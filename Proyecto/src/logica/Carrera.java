@@ -9,8 +9,9 @@ public class Carrera {
 	private Date fechaEmpiezaInscripcion;
 	private Date fechaCompeticion;
 	private double distancia;
+	private String tipo;
 	
-	public Carrera(String nombre,double precio,Date fechaFI,Date fechaEI, Date fechaCompe,double distancia){
+	public Carrera(String nombre,double precio,Date fechaFI,Date fechaEI, Date fechaCompe,double distancia,String tipo){
 		
 		this.nombre = nombre;
 		this.precio = precio;
@@ -18,9 +19,10 @@ public class Carrera {
 		this.fechaEmpiezaInscripcion = fechaEI;
 		this.fechaCompeticion = fechaCompe;
 		this.distancia = distancia;	
+		this.tipo = tipo;
 		
 	}
-
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -68,6 +70,15 @@ public class Carrera {
 	public void setDistancia(double distancia) {
 		this.distancia = distancia;
 	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	
 	
 
