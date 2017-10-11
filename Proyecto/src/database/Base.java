@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Base {
-	private static final String CONNECTION_STRING = "jdbc:hsqldb:hsql://localhost/labdb";
+	private static final String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:desa";
 	
 	private static final String USERNAME="IPS_2018_5";
 	private static final String PASSWORD="hola2018";
