@@ -60,6 +60,30 @@ public class Base {
 		
 	}
 	
+	/**
+	 *Metodo que devuelve el listado de todas las inscripciones
+	 *Sera tratado luego en una clase a parte el que devolver y como tratarla
+	 */
+	public void getDatosInscripcion() {
+		try {
+			Connection con = getConection();
+			PreparedStatement ps=con.prepareStatement("");	
+			
+			ResultSet rs = ps.executeQuery();		
+			
+			while(rs.next()) {
+				//Se creara una inscripcion y se añadira a la clase que contendra todas las inscripciones
+			}
+			
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	
