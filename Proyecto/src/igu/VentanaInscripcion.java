@@ -37,7 +37,9 @@ public class VentanaInscripcion extends JFrame {
 	private JRadioButton rdbtnFemeino;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JDateChooser dateChooser;
-
+	
+	private double precio;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -132,9 +134,13 @@ public class VentanaInscripcion extends JFrame {
 			btnRegistrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(validarCampos()){
-						registrar();
-						JOptionPane.showMessageDialog(null, "¡Felicidades! Estás registrado.");
+						registrar();						
+						new VentanaMetodoPago(precio);
+						dispose();
 					}
+					else
+						error();
+						
 						
 				}
 			});
@@ -143,13 +149,39 @@ public class VentanaInscripcion extends JFrame {
 		return btnRegistrar;
 	}
 	
+	protected void error() {
+		JOptionPane.showMessageDialog(this, "Rellena campos...(falta completar)");
+		
+	}
+
 	protected void registrar() {
-		// TODO Auto-generated method stub
+		//COMPLETAR EN BASE DE DATOS
+		JOptionPane.showMessageDialog(this, "¡Felicidades! Estás registrado.");
 		
 	}
 
 	protected boolean validarCampos() {
-		// TODO Auto-generated method stub
+		if(validarDni() && validarNombre() && validarFecha()){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean validarDni() {
+		if(getTxtDni().getText().equals(""))			
+			return false;
+		return true;
+	}
+
+	private boolean validarFecha() {
+		if(getDateChooser().getDate() == null)
+			return false;
+		return true;
+	}
+
+	private boolean validarNombre() {
+		if(getTxtNombre().getText().equals(""))
+			return false;
 		return true;
 	}
 
@@ -174,6 +206,7 @@ public class VentanaInscripcion extends JFrame {
 	private JRadioButton getRdbtnMasculino() {
 		if (rdbtnMasculino == null) {
 			rdbtnMasculino = new JRadioButton("Masculino");
+			rdbtnMasculino.setSelected(true);
 			buttonGroup.add(rdbtnMasculino);
 			rdbtnMasculino.setBounds(154, 169, 103, 23);
 		}
