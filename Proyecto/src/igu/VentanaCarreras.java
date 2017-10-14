@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -36,7 +35,7 @@ public class VentanaCarreras extends JFrame {
 	private JPanel panelSur;
 	private JButton btnAtras;
 	private JButton btnSiguiente;
-	
+
 	private Base base;
 	private JScrollPane scrollCentro;
 	private JPanel panelScroll;
@@ -64,9 +63,9 @@ public class VentanaCarreras extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCarreras() {
-		
+
 		base = new Base();
-		
+
 		setTitle("Carreras");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 859, 481);
@@ -77,10 +76,11 @@ public class VentanaCarreras extends JFrame {
 		contentPane.add(getPanelNorte(), BorderLayout.NORTH);
 		contentPane.add(getPanelSur(), BorderLayout.SOUTH);
 		contentPane.add(getScrollCentro(), BorderLayout.CENTER);
-		
+
 		cargarModelo();
-	
+
 	}
+
 	private JPanel getPanelNorte() {
 		if (panelNorte == null) {
 			panelNorte = new JPanel();
@@ -88,12 +88,14 @@ public class VentanaCarreras extends JFrame {
 		}
 		return panelNorte;
 	}
+
 	private JLabel getLblCarreras() {
 		if (lblCarreras == null) {
 			lblCarreras = new JLabel("Carreras");
 		}
 		return lblCarreras;
 	}
+
 	private JPanel getPanelSur() {
 		if (panelSur == null) {
 			panelSur = new JPanel();
@@ -103,21 +105,21 @@ public class VentanaCarreras extends JFrame {
 		}
 		return panelSur;
 	}
+
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
 		}
 		return btnAtras;
 	}
+
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
 		}
 		return btnSiguiente;
 	}
-	
-	
-	
+
 	private JScrollPane getScrollCentro() {
 		if (scrollCentro == null) {
 			scrollCentro = new JScrollPane();
@@ -125,6 +127,7 @@ public class VentanaCarreras extends JFrame {
 		}
 		return scrollCentro;
 	}
+
 	private JPanel getPanelScroll() {
 		if (panelScroll == null) {
 			panelScroll = new JPanel();
@@ -134,6 +137,7 @@ public class VentanaCarreras extends JFrame {
 		}
 		return panelScroll;
 	}
+
 	private JList<Carrera> getListCarreras() {
 		if (listCarreras == null) {
 			listCarreras = new JList<Carrera>();
@@ -144,20 +148,18 @@ public class VentanaCarreras extends JFrame {
 					textCarreras.setText(mostrarCarrera(listCarreras.getSelectedValue()));
 				}
 			});
-			
+
 		}
 		return listCarreras;
 	}
-	
-	private String mostrarCarrera(Carrera carrera){
-		String cadena = "Tipo: " + carrera.getTipo() + "\nDistancia: " + 
-	carrera.getDistancia() + "\nPrecio: " + carrera.getPrecio() + "\nFecha Competicion: " + 
-				carrera.getFechaCompeticion() + "\nFecha Final Inscripcion: " + 
-	carrera.getFechaFinalizaInscripcion();
+
+	private String mostrarCarrera(Carrera carrera) {
+		String cadena = "Tipo: " + carrera.getTipo() + "\nDistancia: " + carrera.getDistancia() + "\nPrecio: "
+				+ carrera.getPrecio() + "\nFecha Competicion: " + carrera.getFechaCompeticion()
+				+ "\nFecha Final Inscripcion: " + carrera.getFechaFinalizaInscripcion();
 		return cadena;
 	}
-	
-	
+
 	private JTextArea getTextCarreras() {
 		if (textCarreras == null) {
 			textCarreras = new JTextArea();
@@ -166,10 +168,10 @@ public class VentanaCarreras extends JFrame {
 		}
 		return textCarreras;
 	}
-	
-	private void cargarModelo(){
+
+	private void cargarModelo() {
 		modeloCarrera.clear();
-		for(int i=0;i<base.getBaseCarrera().getCarreras().size();i++){
+		for (int i = 0; i < base.getBaseCarrera().getCarreras().size(); i++) {
 			modeloCarrera.addElement(base.getBaseCarrera().getCarreras().get(i));
 		}
 	}
