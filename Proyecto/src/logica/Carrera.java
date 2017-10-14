@@ -11,7 +11,8 @@ public class Carrera {
 	private double distancia;
 	private String tipo;
 	
-	public Carrera(String nombre,double precio,Date fechaFI,Date fechaEI, Date fechaCompe,double distancia,String tipo){
+	public Carrera(String nombre,double precio,Date fechaFI,Date fechaEI, 
+			Date fechaCompe,double distancia,String tipo){
 		
 		this.nombre = nombre;
 		this.precio = precio;
@@ -77,6 +78,11 @@ public class Carrera {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	public String toString(){
+		return this.getNombre();
+		
 	}
 	
 	

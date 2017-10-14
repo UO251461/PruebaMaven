@@ -231,14 +231,14 @@ public class VentanaMetodoPago extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(getRdbtnTarjeta().isSelected()){
 						if(validarNum()){
-							new VentanaConfirmacionPago();
+							//new VentanaConfirmacionPago();
 							//new VentanaConfirmacionPago(precio); //aqui despues de poner un constructor pasandole el precio
 							dispose();
 						} else
 							error();
 					}
 					else{
-						new VentanaConfirmacionPago();
+						//new VentanaConfirmacionPago();
 						dispose();
 					}
 				}
