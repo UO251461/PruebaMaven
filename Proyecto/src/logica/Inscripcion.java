@@ -1,31 +1,39 @@
 package logica;
 
+import java.util.Date;
+
 public class Inscripcion {
 
-	String id_participante;
-	String id_competicion;
-	String id_organizador;
-	String pagado;
-	String fecha;
-	String categoria;
-	int dorsal;
-	int tiempo;
+	private String dni;
+	private String id_competicion;
+	private String id_organizador;
+	private String estado; //PRE-INSCRITO , PENDIANTE-DE-PAGO,INSCRITO
+	Date fecha;
+	//String categoria;
+	private String nombreCorredor;
+	private String nombreCompeticion;
+	private double precio;
+	private int dorsal;
+	private int tiempo;
 	
-	public Inscripcion(String idPart, String idCompeticion, String idOrganizador, String pagado, String fecha, String categoria) {
-		this.id_participante = idPart;
+	public Inscripcion( String dni) {
+		this.dni = dni;
+	}
+	
+	public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
+		this.dni = dni;
 		this.id_competicion = idCompeticion;
 		this.id_organizador = idOrganizador;
-		this.pagado = pagado;
+		this.estado = pagado;
 		this.fecha = fecha;
-		this.categoria = categoria;
 	}
 	
 	
-	public String getId_participante() {
-		return id_participante;
+	public String getDni() {
+		return dni;
 	}
-	public void setId_participante(String id_participante) {
-		this.id_participante = id_participante;
+	public void setDni(String id_participante) {
+		this.dni = id_participante;
 	}
 	public String getId_competicion() {
 		return id_competicion;
@@ -39,24 +47,19 @@ public class Inscripcion {
 	public void setId_organizador(String id_organizador) {
 		this.id_organizador = id_organizador;
 	}
-	public String isPagado() {
-		return pagado;
+	public String getEstado() {
+		return estado;
 	}
-	public void setPagado(String pagado) {
-		this.pagado = pagado;
+	public void setEstado(String pagado) {
+		this.estado = pagado;
 	}
-	public String getFecha() {
+	public Date getFecha() {
 		return fecha;
 	}
-	public void setFecha(String fecha) {
+	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public String getCategoria() {
-		return categoria;
-	}
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
+	
 	public int getDorsal() {
 		return dorsal;
 	}
@@ -68,5 +71,29 @@ public class Inscripcion {
 	}
 	public void setTiempo(int tiempo) {
 		this.tiempo = tiempo;
+	}
+
+	public String getNombreCorredor() {
+		return nombreCorredor;
+	}
+
+	public void setNombreCorredor(String nombreCorredor) {
+		this.nombreCorredor = nombreCorredor;
+	}
+
+	public String getNombreCompeticion() {
+		return nombreCompeticion;
+	}
+
+	public void setNombreCompeticion(String nombreCompeticion) {
+		this.nombreCompeticion = nombreCompeticion;
+	}
+
+	public double getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(double importe) {
+		this.precio = importe;
 	}
 }

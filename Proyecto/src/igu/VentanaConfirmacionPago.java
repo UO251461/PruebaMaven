@@ -12,8 +12,10 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import database.*;
+import logica.Inscripcion;
 
 public class VentanaConfirmacionPago extends JDialog {
 
@@ -117,8 +119,7 @@ public class VentanaConfirmacionPago extends JDialog {
 		return btnAceptar;
 	}
 	
-	private void pasarAPendientePago() {
-		//este metodo pone el estado de la inscripcion a "Pendiente de Pago"
-		BaseInscripciones.cambiarEstado("Pendiente de Pago");
+	private void pasarAPendientePago(){
+		vi.getBase().getBaseInscripciones().cambiarEstado("PENDIENTE_DE_PAGO", vi.getInscripcion());
 	}
 }

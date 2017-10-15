@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import database.Base;
+import logica.Inscripcion;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -25,6 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
 public class VentanaMetodoPago extends JDialog {
@@ -49,15 +52,19 @@ public class VentanaMetodoPago extends JDialog {
 	private JPanel paneok;
 	private JButton btnContinuar;
 
-	private double precio;
+	private VentanaElegirCompeticion ve;
+	private Inscripcion inscripcion;
+	private Base base;
 
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaMetodoPago(double pre) {
+	public VentanaMetodoPago(VentanaElegirCompeticion pre) {
 		try {
-			precio = pre;
+			this.ve = pre;
+			inscripcion = pre.getInscripcion();
+			base = pre.getBase();
 			setBounds(300, 300, 605, 127);
 			getContentPane().setLayout(new BorderLayout());
 			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -231,13 +238,11 @@ public class VentanaMetodoPago extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(getRdbtnTarjeta().isSelected()){
 						if(validarNum()){
-							continuar();
+							continuarTarjeta();
 						} else
 							error();
 					}
-					else{
-						continuar();
-					}
+					else continuarTransferencia();					
 				}
 				
 			});
@@ -246,7 +251,14 @@ public class VentanaMetodoPago extends JDialog {
 	}
 	
 	
-	protected void continuar() {
+	private void continuarTarjeta() {
+		base.getBaseInscripciones().cambiarEstado("INSCRITO", inscripcion);
+		dispose();
+	}
+
+	private void continuarTransferencia() {
+		System.out.println("ID_Copeticion:"+inscripcion.getId_competicion()  + " ID_Organizador:"+ 
+				inscripcion.getId_organizador() + " DNI:" + inscripcion.getDni() + " Fecha:" + new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(inscripcion.getFecha()));
 		new VentanaConfirmacionPago(this);		
 	}
 
@@ -257,5 +269,13 @@ public class VentanaMetodoPago extends JDialog {
 		if(getTxtNumTarjeta().getText().equals(""))
 			return false;
 		else return true;
+	}
+
+	public Inscripcion getInscripcion() {
+		return inscripcion;
+	}
+
+	public Base getBase() {
+		return base;
 	}
 }

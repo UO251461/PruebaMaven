@@ -19,6 +19,7 @@ import javax.swing.ButtonGroup;
 import com.toedter.calendar.JMonthChooser;
 
 import database.Base;
+import logica.Inscripcion;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
@@ -45,8 +46,7 @@ public class VentanaInscripcion extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JDateChooser fecha;
 	
-	private double precio;
-	
+	private Inscripcion inscripcion;
 	
 	
 	//ESTO BORRAR, SOLO PRUEBA
@@ -155,7 +155,7 @@ public class VentanaInscripcion extends JFrame {
 					if(validarCampos()){
 						try{							
 							registrar();		
-							continuar("¡Felicidades! Estás registrado");
+							continuar("¡Felicidades! Está registrado");
 						}catch(SQLException sql){
 							errorSQL(sql);
 						}
@@ -256,8 +256,7 @@ public class VentanaInscripcion extends JFrame {
 	 */
 	private void continuar(String str){
 		JOptionPane.showMessageDialog(this, str);
-		new VentanaElegirCompeticion(precio,txtDni.getText());
-		dispose();
+		new VentanaElegirCompeticion(this);
 	}
 	
 	/**
@@ -278,7 +277,7 @@ public class VentanaInscripcion extends JFrame {
 	}
 
 	/**
-	 * Registra en la BBDD el usiario registrado
+	 * Registra en la BBDD el usiario registrado, y crea un objeto inscripcion
 	 * @param dni
 	 * @param nombre
 	 * @param apellido
@@ -287,8 +286,9 @@ public class VentanaInscripcion extends JFrame {
 	 * @throws SQLException, si el usuario con dni ya está registrado lanza una excepción
 	 */
 	protected void registrar() throws SQLException {
-		String date = fecha.getDate().getDate()+ "/" + (fecha.getDate().getMonth()+1) +"/"+(fecha.getDate().getYear()+1900);
-		base.getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected);		
+		String date = fecha.getDate().getDate()+ "/" + (fecha.getDate().getMonth()+1) +"/"+(fecha.getDate().getYear()+1900); 
+		inscripcion = new Inscripcion(txtDni.getText()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
+		base.getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);		
 	}
 
 	/**
@@ -325,6 +325,14 @@ public class VentanaInscripcion extends JFrame {
 		if(getTxtNombre().getText().equals(""))
 			return false;
 		return true;
+	}
+
+	public Inscripcion getInscripcion() {
+		return inscripcion;
+	}
+
+	public Base getBase() {
+		return base;
 	}
 
 	

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import database.Base;
+import logica.Inscripcion;
 
 import javax.swing.JScrollPane;
 import javax.swing.JRadioButton;
@@ -39,17 +40,18 @@ public class VentanaElegirCompeticion extends JDialog {
 	private JPanel pnBtn;
 	private JButton btnContinuar;
 	
-	private double precio;
-	private String dni;
+	private Inscripcion inscripcion;
+	private VentanaInscripcion vi;
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaElegirCompeticion(double precio, String dni) {
-		setTitle("Elegir competici\u00F3n");
-		base = new Base();
-		this.precio = precio;
-		this.dni = dni;
+	public VentanaElegirCompeticion(VentanaInscripcion vi) {
+		setAlwaysOnTop(true);
+		this.vi = vi;
+		base = vi.getBase();
+		inscripcion = vi.getInscripcion();
+		setTitle("Elegir competici\u00F3n");		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setBounds(100, 100, 460, 157);
@@ -115,10 +117,21 @@ public class VentanaElegirCompeticion extends JDialog {
 	 * @throws SQLException, lanza una excepcion si ya está inscrito en esa competición
 	 */
 	private void confirmar() throws SQLException{
+		base.getBaseInscripciones().inscribirCompeticion(cbCompeticion.getSelectedItem().toString(), inscripcion);
+		new VentanaJustificante(this);
+		ocultarVentanas();
 		
-		base.getBaseInscripciones().inscribirCompeticion(cbCompeticion.getSelectedItem().toString(), dni);
-		new VentanaMetodoPago(precio);
+	}
+	
+	public void ocultarVentanas(){
+		setVisible(false);
+		vi.setVisible(false);	
+	}
+	
+	public void cerrarVentanas(){
+		new  VentanaMetodoPago(this);
 		dispose();
+		vi.dispose();
 	}
 	
 	/**
@@ -133,6 +146,13 @@ public class VentanaElegirCompeticion extends JDialog {
 			JOptionPane.showMessageDialog(this, "Usted ya esta inscrito en esta competición, elija otra opción");
 		else 
 			e.printStackTrace();
+	}
+	public Inscripcion getInscripcion() {
+		// TODO Auto-generated method stub
+		return inscripcion;
+	}
+	public Base getBase() {
+		return base;
 	}
 	
 }
