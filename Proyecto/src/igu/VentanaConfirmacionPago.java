@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.Color;
@@ -59,6 +60,8 @@ public class VentanaConfirmacionPago extends JDialog {
 		contentPanel.add(getTxtPrecio());
 		contentPanel.add(getBtnAceptar());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		txtPrecio.setText(String.valueOf(vi.getInscripcion().getPrecio()));
+		txtEntidadBancaria.setText("ES89138183901929");
 		setVisible(true);
 		
 	}
@@ -92,15 +95,14 @@ public class VentanaConfirmacionPago extends JDialog {
 	private JTextField getTxtPrecio() {
 		if (txtPrecio == null) {
 			txtPrecio = new JTextField();
-			txtPrecio.setBounds(170, 140, 139, 31);
+			txtPrecio.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			txtPrecio.setBounds(170, 136, 69, 31);
 			txtPrecio.setColumns(10);
 		}
 		return txtPrecio;
 	}
 	
-	private void setTextEntidad(String entidad) {
-		this.txtEntidadBancaria.setText(entidad);
-	}
+	
 	
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
@@ -109,6 +111,7 @@ public class VentanaConfirmacionPago extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
 					vi.dispose();
+					
 					//cerrar las demas ventanas que se relacionen con el pago
 					pasarAPendientePago();
 				}
@@ -119,7 +122,11 @@ public class VentanaConfirmacionPago extends JDialog {
 		return btnAceptar;
 	}
 	
+	/**
+	 * Metodo que pone a pendiente de pago al pagar por transferencia una inscripcion
+	 */
 	private void pasarAPendientePago(){
+		JOptionPane.showMessageDialog(this, "Recuerde, su inscripción está pendiente de pago");
 		vi.getBase().getBaseInscripciones().cambiarEstado("PENDIENTE_DE_PAGO", vi.getInscripcion());
 	}
 }

@@ -278,4 +278,6 @@ public class VentanaMetodoPago extends JDialog {
 	public Base getBase() {
 		return base;
 	}
+	
+	
 }
