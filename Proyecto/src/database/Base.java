@@ -10,6 +10,7 @@ public class Base {
 	private static final String PASSWORD="hola2018";
 	
 	private BaseCarreras baseCarrera;
+	private BaseInscripciones baseInscripciones;
 	
 	
 	public static Connection getConection() throws SQLException{
@@ -25,6 +26,7 @@ public class Base {
 	
 	public void inicializar(){
 		baseCarrera = new BaseCarreras();
+		baseInscripciones = new BaseInscripciones();
 	}	
 	
 	public BaseCarreras getBaseCarrera(){
@@ -84,6 +86,11 @@ public class Base {
 		}
 		
 	}
+
+	public BaseInscripciones getBaseInscripciones() {
+		return baseInscripciones;
+	}
+
 	
 	
 	

@@ -56,6 +56,8 @@ public class VentanaConfirmacionPago extends JDialog {
 		contentPanel.add(getLblPrecio());
 		contentPanel.add(getTxtPrecio());
 		contentPanel.add(getBtnAceptar());
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setVisible(true);
 		
 	}
 	private JLabel getLblCuenta() {

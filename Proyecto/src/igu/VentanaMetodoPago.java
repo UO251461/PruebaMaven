@@ -231,23 +231,25 @@ public class VentanaMetodoPago extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(getRdbtnTarjeta().isSelected()){
 						if(validarNum()){
-							//new VentanaConfirmacionPago();
-							//new VentanaConfirmacionPago(precio); //aqui despues de poner un constructor pasandole el precio
-							dispose();
+							continuar();
 						} else
 							error();
 					}
 					else{
-						//new VentanaConfirmacionPago();
-						dispose();
+						continuar();
 					}
 				}
-
 				
 			});
 		}
 		return btnContinuar;
 	}
+	
+	
+	protected void continuar() {
+		new VentanaConfirmacionPago(this);		
+	}
+
 	private void error() {
 		JOptionPane.showMessageDialog(this, "Número de tarjeta no válido");
 	}
