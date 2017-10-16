@@ -1,10 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -154,4 +150,25 @@ public class BaseInscripciones {
 		}
 		
 	}
+	
+	/**
+	 * Método que genera las clasificaciones absolutas y por sexo.
+	 */
+	public void generarClasificaciones(){
+		try {
+			ArrayList<Inscripcion> clasificacion = new ArrayList<Inscripcion>();
+			Connection con = getConnection();
+			Statement st = con.createStatement();
+			ResultSet rs= st.executeQuery("SELECT * FROM INSCRIPCIONES ORDER BY TIEMPO");
+			while(rs.next()){
+				clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
+			}
+			rs.close();
+			st.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -14,7 +14,7 @@ public class Inscripcion {
 	private String nombreCompeticion;
 	private double precio;
 	private int dorsal;
-	private int tiempo;
+	private double tiempo;
 	
 	public Inscripcion( String dni) {
 		this.dni = dni;
@@ -26,6 +26,16 @@ public class Inscripcion {
 		this.id_organizador = idOrganizador;
 		this.estado = pagado;
 		this.fecha = fecha;
+	}
+	
+	public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
+		this.dni = dni;
+		this.id_competicion = idCompeticion;
+		this.id_organizador = idOrganizador;
+		this.estado = pagado;
+		this.fecha = fecha;
+		this.dorsal=dorsal;
+		this.tiempo=tiempo;
 	}
 	
 	
@@ -66,7 +76,7 @@ public class Inscripcion {
 	public void setDorsal(int dorsal) {
 		this.dorsal = dorsal;
 	}
-	public int getTiempo() {
+	public double getTiempo() {
 		return tiempo;
 	}
 	public void setTiempo(int tiempo) {
