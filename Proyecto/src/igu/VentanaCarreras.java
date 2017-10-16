@@ -2,14 +2,9 @@ package igu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
-import database.Base;
 import logica.Carrera;
 
 import javax.swing.JLabel;
@@ -22,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaCarreras extends JFrame {
 
@@ -36,36 +33,37 @@ public class VentanaCarreras extends JFrame {
 	private JButton btnAtras;
 	private JButton btnSiguiente;
 
-	private Base base;
+	
 	private JScrollPane scrollCentro;
 	private JPanel panelScroll;
 	private JList<Carrera> listCarreras;
 	private DefaultListModel<Carrera> modeloCarrera = new DefaultListModel<Carrera>();
 	private JTextArea textCarreras;
+	
+	private VentanaPrincipal vp;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaCarreras frame = new VentanaCarreras();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaCarreras frame = new VentanaCarreras();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCarreras() {
-
-		base = new Base();
-
+	public VentanaCarreras(VentanaPrincipal vp) {
+		
+		this.vp = vp;
 		setTitle("Carreras");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 859, 481);
@@ -109,6 +107,13 @@ public class VentanaCarreras extends JFrame {
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
+			btnAtras.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					vp.setVisible(true);
+				}
+			});
+			btnAtras.setMnemonic('A');
 		}
 		return btnAtras;
 	}
@@ -116,8 +121,21 @@ public class VentanaCarreras extends JFrame {
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
+			btnSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarInscripcion();
+				}
+			});
+			btnSiguiente.setMnemonic('S');
 		}
 		return btnSiguiente;
+	}
+	
+	private void mostrarInscripcion(){
+		VentanaInscripcion vinscripcion = new VentanaInscripcion(this);
+		vinscripcion.setLocationRelativeTo(null);		;
+		vinscripcion.setVisible(true);
+		this.setVisible(false);
 	}
 
 	private JScrollPane getScrollCentro() {
@@ -171,8 +189,8 @@ public class VentanaCarreras extends JFrame {
 
 	private void cargarModelo() {
 		modeloCarrera.clear();
-		for (int i = 0; i < base.getBaseCarrera().getCarreras().size(); i++) {
-			modeloCarrera.addElement(base.getBaseCarrera().getCarreras().get(i));
+		for (int i = 0; i < vp.getBase().getBaseCarrera().getCarreras().size(); i++) {
+			modeloCarrera.addElement(vp.getBase().getBaseCarrera().getCarreras().get(i));
 		}
 	}
 }

@@ -47,6 +47,7 @@ public class VentanaInscripcion extends JFrame {
 	private JDateChooser fecha;
 	
 	private Inscripcion inscripcion;
+	private VentanaCarreras vc;
 	
 	
 	//ESTO BORRAR, SOLO PRUEBA
@@ -56,26 +57,27 @@ public class VentanaInscripcion extends JFrame {
 	
 	protected String sexoSelected = "HOMBRE";
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaInscripcion frame = new VentanaInscripcion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaInscripcion frame = new VentanaInscripcion();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaInscripcion() {
+	public VentanaInscripcion(VentanaCarreras vc) {
+		this.vc = vc;
 		setTitle("Registrarse");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,6 +143,7 @@ public class VentanaInscripcion extends JFrame {
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
+					vc.setVisible(true);
 				}
 			});
 			btnCancelar.setBounds(98, 404, 137, 40);
