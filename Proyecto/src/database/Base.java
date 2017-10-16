@@ -13,7 +13,7 @@ public class Base {
 	private BaseInscripciones baseInscripciones;
 	
 	
-	public static Connection getConection() throws SQLException{
+	public static Connection getConnection() throws SQLException{
 		if(DriverManager.getDriver(CONNECTION_STRING)==null)
 			if(CONNECTION_STRING.contains("oracle"))
 				DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -33,34 +33,7 @@ public class Base {
 		return baseCarrera;
 	}
 	
-	/**
-	 * Devuelve la informacion del atleta de todas las carreras
-	 * muestra el estado de su inscripcion
-	 * tambien el tiempo y la posicion si dicha carrera ha finalizado.
-	 * @param atleta identificador del atleta cuyos datos se desean obtener.
-	 */
-	public void getDatosAtleta(String atleta) {
-		try {
-			Connection con = getConection();
-			PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCIONES WHERE DNI=?");	//<-- aqui va la consulta que esta en proceso de crearse
-			ps.setString(1, atleta);	//se introduce el identificador del atleta
-			ResultSet rs = ps.executeQuery();		
-			
-			while(rs.next()) {
-				//mientras se reciban datos, se almacenaran en un array para posteriormente tratarlos
-				//en la logica o donde sea necesario
-				//por lo que este metodo en vez de void devolvera un Array
-			}
-			
-			rs.close();
-			ps.close();
-			con.close();
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-		
-	}
+
 	
 	/**
 	 *Metodo que devuelve el listado de todas las inscripciones
@@ -68,7 +41,7 @@ public class Base {
 	 */
 	public void getDatosInscripcion() {
 		try {
-			Connection con = getConection();
+			Connection con = getConnection();
 			PreparedStatement ps=con.prepareStatement("");	
 			
 			ResultSet rs = ps.executeQuery();		

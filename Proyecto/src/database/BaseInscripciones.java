@@ -126,4 +126,32 @@ public class BaseInscripciones {
 	}
 
 
+	/**
+	 * Devuelve la informacion del atleta de todas las carreras
+	 * muestra el estado de su inscripcion
+	 * tambien el tiempo y la posicion si dicha carrera ha finalizado.
+	 * @param atleta identificador del atleta cuyos datos se desean obtener.
+	 */
+	public void getDatosAtleta(String atleta) {
+		try {
+			Connection con = getConnection();
+			PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCIONES WHERE DNI=? ORDER BY FECHA DESC");	//<-- aqui va la consulta que esta en proceso de crearse
+			ps.setString(1, atleta);	//se introduce el identificador del atleta
+			ResultSet rs = ps.executeQuery();		
+			
+			while(rs.next()) {
+				//mientras se reciban datos, se almacenaran en un array para posteriormente tratarlos
+				//en la logica o donde sea necesario
+				//por lo que este metodo en vez de void devolvera un Array
+			}
+			
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
 }
