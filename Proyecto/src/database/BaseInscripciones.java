@@ -157,11 +157,24 @@ public class BaseInscripciones {
 	public void generarClasificaciones(){
 		try {
 			ArrayList<Inscripcion> clasificacion = new ArrayList<Inscripcion>();
+			ArrayList<Inscripcion> clasificacionMasc = new ArrayList<Inscripcion>();
+			ArrayList<Inscripcion> clasificacionFem = new ArrayList<Inscripcion>();
 			Connection con = getConnection();
 			Statement st = con.createStatement();
-			ResultSet rs= st.executeQuery("SELECT * FROM INSCRIPCIONES ORDER BY TIEMPO");
+			//se crean las clasificaciones absolutas
+			ResultSet rs= st.executeQuery("SELECT * FROM INSCRIPCIONES WHERE DORSAL>0 ORDER BY TIEMPO");
 			while(rs.next()){
 				clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
+			}
+			//se crean las clasificaciones masculinas
+			rs=st.executeQuery("select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') ORDER BY TIEMPO");
+			while(rs.next()){
+				clasificacionMasc.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
+			}
+			//se crean las clasificaciones femeninas
+			rs=st.executeQuery("select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') ORDER BY TIEMPO");
+			while(rs.next()){
+				clasificacionFem.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
 			}
 			rs.close();
 			st.close();
