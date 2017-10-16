@@ -22,7 +22,7 @@ public class ModeloNoEditableCorredores extends AbstractListModel{
 		return corredor.getDni();
 	}
 	
-	public void aÃ±adirCorredor(Corredor corredor) {
+	public void añadirCorredor(Corredor corredor) {
 		corredores.add(corredor);
 		this.fireIntervalAdded(this, getSize(), getSize()+1);
 	}

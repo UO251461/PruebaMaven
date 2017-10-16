@@ -42,7 +42,7 @@ public class Base {
 	public void getDatosAtleta(String atleta) {
 		try {
 			Connection con = getConection();
-			PreparedStatement ps=con.prepareStatement("");	//<-- aqui va la consulta que esta en proceso de crearse
+			PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCIONES WHERE DNI=?");	//<-- aqui va la consulta que esta en proceso de crearse
 			ps.setString(1, atleta);	//se introduce el identificador del atleta
 			ResultSet rs = ps.executeQuery();		
 			
