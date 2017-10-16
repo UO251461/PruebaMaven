@@ -123,7 +123,9 @@ public class VentanaCarreras extends JFrame {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
 					mostrarInscripcion();
+					
 				}
 			});
 			btnSiguiente.setMnemonic('S');

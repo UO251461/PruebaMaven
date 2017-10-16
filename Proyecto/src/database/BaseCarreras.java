@@ -16,6 +16,8 @@ public class BaseCarreras {
 	private static final String PASSWORD = "hola2018";
 
 	private ArrayList<Carrera> carreras = new ArrayList<Carrera>();
+	
+	private Carrera carreraSeleccionada;
 
 	public BaseCarreras() {
 		inicializar();
@@ -69,6 +71,13 @@ public class BaseCarreras {
 
 	public ArrayList<Carrera> getCarreras() {
 		return carreras;
+	}
+	
+	public void setCarreraSeleccionada(Carrera carrera){
+		this.carreraSeleccionada = carrera;
+	}
+	public Carrera getCarreraSeleccionada(){
+		return carreraSeleccionada;
 	}
 
 }
