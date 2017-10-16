@@ -47,6 +47,7 @@ public class BaseInscripciones {
 		}
 	}
 
+
 	public void registrarCorredor(String dni, String nombre, String apellido,String fecha, String sexo, Inscripcion inscripcion) throws SQLException{//(String dni, String nombre, String aplllido, String fecha, String sexo)
 		try{
 			con = getConnection();
