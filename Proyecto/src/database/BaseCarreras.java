@@ -47,7 +47,7 @@ public class BaseCarreras {
 		try {
 			con = getConnection();
 			Statement st = con.createStatement();
-			String consulta = "select nombreorganizador,fechacompeticion,fecha_apertura_ins,fecha_final_ins,precio,"
+			String consulta = "select nombreorganizador,idcompeticion,competicion.idorganizador,fechacompeticion,fecha_apertura_ins,fecha_final_ins,precio,"
 					+ " nombre_competicion,distancia,tipo,plazas_disponibles"
 					+ " from competicion,organizador where organizador.idorganizador = competicion.idorganizador AND "
 					+ " CURRENT_DATE BETWEEN fecha_apertura_ins AND fecha_final_ins order by fecha_final_ins";
@@ -57,7 +57,9 @@ public class BaseCarreras {
 
 				carreras.add(new Carrera(rs.getString("Nombre_Competicion"), rs.getDouble("Precio"),
 						rs.getDate("Fecha_apertura_ins"), rs.getDate("Fecha_final_ins"), rs.getDate("Fechacompeticion"),
-						rs.getDouble("Distancia"), rs.getString("Tipo"),new Organizador(rs.getString("nombreorganizador")),rs.getInt("plazas_disponibles")));
+						rs.getDouble("Distancia"), rs.getString("Tipo"),
+						new Organizador(rs.getString("nombreorganizador"),rs.getString("idorganizador")),
+						rs.getInt("plazas_disponibles"),rs.getString("idcompeticion")));
 
 			}
 			st.close();

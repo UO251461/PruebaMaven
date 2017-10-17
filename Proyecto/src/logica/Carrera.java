@@ -12,9 +12,11 @@ public class Carrera {
 	private String tipo;
 	private Organizador organizador;
 	private int plazasDisponibles;
+	private String idcarrera;
+
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -25,6 +27,7 @@ public class Carrera {
 		this.tipo = tipo;
 		this.organizador = organizador;
 		this.plazasDisponibles = plazasDisponibles;
+		this.idcarrera = idcarrera;
 	}
 
 	public String getNombre() {
@@ -102,6 +105,16 @@ public class Carrera {
 	public void setPlazasDisponibles(int plazasDisponibles) {
 		this.plazasDisponibles = plazasDisponibles;
 	}
+
+	public String getIdcarrera() {
+		return idcarrera;
+	}
+
+	public void setIdcarrera(String idcarrera) {
+		this.idcarrera = idcarrera;
+	}
+	
+	
 	
 
 }
