@@ -10,20 +10,23 @@ public class Carrera {
 	private Date fechaCompeticion;
 	private double distancia;
 	private String tipo;
-	
-	public Carrera(String nombre,double precio,Date fechaFI,Date fechaEI, 
-			Date fechaCompe,double distancia,String tipo){
-		
+	private Organizador organizador;
+	private int plazasDisponibles;
+
+	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
+			String tipo, Organizador organizador,int plazasDisponibles) {
+
 		this.nombre = nombre;
 		this.precio = precio;
 		this.fechaFinalizaInscripcion = fechaFI;
 		this.fechaEmpiezaInscripcion = fechaEI;
 		this.fechaCompeticion = fechaCompe;
-		this.distancia = distancia;	
+		this.distancia = distancia;
 		this.tipo = tipo;
-		
+		this.organizador = organizador;
+		this.plazasDisponibles = plazasDisponibles;
 	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -79,13 +82,26 @@ public class Carrera {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return this.getNombre();
-		
 	}
-	
-	
+
+	public Organizador getOrganizador() {
+		return organizador;
+	}
+
+	public void setOrganizador(Organizador organizador) {
+		this.organizador = organizador;
+	}
+
+	public int getPlazasDisponibles() {
+		return plazasDisponibles;
+	}
+
+	public void setPlazasDisponibles(int plazasDisponibles) {
+		this.plazasDisponibles = plazasDisponibles;
+	}
 	
 
 }
