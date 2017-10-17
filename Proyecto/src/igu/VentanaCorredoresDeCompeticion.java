@@ -7,7 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import logica.ModeloNoEditableCorredores;
+import database.Base;
+import logica.Carrera;
+import logica.Inscripcion;
+
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -18,6 +21,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 
@@ -30,8 +35,9 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JButton btnAtras;
-	private JList list;
-	private ModeloNoEditableCorredores corredores;
+	private JList<Inscripcion> list;
+	private DefaultListModel<Inscripcion> modeloCorredores= new DefaultListModel<Inscripcion>();
+	private Base base = new Base();
 
 //	/**
 //	 * Launch the application.
@@ -62,6 +68,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlCarrera(), BorderLayout.NORTH);
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
+		cargarModelo();
 		//poner el nombre de la carrera que el organizador quiere ver
 		//rellenar automaticamente con los corredores correspondientes a la carrera
 	}
@@ -119,10 +126,17 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		return btnAtras;
 	}
-	private JList getList() {
+	private JList<Inscripcion> getList() {
 		if (list == null) {
-			list = new JList(corredores);
+			list = new JList<Inscripcion>(modeloCorredores);
 		}
 		return list;
+	}
+	
+	private void cargarModelo() {
+		modeloCorredores.clear();
+		for (int i = 0; i < base.getBaseInscripciones().getInscripciones().size(); i++) {
+			modeloCorredores.addElement(base.getBaseInscripciones().getInscripciones().get(i));
+		}
 	}
 }
