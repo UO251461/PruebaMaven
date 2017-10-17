@@ -68,6 +68,20 @@ public class BaseInscripciones {
 		
 	}
 	
+	/*
+	 * Metodo que devuelve 
+	 */
+	public void corredoresCompeticionOrdenadosInscripcion() {
+		try {
+			con = getConnection();
+			ps = con.prepareStatement("Select from corredor c,inscripcion"
+					+ " i where c.dni = i.dni and i.estado='inscrito' order by i.fecha");
+		}
+		catch(SQLException sql) {
+			
+		}
+	}
+	
 	public void inscribirCompeticion(String competicion, Inscripcion inscripcion) throws SQLException{
 		String compet = ids.get(competicion)[0];
 		String organizador = ids.get(competicion)[1];

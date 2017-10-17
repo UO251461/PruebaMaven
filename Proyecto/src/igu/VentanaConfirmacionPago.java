@@ -110,7 +110,7 @@ public class VentanaConfirmacionPago extends JDialog {
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					vi.dispose();
+					//vi.dispose();
 					
 					//cerrar las demas ventanas que se relacionen con el pago
 					pasarAPendientePago();

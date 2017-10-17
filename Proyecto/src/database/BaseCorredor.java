@@ -53,15 +53,6 @@ public class BaseCorredor {
 		
 	}
 	
-	public void corredoresCompeticionOrdenadosTiempo() {
-		try {
-			con = getConnection();
-			ps = con.prepareStatement("Select c.dni,c.nombre,c.apellido,c.sexo from corredor c,inscripcion i where c.dni = i.dni order by time");
-		}
-		catch(SQLException sql) {
-			
-		}
-	}
 	
 	public ArrayList<Corredor> getCorredores() {
 		return corredores;

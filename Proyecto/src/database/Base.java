@@ -11,6 +11,7 @@ public class Base {
 	
 	private BaseCarreras baseCarrera;
 	private BaseInscripciones baseInscripciones;
+	private BaseCorredor baseCorredor;
 	
 	
 	public static Connection getConnection() throws SQLException{
