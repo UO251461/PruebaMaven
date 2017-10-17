@@ -18,11 +18,13 @@ public class BaseInscripciones {
 	private HashMap<String, String[]> ids;
 	private ArrayList<String> nombres;
 	private ArrayList<Inscripcion> inscripciones;
+	private ArrayList<Inscripcion> inscripcionesCarrera;
 	
 	
 	
 	public BaseInscripciones() {
 		inscripciones = new ArrayList<Inscripcion>();		
+		inscripcionesCarrera = new ArrayList<Inscripcion>();
 	}	
 	
 	
@@ -71,14 +73,32 @@ public class BaseInscripciones {
 	/*
 	 * Metodo que devuelve 
 	 */
-	public void corredoresCompeticionOrdenadosInscripcion() {
+	public void getInscripcionPorCompeticion(String idCompeticion) {
+		Connection con;
 		try {
-			con = getConnection();
-			ps = con.prepareStatement("Select from corredor c,inscripcion"
-					+ " i where c.dni = i.dni and i.estado='inscrito' order by i.fecha");
-		}
-		catch(SQLException sql) {
 			
+			con = getConnection();
+			String consulta = "select * from inscripcion where inscripcion.idcompeticion = ? order by fecha";
+			PreparedStatement pst = con.prepareStatement(consulta);
+			
+			pst.setString(1, idCompeticion);
+			
+			ResultSet rs1 = pst.executeQuery();
+			
+			while (rs1.next()) {
+				//coge las inscripciones pasada una competicion
+				//inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"),rs1.getString("idorganizador"),rs1.getString("dni"),rs1.getDate("fecha"),rs1.getInt("dorsal"),rs1.getFloat("tiempo")));
+
+			}
+			pst.close();
+			con.close();
+
+
+		} catch (SQLException e) {
+
+			System.err.println("Error al intentar crear el arrayList de carreras ordenadas");
+			e.printStackTrace();
+
 		}
 	}
 	
