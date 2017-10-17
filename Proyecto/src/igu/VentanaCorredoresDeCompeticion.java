@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import logica.ModeloNoEditableCorredores;
+
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -28,6 +31,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JTextField txtCarrera;
 	private JButton btnAtras;
 	private JList list;
+	private ModeloNoEditableCorredores corredores;
 
 //	/**
 //	 * Launch the application.
@@ -58,8 +62,17 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlCarrera(), BorderLayout.NORTH);
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
+		//poner el nombre de la carrera que el organizador quiere ver
+		//rellenar automaticamente con los corredores correspondientes a la carrera
 	}
 
+	/*
+	 * Metodo que cambia el area de texto y pone el de la carrera que recibe
+	 */
+	private void setTextCarrera(String carrera) {
+		txtCarrera.setText(carrera);
+	}
+	
 	private JPanel getPnlCarrera() {
 		if (pnlCarrera == null) {
 			pnlCarrera = new JPanel();
@@ -108,7 +121,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	}
 	private JList getList() {
 		if (list == null) {
-			list = new JList();
+			list = new JList(corredores);
 		}
 		return list;
 	}
