@@ -121,6 +121,7 @@ public class VentanaCarreras extends JFrame {
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
+			btnSiguiente.setEnabled(false);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
@@ -165,6 +166,7 @@ public class VentanaCarreras extends JFrame {
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					btnSiguiente.setEnabled(true);
 					textCarreras.setText(mostrarCarrera(listCarreras.getSelectedValue()));
 				}
 			});
