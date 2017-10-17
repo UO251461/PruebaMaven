@@ -27,7 +27,18 @@ public class BaseInscripciones {
 		inscripcionesCarrera = new ArrayList<Inscripcion>();
 	}	
 	
-	
+	/**
+	 * Cierra debidamente la conexion (Samuel)
+	 */
+	private void cerrarConexion(){
+		try{
+			ps.close();
+			con.close();			
+		}catch(SQLException sq){
+			sq.printStackTrace();
+		}
+		
+	}
 
 	
 	public void cambiarEstado(String estado, Inscripcion ins) {
@@ -38,11 +49,15 @@ public class BaseInscripciones {
 			ps.setString(2, ins.getId_competicion());
 			ps.setString(3, ins.getId_organizador());
 			ps.setString(4, ins.getDni());
-			ps.executeQuery();
+			rs = ps.executeQuery();
 			ins.setEstado(estado);
+			rs.close();
 		}catch(SQLException sq){
 			sq.printStackTrace();
+		}finally{
+			cerrarConexion();
 		}
+		
 	}
 
 
@@ -50,21 +65,20 @@ public class BaseInscripciones {
 		try{
 			con = getConnection();
 			
-			//REGISTRAR E INSERTAR
+			//REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
 			ps=con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
 			ps.setString(1, dni);
 			ps.setString(2, nombre);
 			ps.setString(3, apellido);
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
-			ps.executeQuery();
+			rs = ps.executeQuery();	
+			rs.close();
 		}catch(SQLException sql){
-			ps=con.prepareStatement("SELECT nombre FROM corredor WHERE dni = ?");
-			ps.setString(1, dni);
-			rs = ps.executeQuery();
-			rs.next();
-				inscripcion.setNombreCorredor(rs.getString(1));
-			throw sql;
+			//SI YA ESTÁ REGISTRADO NO HACE NADA
+		}finally{
+			inscribirCompeticion(inscripcion);
+			cerrarConexion();
 		}
 		
 		
@@ -90,8 +104,9 @@ public class BaseInscripciones {
 				//inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"),rs1.getString("idorganizador"),rs1.getString("dni"),rs1.getDate("fecha"),rs1.getInt("dorsal"),rs1.getFloat("tiempo")));
 
 			}
-			pst.close();
+			ps.close();
 			con.close();
+			rs.close();
 
 
 		} catch (SQLException e) {
@@ -102,28 +117,31 @@ public class BaseInscripciones {
 		}
 	}
 	
-	public void inscribirCompeticion(String competicion, Inscripcion inscripcion) throws SQLException{
-		String compet = ids.get(competicion)[0];
-		String organizador = ids.get(competicion)[1];
-		Double precio = Double.parseDouble(ids.get(competicion)[2]);
-		//CONSULTA ADAPTADA PARA AÑADIRLE LA CATEGORIA
-		con = getConnection();
-		ps=con.prepareStatement("INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA) VALUES(?,?,?,'PRE-INSCRITO',?,?)");	
-		Date fecha = new Date();
-		ps.setString(1, compet);
-		ps.setString(2, organizador);
-		ps.setString(3, inscripcion.getDni());
-		ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
-		ps.setString(5, inscripcion.getCategoria());
-		ps.executeQuery();	
-		
-		//si no no esta inscrito
-		inscripcion.setId_competicion(compet);
-		inscripcion.setId_organizador(organizador);
-		inscripcion.setEstado("PRE-INSCRITO");
-		inscripcion.setFecha(fecha);
-		inscripcion.setNombreCompeticion(competicion);
-		inscripcion.setPrecio(precio);
+	public void inscribirCompeticion(Inscripcion inscripcion) throws SQLException{
+		try{
+			//CONSULTA ADAPTADA PARA AÑADIRLE LA CATEGORIA
+			con = getConnection();
+			ps=con.prepareStatement("INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA) VALUES(?,?,?,'PRE-INSCRITO',?,?)");	
+			Date fecha = new Date();
+			ps.setString(1, inscripcion.getId_competicion());
+			ps.setString(2, inscripcion.getId_organizador());
+			ps.setString(3, inscripcion.getDni());
+			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
+			ps.setString(5, inscripcion.getCategoria());
+			rs = ps.executeQuery();	
+			
+			//si no no esta inscrito(Samuel)
+			inscripcion.setId_competicion(inscripcion.getId_competicion());
+			inscripcion.setId_organizador(inscripcion.getId_organizador());
+			inscripcion.setEstado("PRE-INSCRITO");
+			inscripcion.setPrecio(inscripcion.getPrecio());
+			inscripcion.setFecha(fecha);
+			
+			rs.close();
+		}finally{
+			cerrarConexion();
+		}
+		rs.close();
 	}
 	
 	public ArrayList<Inscripcion> getInscripciones() {
@@ -218,5 +236,33 @@ public class BaseInscripciones {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * Asigna el campo dorsal de la tabla inscripciones de aquellos que esten en estado INSCRITO(Samuel)
+	 */
+	public void asignarDorsal(){
+		try{
+			Connection con = getConnection();
+			ps = con.prepareStatement("SELECT idcompeticion, idorganizador, dni FROM inscripcion WHERE estado = 'INSCRITO' ORDER BY FECHA ASC");
+			PreparedStatement corredorInscrito = con.prepareStatement("UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
+			rs = ps.executeQuery();
+			//se dejan los 10 primeros (requisito)
+			int numeroDorsal = 11;
+			while(rs.next()){
+				corredorInscrito.setInt(1, numeroDorsal);
+				corredorInscrito.setString(2, rs.getString(1));
+				corredorInscrito.setString(3, rs.getString(2));
+				corredorInscrito.setString(4, rs.getString(3));
+				corredorInscrito.executeQuery();
+				numeroDorsal++;
+			}
+			
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+	}
+	
 	
 }

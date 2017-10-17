@@ -10,16 +10,10 @@ public class Inscripcion {
 		private String estado; //PRE-INSCRITO , PENDIANTE-DE-PAGO,INSCRITO
 		Date fecha;
 		private String categoria;
-		private String nombreCorredor;
-		private String nombreCompeticion;
 		private double precio;
 		private int dorsal;
 		private double tiempo;
 		
-		
-		public Inscripcion(String dni) {
-			this.dni = dni;
-		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			this.dni = dni;
@@ -40,6 +34,13 @@ public class Inscripcion {
 		}
 		
 		
+		public Inscripcion(String idCarrera, String idOrganizador, String dni, double pre) {
+			id_competicion = idCarrera;
+			id_organizador = idOrganizador;
+			this.dni = dni;
+			precio =pre;
+		}
+
 		public String getDni() {
 			return dni;
 		}
@@ -82,22 +83,6 @@ public class Inscripcion {
 		}
 		public void setTiempo(int tiempo) {
 			this.tiempo = tiempo;
-		}
-
-		public String getNombreCorredor() {
-			return nombreCorredor;
-		}
-
-		public void setNombreCorredor(String nombreCorredor) {
-			this.nombreCorredor = nombreCorredor;
-		}
-
-		public String getNombreCompeticion() {
-			return nombreCompeticion;
-		}
-
-		public void setNombreCompeticion(String nombreCompeticion) {
-			this.nombreCompeticion = nombreCompeticion;
 		}
 
 		public double getPrecio() {

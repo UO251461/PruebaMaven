@@ -2,6 +2,7 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +16,8 @@ public class BaseCarreras {
 	private final static String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
 	private static final String USERNAME = "IPS_2018_5";
 	private static final String PASSWORD = "hola2018";
-
+	private Connection con;
+	private PreparedStatement ps;
 	private ArrayList<Carrera> carreras = new ArrayList<Carrera>();
 	
 	private Carrera carreraSeleccionada;
@@ -43,7 +45,7 @@ public class BaseCarreras {
 	 * inscripcion
 	 */
 	public void ordenarCarreras() {
-		Connection con;
+		
 		try {
 			con = getConnection();
 			Statement st = con.createStatement();
@@ -86,4 +88,71 @@ public class BaseCarreras {
 		return carreraSeleccionada;
 	}
 
+	/**
+	 * Metodo que devuelve el nombre de la carrera pasado el idorganizador y el idcarrera (Samuel)
+	 * @param id_competicion
+	 * @param id_organizador
+	 * @return String, nombre de la carrera
+	 */
+	public String getNombreCarrera(String id_competicion, String id_organizador) {
+		String ret = "";
+		try{
+			con = getConnection();
+			PreparedStatement st = con.prepareStatement("SELECT nombre_competicion FROM COMPETICION WHERE idcompeticion = ? AND idorganizador = ?");
+			st.setString(1, id_competicion);
+			st.setString(2, id_organizador);
+			
+			ResultSet rs = st.executeQuery();
+			
+			if(rs.next()){
+				ret = rs.getString(1);
+			}
+			rs.close();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cerrarConexion();
+		}
+		return ret;
+	}
+
+	/**
+	 * Retorna el nombre del corredor (Samuel)
+	 * @param dni del corredor
+	 * @return nombre del coredor
+	 */
+	public String getNombreCorredor(String dni) {
+		String ret = "";
+		try{
+			con = getConnection();
+			ps = con.prepareStatement("SELECT nombre FROM CORREDOR WHERE dni = ? ");
+			ps.setString(1, dni);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()){
+				ret = rs.getString(1);
+			}
+			rs.close();
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cerrarConexion();
+		}
+		return ret;
+	}
+	/**
+	 * Cierra la conexion (samuel)
+	 */
+
+	private void cerrarConexion(){
+		try{
+			ps.close();
+			con.close();			
+		}catch(SQLException sq){
+			sq.printStackTrace();
+		}
+		
+	}
 }

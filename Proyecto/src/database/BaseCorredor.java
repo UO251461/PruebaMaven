@@ -46,7 +46,6 @@ public class BaseCorredor {
 			ps.setString(1, dni);
 			rs = ps.executeQuery();
 			rs.next();
-				inscripcion.setNombreCorredor(rs.getString(1));
 			throw sql;
 		}
 		

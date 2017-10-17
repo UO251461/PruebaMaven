@@ -52,7 +52,7 @@ public class VentanaMetodoPago extends JDialog {
 	private JPanel paneok;
 	private JButton btnContinuar;
 
-	private VentanaElegirCompeticion ve;
+	private VentanaInscripcion vi;
 	private Inscripcion inscripcion;
 	private Base base;
 
@@ -60,9 +60,9 @@ public class VentanaMetodoPago extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaMetodoPago(VentanaElegirCompeticion pre) {
+	public VentanaMetodoPago(VentanaInscripcion pre) {
 		try {
-			this.ve = pre;
+			this.vi = pre;
 			inscripcion = pre.getInscripcion();
 			base = pre.getBase();
 			setBounds(300, 300, 605, 127);
@@ -76,7 +76,7 @@ public class VentanaMetodoPago extends JDialog {
 			
 			contentPanel.add(getPanel());
 			getContentPane().add(getPaneok(), BorderLayout.SOUTH);
-			
+			setLocationRelativeTo(pre);
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setVisible(true);
 		} catch (Exception e) {
@@ -115,7 +115,7 @@ public class VentanaMetodoPago extends JDialog {
 		if (lblNumeroDeTarjeta == null) {
 			lblNumeroDeTarjeta = new JLabel("Numero de tarjeta:");
 			lblNumeroDeTarjeta.setLabelFor(getTxtNumTarjeta());
-			lblNumeroDeTarjeta.setDisplayedMnemonic('m');
+			lblNumeroDeTarjeta.setDisplayedMnemonic('n');
 			lblNumeroDeTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			lblNumeroDeTarjeta.setBounds(21, 64, 149, 26);
 		}
@@ -139,6 +139,7 @@ public class VentanaMetodoPago extends JDialog {
 	private JLabel getLblTarjera() {
 		if (lblTarjera == null) {
 			lblTarjera = new JLabel("");
+			lblTarjera.setLabelFor(getTxtNumTarjeta());
 			lblTarjera.setBounds(333, 18, 69, 35);		
 		}
 		return lblTarjera;
@@ -190,6 +191,7 @@ public class VentanaMetodoPago extends JDialog {
 	private JRadioButton getRdbtnTarjeta() {
 		if (rdbtnTarjeta == null) {
 			rdbtnTarjeta = new JRadioButton("Tarjeta");
+			rdbtnTarjeta.setMnemonic('t');
 			rdbtnTarjeta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					mostrarTarjeta();
@@ -204,6 +206,7 @@ public class VentanaMetodoPago extends JDialog {
 	private JRadioButton getRdbtnTransferencia() {
 		if (rdbtnTransferencia == null) {
 			rdbtnTransferencia = new JRadioButton("Transferencia");
+			rdbtnTransferencia.setMnemonic('r');
 			rdbtnTransferencia.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ocultarTarjeta();
@@ -234,6 +237,7 @@ public class VentanaMetodoPago extends JDialog {
 	private JButton getBtnContinuar() {
 		if (btnContinuar == null) {
 			btnContinuar = new JButton("Continuar");
+			btnContinuar.setMnemonic('c');
 			btnContinuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(getRdbtnTarjeta().isSelected()){
@@ -257,8 +261,6 @@ public class VentanaMetodoPago extends JDialog {
 	}
 
 	private void continuarTransferencia() {
-		System.out.println("ID_Copeticion:"+inscripcion.getId_competicion()  + " ID_Organizador:"+ 
-				inscripcion.getId_organizador() + " DNI:" + inscripcion.getDni() + " Fecha:" + new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(inscripcion.getFecha()));
 		new VentanaConfirmacionPago(this);		
 	}
 

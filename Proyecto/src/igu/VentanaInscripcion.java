@@ -19,6 +19,7 @@ import javax.swing.ButtonGroup;
 import com.toedter.calendar.JMonthChooser;
 
 import database.Base;
+import logica.Carrera;
 import logica.Inscripcion;
 
 import com.toedter.calendar.JCalendar;
@@ -51,11 +52,11 @@ public class VentanaInscripcion extends JFrame {
 	
 	
 	//ESTO BORRAR, SOLO PRUEBA
-	private Base base;
 	private JLabel lbApellidos;
 	private JTextField txtApellidos;
 	
 	protected String sexoSelected = "HOMBRE";
+	private JButton btnNewButton;
 	
 	/**
 	 * Create the frame.
@@ -66,7 +67,6 @@ public class VentanaInscripcion extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 566, 513);
-		base = new Base();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -74,11 +74,14 @@ public class VentanaInscripcion extends JFrame {
 		contentPane.add(getBtnCancelar());
 		contentPane.add(getBtnRegistrar());
 		contentPane.add(getPanel());
+		contentPane.add(getBtnNewButton());
 		
 	}
 	private JLabel getLblDni() {
 		if (lblDni == null) {
 			lblDni = new JLabel("DNI :");
+			lblDni.setDisplayedMnemonic('d');
+			lblDni.setLabelFor(getTxtDni());
 			lblDni.setBounds(40, 35, 72, 23);
 		}
 		return lblDni;
@@ -94,6 +97,8 @@ public class VentanaInscripcion extends JFrame {
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre :");
+			lblNombre.setLabelFor(getTxtNombre());
+			lblNombre.setDisplayedMnemonic('n');
 			lblNombre.setBounds(40, 93, 79, 23);
 		}
 		return lblNombre;
@@ -117,6 +122,8 @@ public class VentanaInscripcion extends JFrame {
 	private JLabel getLblFechaDeNacimiento() {
 		if (lblFechaDeNacimiento == null) {
 			lblFechaDeNacimiento = new JLabel("Fecha de nacimiento :");
+			lblFechaDeNacimiento.setLabelFor(getDateChooser());
+			lblFechaDeNacimiento.setDisplayedMnemonic('f');
 			lblFechaDeNacimiento.setBounds(40, 267, 126, 23);
 		}
 		return lblFechaDeNacimiento;
@@ -124,11 +131,13 @@ public class VentanaInscripcion extends JFrame {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
+			btnCancelar.setMnemonic('c');
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					vc.setVisible(true);
+					cancelar();
 				}
+
+				
 			});
 			btnCancelar.setBounds(98, 404, 137, 40);
 		}
@@ -137,12 +146,13 @@ public class VentanaInscripcion extends JFrame {
 	private JButton getBtnRegistrar() {
 		if (btnRegistrar == null) {
 			btnRegistrar = new JButton("Registrar");
+			btnRegistrar.setMnemonic('r');
 			btnRegistrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(validarCampos()){
 						try{							
 							registrar();		
-							continuar("¡Felicidades! Está registrado");
+							continuar();
 						}catch(SQLException sql){
 							errorSQL(sql);
 						}
@@ -182,6 +192,7 @@ public class VentanaInscripcion extends JFrame {
 	private JRadioButton getRdbtnHombre() {
 		if (rdbtnHombre == null) {
 			rdbtnHombre = new JRadioButton("HOMBRE");
+			rdbtnHombre.setMnemonic('h');
 			rdbtnHombre.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					sexoSelected = "HOMBRE";
@@ -196,6 +207,7 @@ public class VentanaInscripcion extends JFrame {
 	private JRadioButton getRdbtnMujer() {
 		if (rdbtnMujer == null) {
 			rdbtnMujer = new JRadioButton("MUJER");
+			rdbtnMujer.setMnemonic('m');
 			rdbtnMujer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					sexoSelected = "MUJER";
@@ -218,6 +230,8 @@ public class VentanaInscripcion extends JFrame {
 	private JLabel getLbApellidos() {
 		if (lbApellidos == null) {
 			lbApellidos = new JLabel("Apellidos");
+			lbApellidos.setDisplayedMnemonic('a');
+			lbApellidos.setLabelFor(getTxtApellidos());
 			lbApellidos.setBounds(40, 151, 79, 23);
 		}
 		return lbApellidos;
@@ -241,10 +255,11 @@ public class VentanaInscripcion extends JFrame {
 	 * Muestra un mejsaje pasado por parametro, crea una ventana "elegir campo" y cierra la ventana actual
 	 * @param str, el texto a mostrar
 	 */
-	private void continuar(String str){
+	private void continuar(){
 		inscripcion.asignarCategoria(fecha.getDate());//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
-		JOptionPane.showMessageDialog(this, str);
-		new VentanaElegirCompeticion(this);
+		JOptionPane.showMessageDialog(this, "¡Felicidades! Está registrado");
+		
+		new VentanaJustificante(this);
 	}
 	
 	/**
@@ -252,11 +267,9 @@ public class VentanaInscripcion extends JFrame {
 	 * @param sql
 	 */
 	protected void errorSQL(SQLException sql) {
-		int code =sql.getErrorCode();
-		if(code == -20001)			
-			JOptionPane.showMessageDialog(this, sql.getMessage());
-		else if(code == 1){
-			continuar("Usted ya está registrado, por favor elija la competición");
+		if(sql.getErrorCode() == 1){
+			JOptionPane.showMessageDialog(this,"Usted ya está registrado, por favor elija la competición");
+			cancelar();
 		}
 			
 		else 
@@ -265,7 +278,7 @@ public class VentanaInscripcion extends JFrame {
 	}
 
 	/**
-	 * Registra en la BBDD el usiario registrado, y crea un objeto inscripcion
+	 * Registra en la BBDD el usiario registrado, y crea un objeto inscripcion (Samuel)
 	 * @param dni
 	 * @param nombre
 	 * @param apellido
@@ -274,13 +287,15 @@ public class VentanaInscripcion extends JFrame {
 	 * @throws SQLException, si el usuario con dni ya está registrado lanza una excepción
 	 */
 	protected void registrar() throws SQLException {
-		String date = fecha.getDate().getDate()+ "/" + (fecha.getDate().getMonth()+1) +"/"+(fecha.getDate().getYear()+1900); 
-		inscripcion = new Inscripcion(txtDni.getText()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
-		base.getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);		
+		String date = fecha.getDate().getDate()+ "/" + (fecha.getDate().getMonth()+1) +"/"+(fecha.getDate().getYear()+1900); //Conversion de la fecha de nacimiento a lo guarro
+		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
+		
+		inscripcion = new Inscripcion(carreraSel.getIdcarrera(), carreraSel.getOrganizador().getIdorganizador() ,txtDni.getText(), carreraSel.getPrecio()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
+		getBase().getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);		
 	}
 
 	/**
-	 * Trata los errores de los campos vacios
+	 * Trata los errores de los campos vacios(Samuel)
 	 */
 	protected void error() {		
 		JOptionPane.showMessageDialog(this, "Es obligatorio rellenar todos los campos");		
@@ -320,8 +335,29 @@ public class VentanaInscripcion extends JFrame {
 	}
 
 	public Base getBase() {
-		return base;
+		return vc.getBase();
 	}
 
+	public void cerrarVentanas(){
+		new  VentanaMetodoPago(this);
+		vc.dispose();
+		dispose();
+	}
 	
+	private void cancelar() {
+		dispose();
+		vc.setVisible(true);
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("(BOTON DE PRUEBA) ASIGNAR DORSAL");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					vc.getBase().getBaseInscripciones().asignarDorsal();
+				}
+			});
+			btnNewButton.setBounds(136, 451, 305, 23);
+		}
+		return btnNewButton;
+	}
 }
