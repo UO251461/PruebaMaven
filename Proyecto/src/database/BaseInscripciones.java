@@ -106,14 +106,15 @@ public class BaseInscripciones {
 		String compet = ids.get(competicion)[0];
 		String organizador = ids.get(competicion)[1];
 		Double precio = Double.parseDouble(ids.get(competicion)[2]);
-		
+		//CONSULTA ADAPTADA PARA AÑADIRLE LA CATEGORIA
 		con = getConnection();
-		ps=con.prepareStatement("INSERT INTO INSCRIPCION VALUES(?,?,?,'PRE-INSCRITO',?)");	
+		ps=con.prepareStatement("INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA) VALUES(?,?,?,'PRE-INSCRITO',?,?)");	
 		Date fecha = new Date();
 		ps.setString(1, compet);
 		ps.setString(2, organizador);
 		ps.setString(3, inscripcion.getDni());
 		ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
+		ps.setString(5, inscripcion.getCategoria());
 		ps.executeQuery();	
 		
 		//si no no esta inscrito

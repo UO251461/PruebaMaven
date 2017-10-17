@@ -242,6 +242,7 @@ public class VentanaInscripcion extends JFrame {
 	 * @param str, el texto a mostrar
 	 */
 	private void continuar(String str){
+		inscripcion.asignarCategoria(fecha.getDate());//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
 		JOptionPane.showMessageDialog(this, str);
 		new VentanaElegirCompeticion(this);
 	}

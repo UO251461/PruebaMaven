@@ -116,7 +116,7 @@ public class VentanaElegirCompeticion extends JDialog {
 	 * Registra una inscripcion en una  competicion en la BBDD
 	 * @throws SQLException, lanza una excepcion si ya está inscrito en esa competición
 	 */
-	private void confirmar() throws SQLException{
+	private void confirmar() throws SQLException{	
 		base.getBaseInscripciones().inscribirCompeticion(cbCompeticion.getSelectedItem().toString(), inscripcion);
 		new VentanaJustificante(this);
 		ocultarVentanas();
