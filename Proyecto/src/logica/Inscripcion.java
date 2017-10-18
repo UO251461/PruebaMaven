@@ -13,6 +13,7 @@ public class Inscripcion {
 		private double precio;
 		private int dorsal;
 		private double tiempo;
+		private String nombreCorredor;
 		
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
@@ -21,6 +22,17 @@ public class Inscripcion {
 			this.id_organizador = idOrganizador;
 			this.estado = pagado;
 			this.fecha = fecha;
+			this.categoria = categoria;
+		}
+		
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
+			this.dni = dni;
+			this.id_competicion = idCompeticion;
+			this.id_organizador = idOrganizador;
+			this.estado = pagado;
+			this.fecha = fecha;
+			this.nombreCorredor = nombre;
+			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
@@ -114,6 +126,11 @@ public class Inscripcion {
 					this.categoria = carrera.getCategorias()[i].getCategoria();
 				}
 			}
+		}
+		
+		@Override
+		public String toString() {
+			return this.dni + " " + this.nombreCorredor + " "+ this.categoria + " "+ this.fecha + "------------->"+ this.estado;
 		}
 	
 }

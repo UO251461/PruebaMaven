@@ -135,10 +135,11 @@ public class BaseCarreras {
 				ret = rs.getString(1);
 			}
 			rs.close();
-			
+			ps.close();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}finally{
+			
 			cerrarConexion();
 		}
 		return ret;
@@ -149,7 +150,7 @@ public class BaseCarreras {
 
 	private void cerrarConexion(){
 		try{
-			ps.close();
+
 			con.close();			
 		}catch(SQLException sq){
 			sq.printStackTrace();
