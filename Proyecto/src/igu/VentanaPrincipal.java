@@ -48,7 +48,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	public VentanaPrincipal() {
 		base = new Base();
-		setTitle("Ventana Principal");
+		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
 		contentPane = new JPanel();

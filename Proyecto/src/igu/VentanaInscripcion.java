@@ -256,7 +256,7 @@ public class VentanaInscripcion extends JFrame {
 	 * @param str, el texto a mostrar
 	 */
 	private void continuar(){
-		inscripcion.asignarCategoria(fecha.getDate());//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
+		
 		JOptionPane.showMessageDialog(this, "¡Felicidades! Está registrado");
 		
 		new VentanaJustificante(this);
@@ -291,6 +291,7 @@ public class VentanaInscripcion extends JFrame {
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 		
 		inscripcion = new Inscripcion(carreraSel.getIdcarrera(), carreraSel.getOrganizador().getIdorganizador() ,txtDni.getText(), carreraSel.getPrecio()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
+		inscripcion.asignarCategoria(fecha.getDate(),carreraSel);//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
 		getBase().getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);		
 	}
 

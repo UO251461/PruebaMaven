@@ -106,20 +106,14 @@ public class Inscripcion {
 		}
 
 		@SuppressWarnings("deprecation")
-		public void asignarCategoria(Date fechaNacimiento){			
+		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
 			int actual = new Date().getYear();			
 			int edad = actual - fechaNacimiento.getYear();
-			if(edad >= 18 && edad < 35){
-				this.categoria = "Senior";
+			for(int i=0;i<carrera.getCategorias().length;i++){
+				if(edad >= carrera.getCategorias()[i].getLimiteInferior() && edad < carrera.getCategorias()[i].getLimiteSuperior()){
+					this.categoria = carrera.getCategorias()[i].getCategoria();
+				}
 			}
-			else if(edad >=35 && edad < 40){
-				this.categoria = "Veterano A";
-			}
-			else if(edad >= 40){
-				this.categoria = "Veterano B";
-			}
-			else
-				this.categoria = "Menor de edad";
 		}
 	
 }

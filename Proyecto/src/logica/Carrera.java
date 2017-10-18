@@ -13,7 +13,8 @@ public class Carrera {
 	private Organizador organizador;
 	private int plazasDisponibles;
 	private String idcarrera;
-
+	private Categoria[] categorias;
+	
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
 			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera) {
@@ -27,7 +28,43 @@ public class Carrera {
 		this.tipo = tipo;
 		this.organizador = organizador;
 		this.plazasDisponibles = plazasDisponibles;
-		this.idcarrera = idcarrera;
+		this.idcarrera = idcarrera;	
+		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+	}
+	
+	//Como los limites y las categorias son generales los inicializo aqui, aunque se deberian pasar en el constructor
+	// para hacer bien el rellenar categorias
+	private int[] crearLimiteInferior(){
+		int[] limiteInferior = {0,18,35,40};		
+		return limiteInferior;
+	}
+	
+	private int[] crearLimiteSuperior(){
+		int[] limiteSuperior = {18,35,40,200};		
+		return limiteSuperior;
+	}
+	
+	private String[] crearStringCategoria(){
+		String[] categorias = {"Menor de edad","Senior","Veterano A","Veterano B"};		
+		return categorias;
+	}	
+	
+	private void rellenarCategorias(int[]limitesInferiores,int[]limitesSuperiores,String[]categ){		
+		
+		//Obtenemos los datos de las categorias y son correctos
+		if(limitesInferiores.length == limitesSuperiores.length && limitesSuperiores.length == categ.length){
+			//inicializar array de categorias si todo es correcto
+			this.categorias = new Categoria[limitesSuperiores.length];
+			for(int i=0;i<categ.length;i++){
+				if(limitesInferiores[i] < limitesSuperiores[i]){
+					this.categorias[i] = new Categoria(limitesInferiores[i],limitesSuperiores[i],categ[i]);
+				}				
+			}
+		}
+	}
+	
+	public Categoria[] getCategorias(){
+		return categorias;
 	}
 
 	public String getNombre() {

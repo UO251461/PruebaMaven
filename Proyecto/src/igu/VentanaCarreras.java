@@ -44,22 +44,6 @@ public class VentanaCarreras extends JFrame {
 	
 	private VentanaPrincipal vp;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaCarreras frame = new VentanaCarreras();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -196,7 +180,8 @@ public class VentanaCarreras extends JFrame {
 	private void cargarModelo() {
 		modeloCarrera.clear();
 		for (int i = 0; i < vp.getBase().getBaseCarrera().getCarreras().size(); i++) {
-			modeloCarrera.addElement(vp.getBase().getBaseCarrera().getCarreras().get(i));
+			if(vp.getBase().getBaseCarrera().getCarreras().get(i).getPlazasDisponibles()>0)
+				modeloCarrera.addElement(vp.getBase().getBaseCarrera().getCarreras().get(i));
 		}
 	}
 	

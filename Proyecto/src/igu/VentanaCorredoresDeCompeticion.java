@@ -59,6 +59,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCorredoresDeCompeticion() {
+		setTitle("Corredores Competicion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 793, 516);
 		contentPane = new JPanel();

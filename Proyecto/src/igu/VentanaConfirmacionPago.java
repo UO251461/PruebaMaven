@@ -47,6 +47,7 @@ public class VentanaConfirmacionPago extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaConfirmacionPago (VentanaMetodoPago vi) {
+		setTitle("Confirmacion de Pago");
 		this.vi = vi;
 		setBounds(100, 100, 593, 317);
 		getContentPane().setLayout(new BorderLayout());

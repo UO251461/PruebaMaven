@@ -126,7 +126,7 @@ public class BaseInscripciones {
 			ps.setString(1, inscripcion.getId_competicion());
 			ps.setString(2, inscripcion.getId_organizador());
 			ps.setString(3, inscripcion.getDni());
-			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
+			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));		
 			ps.setString(5, inscripcion.getCategoria());
 			rs = ps.executeQuery();	
 			

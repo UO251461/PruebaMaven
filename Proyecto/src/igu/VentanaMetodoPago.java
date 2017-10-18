@@ -61,6 +61,7 @@ public class VentanaMetodoPago extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaMetodoPago(VentanaInscripcion pre) {
+		setTitle("Metodo de Pago");
 		try {
 			this.vi = pre;
 			inscripcion = pre.getInscripcion();

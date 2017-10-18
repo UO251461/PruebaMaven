@@ -34,6 +34,7 @@ public class VentanaJustificante extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaJustificante(VentanaInscripcion vi) {
+		setTitle("Justificante");
 		this.vi = vi;
 		ins = vi.getInscripcion();
 		setResizable(false);

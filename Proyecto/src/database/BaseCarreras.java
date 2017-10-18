@@ -86,7 +86,8 @@ public class BaseCarreras {
 	}
 	public Carrera getCarreraSeleccionada(){
 		return carreraSeleccionada;
-	}
+	}	
+	
 
 	/**
 	 * Metodo que devuelve el nombre de la carrera pasado el idorganizador y el idcarrera (Samuel)
