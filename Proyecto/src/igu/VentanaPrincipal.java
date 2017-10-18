@@ -108,7 +108,8 @@ public class VentanaPrincipal extends JFrame {
 			btnUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String dni = JOptionPane.showInputDialog("Introduzca dni");
-					mostrarVentanaUsuario(dni);
+					if(!dni.isEmpty())
+						mostrarVentanaUsuario(dni);
 				}
 			});
 		}
@@ -127,7 +128,8 @@ public class VentanaPrincipal extends JFrame {
 			btClasificacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
-					mostrarVentanaClasificacion(competicion);
+					if(!competicion.isEmpty())
+						mostrarVentanaClasificacion(competicion);
 				}
 			});
 		}
