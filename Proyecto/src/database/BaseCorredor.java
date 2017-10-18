@@ -63,6 +63,7 @@ public class BaseCorredor {
 		DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
 		return DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
 	}
+
 	
 
 }

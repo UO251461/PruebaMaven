@@ -92,7 +92,8 @@ public class BaseInscripciones {
 		try {
 			
 			con = getConnection();
-			String consulta = "select * from inscripcion where inscripcion.idcompeticion = ? order by fecha";
+			String consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
+					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'INSCRITO' order by fecha";
 			PreparedStatement pst = con.prepareStatement(consulta);
 			
 			pst.setString(1, idCompeticion);
@@ -100,13 +101,47 @@ public class BaseInscripciones {
 			ResultSet rs1 = pst.executeQuery();
 			
 			while (rs1.next()) {
-				//coge las inscripciones pasada una competicion
-				//inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"),rs1.getString("idorganizador"),rs1.getString("dni"),rs1.getDate("fecha"),rs1.getInt("dorsal"),rs1.getFloat("tiempo")));
+				inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"),rs1.getString("idorganizador"),rs1.getString("dni"),
+						rs1.getString("estado"), rs1.getDate("fecha"),rs1.getString("categoria"),rs1.getString("nombre")));
 
 			}
-			ps.close();
+			
+			consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
+					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PRE-INSCRITO' order by fecha";
+			PreparedStatement pst2 = con.prepareStatement(consulta);
+			
+			pst2.setString(1, idCompeticion);
+			
+			ResultSet rs2 = pst2.executeQuery();
+			
+			while (rs2.next()) {
+				inscripcionesCarrera.add(new Inscripcion(rs2.getString("idcompeticion"),rs2.getString("idorganizador"),rs2.getString("dni"),
+						rs2.getString("estado"), rs2.getDate("fecha"),rs2.getString("categoria"),rs2.getString("nombre")));
+
+			}
+			
+			consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
+					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PENDIENTE DE PAGO' order by fecha";
+			PreparedStatement pst3 = con.prepareStatement(consulta);
+			
+			pst3.setString(1, idCompeticion);
+			
+			ResultSet rs3 = pst3.executeQuery();
+			
+			while (rs3.next()) {
+				inscripcionesCarrera.add(new Inscripcion(rs3.getString("idcompeticion"),rs3.getString("idorganizador"),rs3.getString("dni"),
+						rs3.getString("estado"), rs3.getDate("fecha"),rs3.getString("categoria"),rs3.getString("nombre")));
+
+			}
+			
+			pst.close();
+			rs1.close();
+			pst2.close();
+			rs2.close();
+			pst3.close();
+			rs3.close();
 			con.close();
-			rs.close();
+		
 
 
 		} catch (SQLException e) {
@@ -148,6 +183,9 @@ public class BaseInscripciones {
 		return inscripciones;
 	}
 	
+	public ArrayList<Inscripcion> getInscripcionesCarrera() {
+		return inscripcionesCarrera;
+	}
 	
 	private Connection getConnection() throws SQLException {
 

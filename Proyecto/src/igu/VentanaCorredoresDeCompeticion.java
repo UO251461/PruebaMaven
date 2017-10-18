@@ -38,27 +38,31 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JList<Inscripcion> list;
 	private DefaultListModel<Inscripcion> modeloCorredores= new DefaultListModel<Inscripcion>();
 	private Base base = new Base();
-
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaCorredoresDeCompeticion frame = new VentanaCorredoresDeCompeticion();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//private Carrera carrera;
+	private String carrera;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					
+					VentanaCorredoresDeCompeticion frame = new VentanaCorredoresDeCompeticion("6");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCorredoresDeCompeticion() {
+	public VentanaCorredoresDeCompeticion(String competicion) {
+		this.carrera = competicion;
+		cargarModelo();
 		setTitle("Corredores Competicion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 793, 516);
@@ -69,7 +73,8 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlCarrera(), BorderLayout.NORTH);
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
-		cargarModelo();
+		
+		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera,"1" ));
 		//poner el nombre de la carrera que el organizador quiere ver
 		//rellenar automaticamente con los corredores correspondientes a la carrera
 	}
@@ -136,8 +141,9 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	
 	private void cargarModelo() {
 		modeloCorredores.clear();
+		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);;
 		for (int i = 0; i < base.getBaseInscripciones().getInscripciones().size(); i++) {
-			modeloCorredores.addElement(base.getBaseInscripciones().getInscripciones().get(i));
+			modeloCorredores.addElement(base.getBaseInscripciones().getInscripcionesCarrera().get(i));
 		}
 	}
 }
