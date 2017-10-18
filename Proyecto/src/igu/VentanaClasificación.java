@@ -19,6 +19,10 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.JButton;
+import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaClasificación extends JFrame {
 
@@ -33,6 +37,7 @@ public class VentanaClasificación extends JFrame {
 	private JRadioButton rbFemenino;
 	private Base base;
 	private String competicion;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -87,7 +92,7 @@ public class VentanaClasificación extends JFrame {
 	private JTable getTablaClasificacion() {
 		if (tablaClasificacion == null) {
 			tablaClasificacion = new JTable();
-			String[] nombreColumnas = {"dni","Dorsal","Tiempo","Categoria"};
+			String[] nombreColumnas = {"posicion","DNI","Dorsal","Tiempo","Categoria"};
 			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
 			//las crearemos en tiempo de ejecucion
 			tablaClasificacion.setModel(modeloTabla);
@@ -120,6 +125,12 @@ public class VentanaClasificación extends JFrame {
 	private JRadioButton getRbAbsoluto() {
 		if (rbAbsoluto == null) {
 			rbAbsoluto = new JRadioButton("Absoluto");
+			rbAbsoluto.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					actualizarTabla();
+				}
+			});
+			buttonGroup.add(rbAbsoluto);
 			rbAbsoluto.setSelected(true);
 		}
 		return rbAbsoluto;
@@ -127,34 +138,58 @@ public class VentanaClasificación extends JFrame {
 	private JRadioButton getRbMasculino() {
 		if (rbMasculino == null) {
 			rbMasculino = new JRadioButton("Masculino");
+			rbMasculino.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					actualizarTabla();
+				}
+			});
+			buttonGroup.add(rbMasculino);
 		}
 		return rbMasculino;
 	}
 	private JRadioButton getRbFemenino() {
 		if (rbFemenino == null) {
 			rbFemenino = new JRadioButton("Femenino");
+			rbFemenino.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					actualizarTabla();
+				}
+			});
+			buttonGroup.add(rbFemenino);
 		}
 		return rbFemenino;
 	}
 	
 	public void añadirFilas(){
 		ArrayList<Inscripcion> datos;
-		Object[] nuevaFila = new Object[4];
+		Object[] nuevaFila = new Object[5];
 		if(rbAbsoluto.isSelected())
 			datos = base.getBaseInscripciones().generarClasificaciones(0, competicion);
 		else if(rbMasculino.isSelected())
 			datos = base.getBaseInscripciones().generarClasificaciones(1, competicion);
 		else
 			datos = base.getBaseInscripciones().generarClasificaciones(2, competicion);
+		int pos=1;
 		for(Inscripcion i:datos){
-			nuevaFila[0]= i.getDni();
-			nuevaFila[1]= i.getDorsal();
+			nuevaFila[0]=pos++;
+			nuevaFila[1]= i.getDni();
+			nuevaFila[2]= i.getDorsal();
 			if(i.getTiempo()==0)
-				nuevaFila[2]="---";
+				nuevaFila[3]="---";
 			else
-				nuevaFila[2]=i.getTiempo();
-			nuevaFila[3]=i.getCategoria();
+				nuevaFila[3]=i.getTiempo();
+			nuevaFila[4]=i.getCategoria();
 			modeloTabla.addRow(nuevaFila);
 		}
+	}
+	
+	
+	private  void actualizarTabla(){
+		//vacio el modelo de la tabla
+		modeloTabla.getDataVector().clear();
+		//lo vuelvo a rellenar
+		añadirFilas();
+		//necesario para repintar la tabla(especialmente cuando se queda vacia)
+		modeloTabla.fireTableDataChanged();
 	}
 }

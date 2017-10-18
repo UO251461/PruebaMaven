@@ -273,7 +273,7 @@ public class BaseInscripciones {
 			} else if (n == 1) {
 				// se crean las clasificaciones masculinas
 				PreparedStatement ps=con.prepareStatement(
-						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') AND IDCOMPETICION=? ORDER BY TIEMPO");
+						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
@@ -286,7 +286,7 @@ public class BaseInscripciones {
 			} else if (n == 2) {
 				// se crean las clasificaciones femeninas
 				PreparedStatement ps=con.prepareStatement(
-						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') AND IDCOMPETICION=? ORDER BY TIEMPO");
+						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
