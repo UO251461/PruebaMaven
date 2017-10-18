@@ -62,7 +62,7 @@ public class VentanaUsuario extends JFrame {
 	private JTable getTablaInscripciones() {
 		if (tablaInscripciones == null) {
 			tablaInscripciones = new JTable();
-			String[] nombreColumnas = {"IdCompeticion", "IdOrganizador","Estado","Fecha", "Dorsal","Tiempo","Categoria"};
+			String[] nombreColumnas = {"IdCompeticion", "IdOrganizador","Estado","Fecha", "Dorsal","Tiempo"};
 			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
 			//las crearemos en tiempo de ejecucion
 			tablaInscripciones.setModel(modeloTabla);
@@ -95,7 +95,7 @@ public class VentanaUsuario extends JFrame {
 	
 	
 	public void añadirFilas(){
-		Object[] nuevaFila = new Object[7];
+		Object[] nuevaFila = new Object[6];
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
 			nuevaFila[0]= i.getId_competicion();
@@ -107,7 +107,7 @@ public class VentanaUsuario extends JFrame {
 				nuevaFila[5]="---";
 			else
 				nuevaFila[5]=i.getTiempo();
-			nuevaFila[6]=i.getCategoria();
+			//nuevaFila[6]=i.getCategoria();
 			modeloTabla.addRow(nuevaFila);
 		}
 	}

@@ -260,13 +260,13 @@ public class BaseInscripciones {
 			// se crean las clasificaciones absolutas
 			if (n == 0) {
 				
-				PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCION WHERE DORSAL>0 AND IDCOMPETICION=? ORDER BY TIEMPO");
+				PreparedStatement ps=con.prepareStatement("SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni  ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO")));
+							rs.getDouble("TIEMPO"), rs.getString("SEXO")));
 				}
 				rs.close();
 				ps.close();
@@ -279,7 +279,7 @@ public class BaseInscripciones {
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO")));
+							rs.getDouble("TIEMPO"), "HOMBRE"));
 				}
 				rs.close();
 				ps.close();
@@ -292,7 +292,7 @@ public class BaseInscripciones {
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO")));
+							rs.getDouble("TIEMPO"), "MUJER"));
 				}
 				rs.close();
 				ps.close();

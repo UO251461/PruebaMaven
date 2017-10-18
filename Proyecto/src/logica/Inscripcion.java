@@ -45,6 +45,17 @@ public class Inscripcion {
 			this.tiempo=tiempo;
 		}
 		
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria) {
+			this.dni = dni;
+			this.id_competicion = idCompeticion;
+			this.id_organizador = idOrganizador;
+			this.estado = pagado;
+			this.fecha = fecha;
+			this.dorsal=dorsal;
+			this.tiempo=tiempo;
+			this.categoria=categoria;
+		}
+		
 		
 		public Inscripcion(String idCarrera, String idOrganizador, String dni, double pre) {
 			id_competicion = idCarrera;
