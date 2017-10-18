@@ -94,7 +94,7 @@ public class VentanaUsuario extends JFrame {
 	
 	public void añadirFilas(){
 		Object[] nuevaFila = new Object[7];
-		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta("123");
+		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
 			nuevaFila[0]= i.getId_competicion();
 			nuevaFila[1]= i.getId_organizador();
