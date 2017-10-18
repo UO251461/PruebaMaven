@@ -1,7 +1,5 @@
 package igu;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,29 +7,31 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
+
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
-import com.toedter.calendar.JMonthChooser;
+
 
 import database.Base;
 import logica.Carrera;
 import logica.Inscripcion;
 
-import com.toedter.calendar.JCalendar;
+
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
-import java.awt.Component;
-import javax.swing.DefaultComboBoxModel;
+
 
 public class VentanaInscripcion extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblDni;
 	private JTextField txtDni;
@@ -56,7 +56,6 @@ public class VentanaInscripcion extends JFrame {
 	private JTextField txtApellidos;
 	
 	protected String sexoSelected = "HOMBRE";
-	private JButton btnNewButton;
 	
 	/**
 	 * Create the frame.
@@ -74,7 +73,6 @@ public class VentanaInscripcion extends JFrame {
 		contentPane.add(getBtnCancelar());
 		contentPane.add(getBtnRegistrar());
 		contentPane.add(getPanel());
-		contentPane.add(getBtnNewButton());
 		
 	}
 	private JLabel getLblDni() {
@@ -353,17 +351,5 @@ public class VentanaInscripcion extends JFrame {
 	private void cancelar() {
 		dispose();
 		vc.setVisible(true);
-	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("(BOTON DE PRUEBA) ASIGNAR DORSAL");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					vc.getBase().getBaseInscripciones().asignarDorsal();
-				}
-			});
-			btnNewButton.setBounds(136, 451, 305, 23);
-		}
-		return btnNewButton;
 	}
 }

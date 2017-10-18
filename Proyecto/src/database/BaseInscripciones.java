@@ -308,28 +308,42 @@ public class BaseInscripciones {
 	 * Asigna el campo dorsal de la tabla inscripciones de aquellos que esten en
 	 * estado INSCRITO(Samuel)
 	 */
-	public void asignarDorsal() {
+	public boolean asignarDorsal(String idcompeticion, String idorganizador) {
+		boolean asignada = false;
 		try {
-			Connection con = getConnection();
+			con = getConnection();
 			ps = con.prepareStatement(
-					"SELECT idcompeticion, idorganizador, dni FROM inscripcion WHERE estado = 'INSCRITO' ORDER BY FECHA ASC");
+					"SELECT dni FROM inscripcion WHERE estado = 'INSCRITO' AND idcompeticion = ?"
+					+ " AND  idorganizador = ? ORDER BY FECHA ASC");
+			ps.setString(1, idcompeticion);
+			ps.setString(2, idorganizador);
+			
 			PreparedStatement corredorInscrito = con.prepareStatement(
 					"UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
+			
+			
 			rs = ps.executeQuery();
 			// se dejan los 10 primeros (requisito)
 			int numeroDorsal = 11;
+			
 			while (rs.next()) {
+				asignada = true;
 				corredorInscrito.setInt(1, numeroDorsal);
-				corredorInscrito.setString(2, rs.getString(1));
-				corredorInscrito.setString(3, rs.getString(2));
-				corredorInscrito.setString(4, rs.getString(3));
+				corredorInscrito.setString(2, idcompeticion);
+				corredorInscrito.setString(3, idorganizador);
+				corredorInscrito.setString(4, rs.getString(1));
 				corredorInscrito.executeQuery();
 				numeroDorsal++;
 			}
 
+			corredorInscrito.close();
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally{
+			cerrarConexion();
 		}
+		return asignada;
 	}
 
 }

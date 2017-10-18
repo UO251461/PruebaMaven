@@ -30,6 +30,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel;
 	private JButton btnUsuario;
 	private JButton btClasificacion;
+	private JButton btnAsignarDorsal;
 
 	/**
 	 * Launch the application.
@@ -99,6 +100,7 @@ public class VentanaPrincipal extends JFrame {
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
 			panel.add(getBtClasificacion());
+			panel.add(getBtnAsignarDorsal());
 		}
 		return panel;
 	}
@@ -140,5 +142,22 @@ public class VentanaPrincipal extends JFrame {
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);
+	}
+	private JButton getBtnAsignarDorsal() {
+		if (btnAsignarDorsal == null) {
+			btnAsignarDorsal = new JButton("Asignar dorsal");
+			btnAsignarDorsal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String competicion = JOptionPane.showInputDialog("Introduzca id de la competición");
+					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
+					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
+					if(isAsignada)					
+						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
+					else
+						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
+				}
+			});
+		}
+		return btnAsignarDorsal;
 	}
 }
