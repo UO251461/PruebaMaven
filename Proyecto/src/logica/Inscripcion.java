@@ -22,6 +22,7 @@ public class Inscripcion {
 			this.id_organizador = idOrganizador;
 			this.estado = pagado;
 			this.fecha = fecha;
+			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
@@ -31,6 +32,7 @@ public class Inscripcion {
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.nombreCorredor = nombre;
+			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
@@ -126,8 +128,9 @@ public class Inscripcion {
 			}
 		}
 		
+		@Override
 		public String toString() {
-			return this.dni + " " + this.dni + " "+ this.categoria + " "+ this.fecha + "\t\t"+ this.estado;
+			return this.dni + " " + this.nombreCorredor + " "+ this.categoria + " "+ this.fecha + "------------->"+ this.estado;
 		}
 	
 }

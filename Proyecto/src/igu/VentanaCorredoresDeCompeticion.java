@@ -75,8 +75,6 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 		
 		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera,"1" ));
-		//poner el nombre de la carrera que el organizador quiere ver
-		//rellenar automaticamente con los corredores correspondientes a la carrera
 	}
 
 	/*
@@ -141,9 +139,11 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	
 	private void cargarModelo() {
 		modeloCorredores.clear();
-		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);;
-		for (int i = 0; i < base.getBaseInscripciones().getInscripciones().size(); i++) {
-			modeloCorredores.addElement(base.getBaseInscripciones().getInscripcionesCarrera().get(i));
+		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);
+		Inscripcion insc;
+		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
+			insc = base.getBaseInscripciones().getInscripcionesCarrera().get(i);
+			modeloCorredores.addElement(insc);
 		}
 	}
 }

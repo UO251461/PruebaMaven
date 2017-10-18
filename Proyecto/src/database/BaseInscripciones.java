@@ -121,7 +121,7 @@ public class BaseInscripciones {
 			}
 			
 			consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
-					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PENDIENTE DE PAGO' order by fecha";
+					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PENDIENTE_DE_PAGO' order by fecha";
 			PreparedStatement pst3 = con.prepareStatement(consulta);
 			
 			pst3.setString(1, idCompeticion);
