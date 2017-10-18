@@ -180,28 +180,29 @@ public class BaseInscripciones {
 	 * muestra el estado de su inscripcion
 	 * tambien el tiempo y la posicion si dicha carrera ha finalizado.
 	 * @param atleta identificador del atleta cuyos datos se desean obtener.
+	 * @return 
 	 */
-	public void getDatosAtleta(String atleta) {
+	public ArrayList<Inscripcion> getDatosAtleta(String atleta) {
+		ArrayList<Inscripcion> datos = new ArrayList<Inscripcion>();
 		try {
 			Connection con = getConnection();
-			PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCIONES WHERE DNI=? ORDER BY FECHA DESC");	//<-- aqui va la consulta que esta en proceso de crearse
+			PreparedStatement ps=con.prepareStatement("SELECT * FROM INSCRIPCION WHERE DNI=? ORDER BY FECHA DESC");
 			ps.setString(1, atleta);	//se introduce el identificador del atleta
 			ResultSet rs = ps.executeQuery();		
 			
 			while(rs.next()) {
-				//mientras se reciban datos, se almacenaran en un array para posteriormente tratarlos
-				//en la logica o donde sea necesario
-				//por lo que este metodo en vez de void devolvera un Array
+				datos.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
 			}
 			
 			rs.close();
 			ps.close();
 			con.close();
+			
 		} catch (SQLException e) {
 			
 			e.printStackTrace();
 		}
-		
+		return datos;
 	}
 	
 	/**
@@ -215,7 +216,7 @@ public class BaseInscripciones {
 			Connection con = getConnection();
 			Statement st = con.createStatement();
 			//se crean las clasificaciones absolutas
-			ResultSet rs= st.executeQuery("SELECT * FROM INSCRIPCIONES WHERE DORSAL>0 ORDER BY TIEMPO");
+			ResultSet rs= st.executeQuery("SELECT * FROM INSCRIPCION WHERE DORSAL>0 ORDER BY TIEMPO");
 			while(rs.next()){
 				clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),rs.getString("DNI"),rs.getString("ESTADO"),rs.getDate("FECHA"),rs.getInt("DORSAL"),rs.getDouble("TIEMPO")));
 			}
