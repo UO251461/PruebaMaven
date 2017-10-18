@@ -151,8 +151,7 @@ public class VentanaInscripcion extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					if(validarCampos()){
 						try{							
-							registrar();		
-							continuar();
+							registrar();							
 						}catch(SQLException sql){
 							errorSQL(sql);
 						}
@@ -292,7 +291,13 @@ public class VentanaInscripcion extends JFrame {
 		
 		inscripcion = new Inscripcion(carreraSel.getIdcarrera(), carreraSel.getOrganizador().getIdorganizador() ,txtDni.getText(), carreraSel.getPrecio()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
 		inscripcion.asignarCategoria(fecha.getDate(),carreraSel);//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
-		getBase().getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);		
+		//SE COMPRUEBA QUE NO SEA MENOR DE EDAD
+		if(inscripcion.getCategoria().equals("Menor de edad"))
+			JOptionPane.showMessageDialog(this, "Usted es menor de edad y no puede inscribirse en la carrera");
+		else{
+			getBase().getBaseInscripciones().registrarCorredor(txtDni.getText(), txtNombre.getText(),txtApellidos.getText(), date, sexoSelected, inscripcion);
+			continuar();
+		}		
 	}
 
 	/**
