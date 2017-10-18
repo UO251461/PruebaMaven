@@ -26,29 +26,30 @@ public class VentanaUsuario extends JFrame {
 	private String atleta;
 	private JScrollPane scrollPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaUsuario frame = new VentanaUsuario();
-					frame.setVisible(true);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaUsuario frame = new VentanaUsuario();
+//					frame.setVisible(true);
+//					
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaUsuario() {
+	public VentanaUsuario(String atleta) {
 		base=new Base();
 		base.inicializar();
+		this.atleta=atleta;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 636, 464);
 		contentPane = new JPanel();
@@ -78,6 +79,7 @@ public class VentanaUsuario extends JFrame {
 					//programar el doble click
 					if(arg0.getClickCount()==2){
 						//si se hace doble click, que muestre la clasificacion de esa carrera
+						mostrarVentanaClasificacion((String)tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 0));
 					}
 				}
 			});
@@ -115,6 +117,13 @@ public class VentanaUsuario extends JFrame {
 			scrollPane.setViewportView(getTablaInscripciones());
 		}
 		return scrollPane;
+	}
+	
+	private void mostrarVentanaClasificacion(String competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+		vc.setLocationRelativeTo(this);
+		vc.setModal(true);
+		vc.setVisible(true);
 	}
 }
 

@@ -18,13 +18,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Dialog.ModalExclusionType;
 
-public class VentanaClasificación extends JFrame {
+public class VentanaClasificacion extends JDialog {
 
 	private ModeloNoEditable modeloTabla;
 	private JPanel contentPane;
@@ -38,31 +40,31 @@ public class VentanaClasificación extends JFrame {
 	private Base base;
 	private String competicion;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaClasificación frame = new VentanaClasificación();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VentanaClasificacion frame = new VentanaClasificacion();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaClasificación() {
+	public VentanaClasificacion(String competicion) {
+		setTitle("Clasificacion");
 		base=new Base();
 		base.inicializar();
-		competicion="6";
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.competicion=competicion;
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
