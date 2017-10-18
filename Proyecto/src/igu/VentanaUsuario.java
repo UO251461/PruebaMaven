@@ -35,8 +35,6 @@ public class VentanaUsuario extends JFrame {
 				try {
 					VentanaUsuario frame = new VentanaUsuario();
 					frame.setVisible(true);
-					base=new Base();
-					base.inicializar();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -49,6 +47,8 @@ public class VentanaUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaUsuario() {
+		base=new Base();
+		base.inicializar();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 636, 464);
 		contentPane = new JPanel();
@@ -94,14 +94,17 @@ public class VentanaUsuario extends JFrame {
 	
 	public void añadirFilas(){
 		Object[] nuevaFila = new Object[7];
-		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
+		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta("123");
 		for(Inscripcion i:datos){
 			nuevaFila[0]= i.getId_competicion();
 			nuevaFila[1]= i.getId_organizador();
 			nuevaFila[2]= i.getEstado();
 			nuevaFila[3]= i.getFecha();
 			nuevaFila[4]=i.getDorsal();
-			nuevaFila[5]=i.getTiempo();
+			if(i.getTiempo()==0)
+				nuevaFila[5]="---";
+			else
+				nuevaFila[5]=i.getTiempo();
 			nuevaFila[6]=i.getCategoria();
 			modeloTabla.addRow(nuevaFila);
 		}
