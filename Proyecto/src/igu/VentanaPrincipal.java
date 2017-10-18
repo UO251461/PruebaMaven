@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import database.Base;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -26,6 +27,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnMostrarCarreras;
 	
 	private Base base;
+	private JPanel panel;
+	private JButton btnUsuario;
 
 	/**
 	 * Launch the application.
@@ -56,7 +59,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		contentPane.add(getLblAplicacion(), BorderLayout.NORTH);
-		contentPane.add(getBtnMostrarCarreras(), BorderLayout.SOUTH);
+		contentPane.add(getPanel(), BorderLayout.SOUTH);
 	}
 
 	private JLabel getLblAplicacion() {
@@ -88,5 +91,32 @@ public class VentanaPrincipal extends JFrame {
 	
 	public Base getBase(){
 		return base;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.add(getBtnUsuario());
+			panel.add(getBtnMostrarCarreras());
+		}
+		return panel;
+	}
+	private JButton getBtnUsuario() {
+		if (btnUsuario == null) {
+			btnUsuario = new JButton("Ver Usuario");
+			btnUsuario.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String dni = JOptionPane.showInputDialog("Introduzca dni");
+					mostrarVentanaUsuario(dni);
+				}
+			});
+		}
+		return btnUsuario;
+	}
+	
+	private void mostrarVentanaUsuario(String dni){
+		VentanaUsuario vu = new VentanaUsuario(dni);
+		vu.setLocationRelativeTo(this);
+		//vu.setModal(true);
+		vu.setVisible(true);
 	}
 }
