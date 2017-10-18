@@ -29,6 +29,7 @@ public class VentanaPrincipal extends JFrame {
 	private Base base;
 	private JPanel panel;
 	private JButton btnUsuario;
+	private JButton btClasificacion;
 
 	/**
 	 * Launch the application.
@@ -97,6 +98,7 @@ public class VentanaPrincipal extends JFrame {
 			panel = new JPanel();
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
+			panel.add(getBtClasificacion());
 		}
 		return panel;
 	}
@@ -118,5 +120,23 @@ public class VentanaPrincipal extends JFrame {
 		vu.setLocationRelativeTo(this);
 		//vu.setModal(true);
 		vu.setVisible(true);
+	}
+	private JButton getBtClasificacion() {
+		if (btClasificacion == null) {
+			btClasificacion = new JButton("Ver Clasificacion");
+			btClasificacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
+					mostrarVentanaClasificacion(competicion);
+				}
+			});
+		}
+		return btClasificacion;
+	}
+	private void mostrarVentanaClasificacion(String competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+		vc.setLocationRelativeTo(this);
+		vc.setModal(true);
+		vc.setVisible(true);
 	}
 }
