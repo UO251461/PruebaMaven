@@ -28,6 +28,8 @@ public class VentanaConfirmacionPago extends JDialog {
 	private JLabel lblPrecio;
 	private JTextField txtPrecio;
 	private JButton btnAceptar;
+	private JTextField txtAviso;
+	private JButton btnCancelar;
 	
 
 //	/**
@@ -63,6 +65,8 @@ public class VentanaConfirmacionPago extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		txtPrecio.setText(String.valueOf(vi.getInscripcion().getPrecio()));
 		txtEntidadBancaria.setText("ES89138183901929");
+		contentPanel.add(getTxtAviso());
+		contentPanel.add(getBtnCancelar());
 		setVisible(true);
 		
 	}
@@ -89,7 +93,7 @@ public class VentanaConfirmacionPago extends JDialog {
 		if (lblPrecio == null) {
 			lblPrecio = new JLabel("Precio inscripci\u00F3n: ");
 			lblPrecio.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblPrecio.setBounds(23, 141, 139, 25);
+			lblPrecio.setBounds(23, 104, 139, 25);
 		}
 		return lblPrecio;
 	}
@@ -97,7 +101,7 @@ public class VentanaConfirmacionPago extends JDialog {
 		if (txtPrecio == null) {
 			txtPrecio = new JTextField();
 			txtPrecio.setFont(new Font("Tahoma", Font.PLAIN, 20));
-			txtPrecio.setBounds(170, 136, 69, 31);
+			txtPrecio.setBounds(170, 99, 69, 31);
 			txtPrecio.setColumns(10);
 		}
 		return txtPrecio;
@@ -129,5 +133,30 @@ public class VentanaConfirmacionPago extends JDialog {
 	private void pasarAPendientePago(){
 		JOptionPane.showMessageDialog(this, "Recuerde, su inscripción está pendiente de pago");
 		vi.getBase().getBaseInscripciones().cambiarEstado("PENDIENTE_DE_PAGO", vi.getInscripcion());
+	}
+	private JTextField getTxtAviso() {
+		if (txtAviso == null) {
+			txtAviso = new JTextField();
+			txtAviso.setBorder(new EmptyBorder(0, 0, 0, 0));
+			txtAviso.setBackground(Color.WHITE);
+			txtAviso.setEditable(false);
+			txtAviso.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtAviso.setText("Tiene un limite de 48 horas para realizar el pago, si no se anular\u00E1 su inscripci\u00F3n.");
+			txtAviso.setBounds(23, 173, 513, 33);
+			txtAviso.setColumns(10);
+		}
+		return txtAviso;
+	}
+	private JButton getBtnCancelar() {
+		if (btnCancelar == null) {
+			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			btnCancelar.setBounds(343, 233, 89, 23);
+		}
+		return btnCancelar;
 	}
 }
