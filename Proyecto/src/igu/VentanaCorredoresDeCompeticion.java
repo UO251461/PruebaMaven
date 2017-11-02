@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import database.Base;
 import logica.Carrera;
 import logica.Inscripcion;
-
+import logica.ModeloNoEditable;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -21,10 +21,14 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JTable;
 
 public class VentanaCorredoresDeCompeticion extends JFrame {
 
@@ -35,34 +39,37 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JButton btnAtras;
-	private JList<Inscripcion> list;
-	private DefaultListModel<Inscripcion> modeloCorredores= new DefaultListModel<Inscripcion>();
+//	private DefaultListModel<Inscripcion> modeloCorredores = new DefaultListModel<Inscripcion>();
 	private Base base = new Base();
-	//private Carrera carrera;
-	private String carrera;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					
-					VentanaCorredoresDeCompeticion frame = new VentanaCorredoresDeCompeticion("6");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	// private Carrera carrera;
+	private Carrera carrera;
+	private JTable tabla;
+	private ModeloNoEditable modeloTabla;
+
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//
+//					VentanaCorredoresDeCompeticion frame = new VentanaCorredoresDeCompeticion("6");
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCorredoresDeCompeticion(String competicion) {
+	public VentanaCorredoresDeCompeticion(Carrera competicion) {
 		this.carrera = competicion;
-		cargarModelo();
+		//cargarModelo();
+		
 		setTitle("Corredores Competicion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 793, 516);
@@ -73,8 +80,10 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlCarrera(), BorderLayout.NORTH);
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
+
+		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera.getIdcarrera(), "1"));
 		
-		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera,"1" ));
+		actualizarTabla();
 	}
 
 	/*
@@ -83,7 +92,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private void setTextCarrera(String carrera) {
 		txtCarrera.setText(carrera);
 	}
-	
+
 	private JPanel getPnlCarrera() {
 		if (pnlCarrera == null) {
 			pnlCarrera = new JPanel();
@@ -93,6 +102,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		return pnlCarrera;
 	}
+
 	private JPanel getPnlBotones() {
 		if (pnlBotones == null) {
 			pnlBotones = new JPanel();
@@ -101,13 +111,15 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		return pnlBotones;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setViewportView(getList());
+			scrollPane.setViewportView(getTable());
 		}
 		return scrollPane;
 	}
+
 	private JLabel getLblCarrera() {
 		if (lblCarrera == null) {
 			lblCarrera = new JLabel("Carrera:");
@@ -115,6 +127,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		return lblCarrera;
 	}
+
 	private JTextField getTxtCarrera() {
 		if (txtCarrera == null) {
 			txtCarrera = new JTextField();
@@ -124,26 +137,71 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		return txtCarrera;
 	}
+
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
 		}
 		return btnAtras;
 	}
-	private JList<Inscripcion> getList() {
-		if (list == null) {
-			list = new JList<Inscripcion>(modeloCorredores);
+
+//	private void cargarModelo() {
+//		modeloCorredores.clear();
+//		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);
+//		Inscripcion insc;
+//		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
+//			insc = base.getBaseInscripciones().getInscripcionesCarrera().get(i);
+//			modeloCorredores.addElement(insc);
+//		}
+//	}
+
+	private JTable getTable() {
+		if (tabla== null) {
+			tabla= new JTable();
+			String[] nombreColumnas = {"DNI","Nombre","Categoria","Fecha Inscripcion"};
+			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
+			//las crearemos en tiempo de ejecucion
+			tabla.setModel(modeloTabla);
+			//Aplica el renderer que marca la fila seleccionada en rojo y negrita
+			//tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
+			///subo el alto de la fila
+			tabla.setRowHeight(30);
+			//modifico el ancho de la columna 0
+			tabla.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
+			tabla.getTableHeader().setReorderingAllowed(false);
+			tabla.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					//programar el doble click
+					if(arg0.getClickCount()==2){
+						//si se hace doble click, que muestre la clasificacion de esa carrera
+					}
+				}
+			});
+			addFilas(); //aqui o antes de pasarle el modelo
 		}
-		return list;
+		return tabla;
 	}
 	
-	private void cargarModelo() {
-		modeloCorredores.clear();
-		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);
-		Inscripcion insc;
+	
+	public void addFilas(){
+		ArrayList<Inscripcion> datos;
+		Object[] nuevaFila = new Object[5];
 		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
-			insc = base.getBaseInscripciones().getInscripcionesCarrera().get(i);
-			modeloCorredores.addElement(insc);
+			nuevaFila[0]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getDni();
+			nuevaFila[1]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getNombre();
+			nuevaFila[2]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getCategoria();
+			nuevaFila[3]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getFecha().toGMTString();
 		}
 	}
+	
+	private  void actualizarTabla(){
+		//vacio el modelo de la tabla
+		modeloTabla.getDataVector().clear();
+		//lo vuelvo a rellenar
+		addFilas();
+		//necesario para repintar la tabla(especialmente cuando se queda vacia)
+		modeloTabla.fireTableDataChanged();
+	}
+	
 }
