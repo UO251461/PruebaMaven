@@ -81,7 +81,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 
-		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera.getIdcarrera(), "1"));
+		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera.getIdcarrera(), carrera.getOrganizador().getIdorganizador()));
 		
 		actualizarTabla();
 	}
