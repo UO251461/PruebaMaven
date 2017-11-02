@@ -20,6 +20,7 @@ public class BaseInscripciones {
 	private ArrayList<Inscripcion> inscripciones;
 	private ArrayList<Inscripcion> inscripcionesCarrera;
 
+	
 	public BaseInscripciones() {
 		inscripciones = new ArrayList<Inscripcion>();
 		inscripcionesCarrera = new ArrayList<Inscripcion>();
@@ -29,12 +30,9 @@ public class BaseInscripciones {
 	 * Cierra debidamente la conexion (Samuel)
 	 */
 	private void cerrarConexion() {
-		try {
-			ps.close();
-			con.close();
-		} catch (SQLException sq) {
-			sq.printStackTrace();
-		}
+		if(con!=null)try {con.close();}catch(SQLException sq) {sq.printStackTrace();}
+		if(ps!=null)try {ps.close();}catch(SQLException sq) {sq.printStackTrace();}
+		if(rs!=null)try {rs.close();}catch(SQLException sq) {sq.printStackTrace();}
 
 	}
 
@@ -44,12 +42,11 @@ public class BaseInscripciones {
 			ps = con.prepareStatement(
 					"UPDATE INSCRIPCION SET ESTADO = ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI = ?");
 			ps.setString(1, estado);
-			ps.setString(2, ins.getId_competicion());
-			ps.setString(3, ins.getId_organizador());
-			ps.setString(4, ins.getDni());
+			ps.setString(2, ins.getCarrera().getIdcarrera());
+			ps.setString(3, ins.getCarrera().getOrganizador().getIdorganizador());
+			ps.setString(4, ins.getCorredor().getDni());
 			rs = ps.executeQuery();
 			ins.setEstado(estado);
-			rs.close();
 		} catch (SQLException sq) {
 			sq.printStackTrace();
 		} finally {
@@ -58,7 +55,18 @@ public class BaseInscripciones {
 
 	}
 
-	public void registrarCorredor(String dni, String nombre, String apellido, String fecha, String sexo,
+	/**
+	 * Si el corredor no esta en la tabla registro lo inserta y rellena sus datos en el objeto inscripcion,
+	 * en caso contrariorecupera los datos de la tabla y los  rellena en inscripcion (Samuel)
+	 * @param dni
+	 * @param nombre
+	 * @param apellido
+	 * @param fecha
+	 * @param sexo
+	 * @param inscripcion
+	 * @throws SQLException
+	 */
+	public void registrarCorredor(String fecha, 
 			Inscripcion inscripcion) throws SQLException {// (String dni, String
 															// nombre, String
 															// aplllido, String
@@ -67,6 +75,11 @@ public class BaseInscripciones {
 		try {
 			con = getConnection();
 
+			Corredor c = inscripcion.getCorredor();
+			String dni = c.getDni();
+			String nombre = c.getNombre();
+			String apellido = c.getApellido();
+			String sexo = c.getSexo();
 			// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
 			ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
 			ps.setString(1, dni);
@@ -75,7 +88,6 @@ public class BaseInscripciones {
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
 			rs = ps.executeQuery();
-			rs.close();
 		} catch (SQLException sql) {
 			// SI YA ESTÁ REGISTRADO NO HACE NADA
 		} finally {
@@ -161,25 +173,26 @@ public class BaseInscripciones {
 			ps = con.prepareStatement(
 					"INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA) VALUES(?,?,?,'PRE-INSCRITO',?,?)");
 			Date fecha = new Date();
-			ps.setString(1, inscripcion.getId_competicion());
-			ps.setString(2, inscripcion.getId_organizador());
-			ps.setString(3, inscripcion.getDni());
+			ps.setString(1, inscripcion.getCarrera().getIdcarrera());
+			ps.setString(2, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			ps.setString(3, inscripcion.getCorredor().getDni());
 			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
 			ps.setString(5, inscripcion.getCategoria());
+			
+			inscripcion.setFecha(fecha);
+			
 			rs = ps.executeQuery();
 
 			// si no no esta inscrito(Samuel)
-			inscripcion.setId_competicion(inscripcion.getId_competicion());
-			inscripcion.setId_organizador(inscripcion.getId_organizador());
+			//inscripcion.setId_competicion(inscripcion.getCarrera());
+			//inscripcion.setId_organizador(inscripcion.getId_organizador());
 			inscripcion.setEstado("PRE-INSCRITO");
-			inscripcion.setPrecio(inscripcion.getPrecio());
-			inscripcion.setFecha(fecha);
+			//inscripcion.setPrecio(inscripcion.getPrecio());
+			
 
-			rs.close();
 		} finally {
 			cerrarConexion();
 		}
-		rs.close();
 	}
 
 	public ArrayList<Inscripcion> getInscripciones() {
@@ -344,6 +357,23 @@ public class BaseInscripciones {
 			cerrarConexion();
 		}
 		return asignada;
+	}
+
+	public Corredor estaRegistrado(String dni) {
+		try {
+			con = getConnection();
+			ps = con.prepareStatement("select DNI, NOMBRE, APELLIDO, SEXO from CORREDOR where dni = ?");
+			ps.setString(1, dni);
+			rs = ps.executeQuery();
+			if(rs.next())
+				return new Corredor(rs.getString("DNI"), 0, rs.getString("SEXO"), rs.getString("NOMBRE"), rs.getString("APELLIDO"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			cerrarConexion();
+		}
+		
+		return null;
 	}
 
 }

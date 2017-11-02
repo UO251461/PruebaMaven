@@ -27,7 +27,6 @@ public class VentanaJustificante extends JDialog {
 	private JLabel lblJusticicanteDeLa;
 	private VentanaInscripcion vi;
 	private JButton btnContinuar;
-
 	private Inscripcion ins;
 
 	/**
@@ -46,8 +45,8 @@ public class VentanaJustificante extends JDialog {
 			JTextArea txtrJustificanteDeInscripcinn = new JTextArea();
 			txtrJustificanteDeInscripcinn.setEditable(false);
 			txtrJustificanteDeInscripcinn.setBounds(20, 71, 359, 70);
-			txtrJustificanteDeInscripcinn.setText("Fecha de inscripción : " + new SimpleDateFormat("dd-MM-yyyy").format(ins.getFecha())+"\nNombre : " + base.getNombreCorredor(ins.getDni()) +
-					"\nNombre de la competici\u00F3n : " + base.getNombreCarrera(ins.getId_competicion(), ins.getId_organizador()));
+			txtrJustificanteDeInscripcinn.setText("Fecha de inscripción : " + new SimpleDateFormat("dd-MM-yyyy").format(ins.getFecha())+"\nNombre : " + ins.getCorredor().getNombre() +
+					"\nNombre de la competici\u00F3n : " + ins.getCarrera().getNombre());
 			getContentPane().add(txtrJustificanteDeInscripcinn);
 		}
 		getContentPane().add(getTxtrIporte());
@@ -61,7 +60,7 @@ public class VentanaJustificante extends JDialog {
 		if (txtrIporte == null) {
 			txtrIporte = new JTextArea();
 			txtrIporte.setFont(new Font("Monospaced", Font.BOLD, 18));
-			txtrIporte.setText("IMPORTE :" + ins.getPrecio());
+			txtrIporte.setText("IMPORTE :" + ins.getCarrera().getPrecio());
 			txtrIporte.setBounds(117, 168, 210, 34);
 		}
 		return txtrIporte;

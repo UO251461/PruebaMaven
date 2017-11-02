@@ -38,7 +38,6 @@ public class VentanaMetodoPago extends JDialog {
 	private JRadioButton rdbtnTarjeta;
 	private JRadioButton rdbtnTransferencia;
 	
-
 	private JLabel lblTipoDeTarjeta;
 	private JPanel panel;
 	
@@ -220,12 +219,12 @@ public class VentanaMetodoPago extends JDialog {
 	}
 	
 	private void ocultarTarjeta(){
-		setBounds(300, 300, 605, 127);
+		setBounds(getX(), getY(), 605, 127);
 		panel.setVisible(false);
 	}
 	
 	private void mostrarTarjeta(){
-		setBounds(300, 300, 605, 290);
+		setBounds(getX(), getY(), 605, 290);
 		panel.setVisible(true);		
 	}
 	private JPanel getPaneok() {
