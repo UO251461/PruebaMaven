@@ -110,7 +110,7 @@ public class VentanaPrincipal extends JFrame {
 			btnUsuario.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String dni = JOptionPane.showInputDialog("Introduzca dni");
-					if(!dni.isEmpty())
+					if(dni!=null && !dni.isEmpty())
 						mostrarVentanaUsuario(dni);
 				}
 			});
@@ -130,7 +130,7 @@ public class VentanaPrincipal extends JFrame {
 			btClasificacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
-					if(!competicion.isEmpty())
+					if( competicion!=null && !competicion.isEmpty())
 						mostrarVentanaClasificacion(competicion);
 				}
 			});

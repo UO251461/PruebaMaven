@@ -279,7 +279,7 @@ public class BaseInscripciones {
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO"), rs.getString("SEXO")));
+							rs.getDouble("TIEMPO"), rs.getString("Categoria"), rs.getString("SEXO")));
 				}
 				rs.close();
 				ps.close();
@@ -292,7 +292,7 @@ public class BaseInscripciones {
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO"), "HOMBRE"));
+							rs.getDouble("TIEMPO"),rs.getString("Categoria") ,"HOMBRE"));
 				}
 				rs.close();
 				ps.close();
@@ -305,7 +305,7 @@ public class BaseInscripciones {
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO"), "MUJER"));
+							rs.getDouble("TIEMPO"), rs.getString("Categoria"),"MUJER"));
 				}
 				rs.close();
 				ps.close();

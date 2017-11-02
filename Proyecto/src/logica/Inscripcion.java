@@ -11,7 +11,7 @@ public class Inscripcion {
 		private int dorsal;
 		
 		private double tiempo;
-		private Corredor corredor;//CORREDOR TIENE ID, DNI
+		private Corredor corredor;//CORREDOR TIENE ID, DNI, Sexo
 		
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
@@ -42,8 +42,8 @@ public class Inscripcion {
 			this.tiempo=tiempo;
 		}
 		
-		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria) {
-			corredor = new Corredor(dni, 0, "", "", "");
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria, String sexo) {
+			corredor = new Corredor(dni, 0, sexo, "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
 			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion);
 			this.estado = pagado;
