@@ -14,10 +14,11 @@ public class Carrera {
 	private int plazasDisponibles;
 	private String idcarrera;
 	private Categoria[] categorias;
+	private String lugar;
 	
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -29,6 +30,7 @@ public class Carrera {
 		this.organizador = organizador;
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
+		this.lugar= lugar;
 		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
 	}
 	
@@ -124,7 +126,10 @@ public class Carrera {
 	}
 
 	public String toString() {
-		return this.getNombre();
+		
+		String[] fech = String.valueOf(this.fechaCompeticion).split("-");
+		return this.getNombre() +" es en " + this.lugar + ", cuenta con una distancia de " + this.distancia + "km, tiene un precio de " + this.precio + " euros " + " y tendra lugar el " + fech[2]+"/"
+				+ fech[1]  +"/" + fech[0];
 	}
 
 	public Organizador getOrganizador() {
@@ -150,6 +155,15 @@ public class Carrera {
 	public void setIdcarrera(String idcarrera) {
 		this.idcarrera = idcarrera;
 	}
+
+	public String getLugar() {
+		return lugar;
+	}
+
+	public void setLugar(String lugar) {
+		this.lugar = lugar;
+	}
+	
 	
 	
 	
