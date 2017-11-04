@@ -63,7 +63,7 @@ public class VentanaConfirmacionPago extends JDialog {
 		contentPanel.add(getTxtPrecio());
 		contentPanel.add(getBtnAceptar());
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		txtPrecio.setText(String.valueOf(vi.getInscripcion().getPrecio()));
+		txtPrecio.setText(String.valueOf(vi.getInscripcion().getCarrera().getPrecio()));
 		txtEntidadBancaria.setText("ES89138183901929");
 		contentPanel.add(getTxtAviso());
 		contentPanel.add(getBtnCancelar());

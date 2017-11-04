@@ -16,11 +16,14 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 public class VentanaCarreras extends JFrame {
 
@@ -40,9 +43,10 @@ public class VentanaCarreras extends JFrame {
 	private JPanel panelScroll;
 	private JList<Carrera> listCarreras;
 	private DefaultListModel<Carrera> modeloCarrera = new DefaultListModel<Carrera>();
-	private JTextArea textCarreras;
 	
 	private VentanaPrincipal vp;
+	private JPanel panelBotonesCarrera;
+	private JButton btnInfoCarrera;
 
 	/**
 	 * Create the frame.
@@ -138,9 +142,9 @@ public class VentanaCarreras extends JFrame {
 	private JPanel getPanelScroll() {
 		if (panelScroll == null) {
 			panelScroll = new JPanel();
-			panelScroll.setLayout(new GridLayout(0, 2, 0, 0));
+			panelScroll.setLayout(new BorderLayout(0, 0));
 			panelScroll.add(getListCarreras());
-			panelScroll.add(getTextCarreras());
+			panelScroll.add(getPanelBotonesCarrera(), BorderLayout.EAST);
 		}
 		return panelScroll;
 	}
@@ -148,12 +152,13 @@ public class VentanaCarreras extends JFrame {
 	private JList<Carrera> getListCarreras() {
 		if (listCarreras == null) {
 			listCarreras = new JList<Carrera>();
+			listCarreras.setValueIsAdjusting(true);
 			listCarreras = new JList<Carrera>(modeloCarrera);
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					btnSiguiente.setEnabled(true);
-					textCarreras.setText(mostrarCarrera(listCarreras.getSelectedValue()));
+					btnInfoCarrera.setEnabled(true);
 				}
 			});
 
@@ -161,21 +166,7 @@ public class VentanaCarreras extends JFrame {
 		return listCarreras;
 	}
 
-	private String mostrarCarrera(Carrera carrera) {
-		String cadena = "Tipo: " + carrera.getTipo() + "\nDistancia: " + carrera.getDistancia() + "\nPrecio: "
-				+ carrera.getPrecio() + "\nFecha Competicion: " + carrera.getFechaCompeticion()
-				+ "\nFecha Final Inscripcion: " + carrera.getFechaFinalizaInscripcion();
-		return cadena;
-	}
 
-	private JTextArea getTextCarreras() {
-		if (textCarreras == null) {
-			textCarreras = new JTextArea();
-			textCarreras.setBackground(Color.WHITE);
-			textCarreras.setLineWrap(true);
-		}
-		return textCarreras;
-	}
 
 	private void cargarModelo() {
 		modeloCarrera.clear();
@@ -187,5 +178,27 @@ public class VentanaCarreras extends JFrame {
 	
 	public Base getBase(){
 		return vp.getBase();
+	}
+	private JPanel getPanelBotonesCarrera() {
+		if (panelBotonesCarrera == null) {
+			panelBotonesCarrera = new JPanel();
+			panelBotonesCarrera.setLayout(new GridLayout(1, 0, 0, 0));
+			panelBotonesCarrera.add(getBtnInfoCarrera());
+		}
+		return panelBotonesCarrera;
+	}
+	private JButton getBtnInfoCarrera() {
+		if (btnInfoCarrera == null) {
+			btnInfoCarrera = new JButton("Mostrar Informacion Carrera");
+			btnInfoCarrera.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JOptionPane.showMessageDialog(null, "Prueba para mostrar nombre de carrera seleccionada: " + listCarreras.getSelectedValue().getNombre(), "Informacion de la carrera " 
+							+ listCarreras.getSelectedValue().getNombre(),1);
+					
+				}
+			});
+			btnInfoCarrera.setEnabled(false);
+		}
+		return btnInfoCarrera;
 	}
 }
