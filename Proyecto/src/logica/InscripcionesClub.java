@@ -1,6 +1,7 @@
 package logica;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -10,11 +11,11 @@ public class InscripcionesClub {
 
 	ArrayList<Inscripcion> inscripciones;
 
-	public InscripcionesClub(String fichero) {
+	public InscripcionesClub(File fichero) {
 		inscripciones = leerFichero(fichero);
 	}
 
-	private ArrayList<Inscripcion> leerFichero(String fichero) {
+	private ArrayList<Inscripcion> leerFichero(File fichero) {
 		BufferedReader br = null;
 		ArrayList<Inscripcion> ins = new ArrayList<Inscripcion>();
 		try {
@@ -23,7 +24,7 @@ public class InscripcionesClub {
 			String line = br.readLine();
 			while (line != null) {
 				String[] fields = line.split(",");
-				// ins.add(new Inscripcion(fields[0],field[1],field[2],field[3],"PRE-INSCRITO")) //creo una inscripcion y la añado
+				//ins.add(new Inscripcion(fields[0],field[1],field[2],field[3],"PRE-INSCRITO")) //creo una inscripcion y la agrego
 				line = br.readLine();
 			}
 
