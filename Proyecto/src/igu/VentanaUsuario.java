@@ -30,6 +30,7 @@ public class VentanaUsuario extends JFrame {
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JButton btPagar;
+	private ArrayList<Inscripcion> datos;
 
 //	/**
 //	 * Launch the application.
@@ -104,7 +105,7 @@ public class VentanaUsuario extends JFrame {
 	
 	public void añadirFilas(){
 		Object[] nuevaFila = new Object[7];
-		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
+		datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
 			nuevaFila[0]= i.getCarrera().getNombre();
 			//nuevaFila[]= i.getId_organizador();
@@ -134,6 +135,14 @@ public class VentanaUsuario extends JFrame {
 		vc.setModal(true);
 		vc.setVisible(true);
 	}
+	
+	private void mostrarVentanaPago(Inscripcion inscripcion){
+		VentanaMetodoPago vp = new VentanaMetodoPago(inscripcion);
+		vp.setLocationRelativeTo(this);
+		vp.setModal(true);
+		vp.setVisible(true);
+	}
+	
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -147,6 +156,7 @@ public class VentanaUsuario extends JFrame {
 			btPagar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					//all hacer click lleva al usuario a la ventana para pagar
+					mostrarVentanaPago(datos.get(tablaInscripciones.getSelectedRow()));
 					btPagar.setEnabled(false);
 				}
 			});
