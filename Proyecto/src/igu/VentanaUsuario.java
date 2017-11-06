@@ -83,7 +83,7 @@ public class VentanaUsuario extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//programar el doble click
-					if(arg0.getClickCount()==1 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 6)!="")
+					if(arg0.getClickCount()==1 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1)=="PRE-INSCRITO")
 						btPagar.setEnabled(true);
 					if(arg0.getClickCount()==2){
 						//si se hace doble click, que muestre la clasificacion de esa carrera
