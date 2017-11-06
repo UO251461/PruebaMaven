@@ -25,6 +25,7 @@ public class VentanaUsuario extends JFrame {
 	private static Base base;
 	private String atleta;
 	private JScrollPane scrollPane;
+	private JPanel panel;
 
 //	/**
 //	 * Launch the application.
@@ -57,6 +58,7 @@ public class VentanaUsuario extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getScrollPane());
+		contentPane.add(getPanel(), BorderLayout.SOUTH);
 	}
 
 	private JTable getTablaInscripciones() {
@@ -124,6 +126,12 @@ public class VentanaUsuario extends JFrame {
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+		}
+		return panel;
 	}
 }
 
