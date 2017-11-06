@@ -17,10 +17,12 @@ import logica.ModeloNoEditable;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VentanaUsuario extends JFrame {
+public class VentanaUsuario extends JDialog {
 
 	private ModeloNoEditable modeloTabla;//declaro el modelo de la tabla
 	private JPanel contentPane;
@@ -53,10 +55,11 @@ public class VentanaUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaUsuario(String atleta) {
+		setTitle("Ventana Usuario");
 		base=new Base();
 		base.inicializar();
 		this.atleta=atleta;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 636, 464);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

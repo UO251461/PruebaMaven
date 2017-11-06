@@ -121,7 +121,7 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaUsuario(String dni){
 		VentanaUsuario vu = new VentanaUsuario(dni);
 		vu.setLocationRelativeTo(this);
-		//vu.setModal(true);
+		vu.setModal(true);
 		vu.setVisible(true);
 	}
 	private JButton getBtClasificacion() {
