@@ -84,9 +84,11 @@ public class VentanaUsuario extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//programar el doble click
-					if(arg0.getClickCount()==1 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1)=="PRE-INSCRITO")
+					if(tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("PRE-INSCRITO"))
 						btPagar.setEnabled(true);
-					if(arg0.getClickCount()==2){
+					else 
+						btPagar.setEnabled(false);
+					if(arg0.getClickCount()==2 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("INSCRITO")){
 						//si se hace doble click, que muestre la clasificacion de esa carrera
 						mostrarVentanaClasificacion((String)tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 0));
 					}
@@ -141,6 +143,7 @@ public class VentanaUsuario extends JFrame {
 		vp.setLocationRelativeTo(this);
 		vp.setModal(true);
 		vp.setVisible(true);
+		this.dispose();
 	}
 	
 	private JPanel getPanel() {
