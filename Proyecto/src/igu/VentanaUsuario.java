@@ -16,6 +16,9 @@ import logica.ModeloNoEditable;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaUsuario extends JFrame {
 
@@ -26,6 +29,7 @@ public class VentanaUsuario extends JFrame {
 	private String atleta;
 	private JScrollPane scrollPane;
 	private JPanel panel;
+	private JButton btPagar;
 
 //	/**
 //	 * Launch the application.
@@ -64,7 +68,7 @@ public class VentanaUsuario extends JFrame {
 	private JTable getTablaInscripciones() {
 		if (tablaInscripciones == null) {
 			tablaInscripciones = new JTable();
-			String[] nombreColumnas = {"Competicion","Estado","Fecha", "Dorsal","Tiempo"};
+			String[] nombreColumnas = {"Competicion","Estado","Fecha", "Dorsal","Tiempo","Comentario"};
 			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
 			//las crearemos en tiempo de ejecucion
 			tablaInscripciones.setModel(modeloTabla);
@@ -79,6 +83,8 @@ public class VentanaUsuario extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//programar el doble click
+					if(arg0.getClickCount()==1 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 6)!="")
+						btPagar.setEnabled(true);
 					if(arg0.getClickCount()==2){
 						//si se hace doble click, que muestre la clasificacion de esa carrera
 						mostrarVentanaClasificacion((String)tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 0));
@@ -97,7 +103,7 @@ public class VentanaUsuario extends JFrame {
 	
 	
 	public void añadirFilas(){
-		Object[] nuevaFila = new Object[6];
+		Object[] nuevaFila = new Object[7];
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
 			nuevaFila[0]= i.getCarrera().getNombre();
@@ -110,6 +116,7 @@ public class VentanaUsuario extends JFrame {
 			else
 				nuevaFila[4]=i.getTiempo();
 			nuevaFila[5]=i.getCategoria();
+			nuevaFila[6]="";
 			modeloTabla.addRow(nuevaFila);
 		}
 	}
@@ -130,8 +137,22 @@ public class VentanaUsuario extends JFrame {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
+			panel.add(getBtPagar());
 		}
 		return panel;
+	}
+	private JButton getBtPagar() {
+		if (btPagar == null) {
+			btPagar = new JButton("Pagar");
+			btPagar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					//all hacer click lleva al usuario a la ventana para pagar
+					btPagar.setEnabled(false);
+				}
+			});
+			btPagar.setEnabled(false);
+		}
+		return btPagar;
 	}
 }
 
