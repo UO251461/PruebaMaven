@@ -4,51 +4,48 @@ import java.util.Date;
 
 public class Inscripcion {
 	
-		private String dni;
-		private String id_competicion;
-		private String id_organizador;
+		private Carrera carrera; // EN ESTA CLASE HAY UN ATRIBUTO QUE ES EL ORGANIZADOR, PRECIO(Samuel)
 		private String estado; //PRE-INSCRITO , PENDIANTE-DE-PAGO,INSCRITO
 		Date fecha;
 		private String categoria;
-		private double precio;
 		private int dorsal;
+		
 		private double tiempo;
-		private String nombreCorredor;
+		private Corredor corredor;//CORREDOR TIENE ID, DNI, Sexo
 		
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
-			this.dni = dni;
-			this.id_competicion = idCompeticion;
-			this.id_organizador = idOrganizador;
+			corredor = new Corredor(dni, 0, "", "", "");
+			Organizador organizador = new Organizador("", idOrganizador);
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
-			this.dni = dni;
-			this.id_competicion = idCompeticion;
-			this.id_organizador = idOrganizador;
+			corredor = new Corredor(dni, 0, "", "", "");
+			Organizador organizador = new Organizador("", idOrganizador);
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
 			this.estado = pagado;
 			this.fecha = fecha;
-			this.nombreCorredor = nombre;
 			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
-			this.dni = dni;
-			this.id_competicion = idCompeticion;
-			this.id_organizador = idOrganizador;
+			corredor = new Corredor(dni, 0, "", "", "");
+			Organizador organizador = new Organizador("", idOrganizador);
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
 			this.tiempo=tiempo;
 		}
 		
-		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria) {
-			this.dni = dni;
-			this.id_competicion = idCompeticion;
-			this.id_organizador = idOrganizador;
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria, String sexo) {
+			corredor = new Corredor(dni, 0, sexo, "", "");
+			Organizador organizador = new Organizador("", idOrganizador);
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
@@ -58,29 +55,13 @@ public class Inscripcion {
 		
 		
 		public Inscripcion(String idCarrera, String idOrganizador, String dni, double pre) {
-			id_competicion = idCarrera;
-			id_organizador = idOrganizador;
-			this.dni = dni;
-			precio =pre;
+			Organizador organizador = new Organizador("", idOrganizador);
+			carrera = new Carrera("", pre, null, null, null, 0, "", organizador, 0, idCarrera,"Oviedo");
+			corredor = new Corredor(dni, 0, "", "", "");
 		}
 
-		public String getDni() {
-			return dni;
-		}
-		public void setDni(String id_participante) {
-			this.dni = id_participante;
-		}
-		public String getId_competicion() {
-			return id_competicion;
-		}
-		public void setId_competicion(String id_competicion) {
-			this.id_competicion = id_competicion;
-		}
-		public String getId_organizador() {
-			return id_organizador;
-		}
-		public void setId_organizador(String id_organizador) {
-			this.id_organizador = id_organizador;
+		public Carrera getCarrera() {
+			return carrera;
 		}
 		public String getEstado() {
 			return estado;
@@ -108,14 +89,7 @@ public class Inscripcion {
 			this.tiempo = tiempo;
 		}
 
-		public double getPrecio() {
-			return precio;
-		}
 
-		public void setPrecio(double importe) {
-			this.precio = importe;
-		}
-		
 		public String getCategoria() {
 			return categoria;
 		}
@@ -141,7 +115,12 @@ public class Inscripcion {
 		
 		@Override
 		public String toString() {
-			return this.dni + " " + this.nombreCorredor + " "+ this.categoria + " "+ this.fecha + "------------->"+ this.estado;
+			return this.corredor.getDni() + " " + this.corredor.getNombre() + " "+ this.categoria + " "+ this.fecha + "------------->"+ this.estado;
+		}
+
+		public Corredor getCorredor() {
+			return corredor;
 		}
 	
 }
+

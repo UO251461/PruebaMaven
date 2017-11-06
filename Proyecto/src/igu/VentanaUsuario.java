@@ -16,8 +16,13 @@ import logica.ModeloNoEditable;
 
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 
-public class VentanaUsuario extends JFrame {
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class VentanaUsuario extends JDialog {
 
 	private ModeloNoEditable modeloTabla;//declaro el modelo de la tabla
 	private JPanel contentPane;
@@ -25,6 +30,9 @@ public class VentanaUsuario extends JFrame {
 	private static Base base;
 	private String atleta;
 	private JScrollPane scrollPane;
+	private JPanel panel;
+	private JButton btPagar;
+	private ArrayList<Inscripcion> datos;
 
 //	/**
 //	 * Launch the application.
@@ -47,22 +55,24 @@ public class VentanaUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaUsuario(String atleta) {
+		setTitle("Ventana Usuario");
 		base=new Base();
 		base.inicializar();
 		this.atleta=atleta;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 636, 464);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getScrollPane());
+		contentPane.add(getPanel(), BorderLayout.SOUTH);
 	}
 
 	private JTable getTablaInscripciones() {
 		if (tablaInscripciones == null) {
 			tablaInscripciones = new JTable();
-			String[] nombreColumnas = {"IdCompeticion", "IdOrganizador","Estado","Fecha", "Dorsal","Tiempo"};
+			String[] nombreColumnas = {"Competicion","Estado","Fecha", "Dorsal","Tiempo","Comentario"};
 			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
 			//las crearemos en tiempo de ejecucion
 			tablaInscripciones.setModel(modeloTabla);
@@ -77,7 +87,11 @@ public class VentanaUsuario extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					//programar el doble click
-					if(arg0.getClickCount()==2){
+					if(tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("PRE-INSCRITO"))
+						btPagar.setEnabled(true);
+					else 
+						btPagar.setEnabled(false);
+					if(arg0.getClickCount()==2 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("INSCRITO")){
 						//si se hace doble click, que muestre la clasificacion de esa carrera
 						mostrarVentanaClasificacion((String)tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 0));
 					}
@@ -95,19 +109,20 @@ public class VentanaUsuario extends JFrame {
 	
 	
 	public void añadirFilas(){
-		Object[] nuevaFila = new Object[6];
-		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getDatosAtleta(atleta);
+		Object[] nuevaFila = new Object[7];
+		datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
-			nuevaFila[0]= i.getId_competicion();
-			nuevaFila[1]= i.getId_organizador();
-			nuevaFila[2]= i.getEstado();
-			nuevaFila[3]= i.getFecha();
-			nuevaFila[4]=i.getDorsal();
+			nuevaFila[0]= i.getCarrera().getNombre();
+			//nuevaFila[]= i.getId_organizador();
+			nuevaFila[1]= i.getEstado();
+			nuevaFila[2]= i.getFecha();
+			nuevaFila[3]=i.getDorsal();
 			if(i.getTiempo()==0)
-				nuevaFila[5]="---";
+				nuevaFila[4]="---";
 			else
-				nuevaFila[5]=i.getTiempo();
-			//nuevaFila[6]=i.getCategoria();
+				nuevaFila[4]=i.getTiempo();
+			nuevaFila[5]=i.getCategoria();
+			nuevaFila[6]="";
 			modeloTabla.addRow(nuevaFila);
 		}
 	}
@@ -124,6 +139,36 @@ public class VentanaUsuario extends JFrame {
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);
+	}
+	
+	private void mostrarVentanaPago(Inscripcion inscripcion){
+		VentanaMetodoPago vp = new VentanaMetodoPago(inscripcion);
+		vp.setLocationRelativeTo(this);
+		vp.setModal(true);
+		vp.setVisible(true);
+		this.dispose();
+	}
+	
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.add(getBtPagar());
+		}
+		return panel;
+	}
+	private JButton getBtPagar() {
+		if (btPagar == null) {
+			btPagar = new JButton("Pagar");
+			btPagar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					//all hacer click lleva al usuario a la ventana para pagar
+					mostrarVentanaPago(datos.get(tablaInscripciones.getSelectedRow()));
+					btPagar.setEnabled(false);
+				}
+			});
+			btPagar.setEnabled(false);
+		}
+		return btPagar;
 	}
 }
 

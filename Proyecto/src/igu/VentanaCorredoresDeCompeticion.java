@@ -188,7 +188,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		ArrayList<Inscripcion> datos;
 		Object[] nuevaFila = new Object[5];
 		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
-			nuevaFila[0]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getDni();
+			nuevaFila[0]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getDni();
 //			nuevaFila[1]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getNombre();
 //			nuevaFila[2]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getCategoria();
 //			nuevaFila[3]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getFecha().toGMTString();

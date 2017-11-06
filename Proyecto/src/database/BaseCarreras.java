@@ -50,20 +50,25 @@ public class BaseCarreras {
 			con = getConnection();
 			Statement st = con.createStatement();
 			String consulta = "select nombreorganizador,idcompeticion,competicion.idorganizador,fechacompeticion,fecha_apertura_ins,fecha_final_ins,precio,"
-					+ " nombre_competicion,distancia,tipo,plazas_disponibles"
+					+ " nombre_competicion,distancia,tipo,plazas_disponibles,lugar "
 					+ " from competicion,organizador where organizador.idorganizador = competicion.idorganizador AND "
 					+ " CURRENT_DATE BETWEEN fecha_apertura_ins AND fecha_final_ins order by fecha_final_ins";
 
 			ResultSet rs = st.executeQuery(consulta);
 			while (rs.next()) {
-
+//				System.out.println("Fecha competicion: " + rs.getDate("fechacompeticion"));
+				
+				
 				carreras.add(new Carrera(rs.getString("Nombre_Competicion"), rs.getDouble("Precio"),
 						rs.getDate("Fecha_apertura_ins"), rs.getDate("Fecha_final_ins"), rs.getDate("Fechacompeticion"),
 						rs.getDouble("Distancia"), rs.getString("Tipo"),
 						new Organizador(rs.getString("nombreorganizador"),rs.getString("idorganizador")),
-						rs.getInt("plazas_disponibles"),rs.getString("idcompeticion")));
+						rs.getInt("plazas_disponibles"),rs.getString("idcompeticion"),rs.getString("lugar")));
 
 			}
+			
+//			System.out.println("Fecha competicion creada: " + carreras.get(0).getFechaCompeticion());
+//			System.out.println("prueba string value of: " + String.valueOf(carreras.get(0).getFechaCompeticion()));
 			st.close();
 			con.close();
 			rs.close();
