@@ -1,12 +1,14 @@
 package database;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import logica.Carrera;
 import logica.Organizador;
@@ -80,6 +82,32 @@ public class BaseCarreras {
 
 		}
 
+	}
+	
+	public void crearCarrera(String nombre,double precio,Date fechaCompeticion,Date fechaEI,Date fechaFI,double distancia,String tipo,int plazasDisponibles,String lugar){
+		try {
+			con = getConnection();
+			String consulta = "INSERT INTO COMPETICION (IDORGANIZADOR,FECHACOMPETICION, FECHA_APERTURA_INS,FECHA_FINAL_INS, PRECIO,"
+					+ " NOMBRE_COMPETICION,DISTANCIA, TIPO,PLAZAS_DISPONIBLES,LUGAR) VALUES(1,?,?,?,?,?,?,?,?,?)";
+			
+			ps = con.prepareStatement(consulta);
+		
+			ps.setDate(1, new java.sql.Date(fechaCompeticion.getTime()));			
+			ps.setDate(2, new java.sql.Date(fechaEI.getTime() ));
+			ps.setDate(3, new java.sql.Date(fechaFI.getTime() ));
+			ps.setDouble(4, precio);
+			ps.setString(5,nombre);
+			ps.setDouble(6,distancia);
+			ps.setString(7,tipo);
+			ps.setInt(8,plazasDisponibles);
+			ps.setString(9, lugar);
+			ps.executeQuery();
+		} catch (SQLException e) {
+
+			System.err.println("Error al intentar insertar una carrera creada por el organizador");
+			e.printStackTrace();
+		}
+	
 	}
 
 	public ArrayList<Carrera> getCarreras() {

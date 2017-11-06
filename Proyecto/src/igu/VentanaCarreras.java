@@ -110,7 +110,7 @@ public class VentanaCarreras extends JFrame {
 
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
-			btnSiguiente = new JButton("Siguiente");
+			btnSiguiente = new JButton("Inscribirse");
 			btnSiguiente.setEnabled(false);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
