@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JFrame;
@@ -14,12 +15,17 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import logica.Inscripcion;
+import logica.ModeloNoEditable;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class VentanaCrearCarrera extends JFrame {
 
@@ -29,6 +35,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
+	private ModeloNoEditable modeloTabla;
 
 	private VentanaPrincipal vp;
 	private JButton btnCrear;
@@ -53,6 +60,8 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField textPrecio;
 	private JLabel lblLugar;
 	private JTextField textLugar;
+	private JButton btnAadirPlazoInscripcion;
+	private JTable tablePlazos;
 
 	/**
 	 * Launch the application.
@@ -66,7 +75,7 @@ public class VentanaCrearCarrera extends JFrame {
 		this.vp = vp;
 		setTitle("Crear Carrera");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1013, 399);
+		setBounds(100, 100, 1013, 646);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,6 +95,7 @@ public class VentanaCrearCarrera extends JFrame {
 		contentPane.add(getDateCompeticion());
 		contentPane.add(getLblLugar());
 		contentPane.add(getTextLugar());
+		contentPane.add(getTablePlazos());
 	}
 
 	private JButton getBtnCrear() {
@@ -105,7 +115,7 @@ public class VentanaCrearCarrera extends JFrame {
 				}
 
 			});
-			btnCrear.setBounds(897, 336, 86, 23);
+			btnCrear.setBounds(911, 572, 86, 23);
 		}
 		return btnCrear;
 	}
@@ -190,7 +200,7 @@ public class VentanaCrearCarrera extends JFrame {
 					dispose();
 				}
 			});
-			btnAtras.setBounds(768, 336, 96, 23);
+			btnAtras.setBounds(784, 572, 96, 23);
 		}
 		return btnAtras;
 	}
@@ -236,7 +246,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JLabel getLblDistancia() {
 		if (lblDistancia == null) {
 			lblDistancia = new JLabel("Distancia(en km):");
-			lblDistancia.setBounds(625, 24, 124, 19);
+			lblDistancia.setBounds(616, 27, 124, 19);
 			lblDistancia.setLabelFor(getTextDistancia());
 			lblDistancia.setDisplayedMnemonic('d');
 		}
@@ -246,7 +256,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextDistancia() {
 		if (textDistancia == null) {
 			textDistancia = new JTextField();
-			textDistancia.setBounds(724, 26, 115, 20);
+			textDistancia.setBounds(715, 26, 115, 20);
 			textDistancia.setColumns(10);
 		}
 		return textDistancia;
@@ -255,7 +265,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JDateChooser getDateCompeticion() {
 		if (fechaCompeticion == null) {
 			fechaCompeticion = new JDateChooser();
-			fechaCompeticion.setBounds(153, 57, 87, 20);
+			fechaCompeticion.setBounds(153, 86, 87, 20);
 			fechaCompeticion.getCalendarButton().addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -278,7 +288,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblFechaCompeticion = new JLabel("Fecha Competicion:");
 			lblFechaCompeticion.setDisplayedMnemonic('f');
 			lblFechaCompeticion.setLabelFor(getDateCompeticion());
-			lblFechaCompeticion.setBounds(10, 59, 133, 20);
+			lblFechaCompeticion.setBounds(10, 86, 133, 20);
 		}
 		return lblFechaCompeticion;
 	}
@@ -288,7 +298,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblNumeroDePlazas = new JLabel("Numero de plazas:");
 			lblNumeroDePlazas.setLabelFor(getTextPlazas());
 			lblNumeroDePlazas.setDisplayedMnemonic('n');
-			lblNumeroDePlazas.setBounds(309, 59, 115, 20);
+			lblNumeroDePlazas.setBounds(309, 86, 115, 20);
 		}
 		return lblNumeroDePlazas;
 	}
@@ -296,7 +306,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextPlazas() {
 		if (textPlazas == null) {
 			textPlazas = new JTextField();
-			textPlazas.setBounds(434, 57, 124, 20);
+			textPlazas.setBounds(434, 86, 124, 20);
 			textPlazas.setColumns(10);
 		}
 		return textPlazas;
@@ -306,7 +316,7 @@ public class VentanaCrearCarrera extends JFrame {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panel.setBounds(23, 90, 454, 239);
+			panel.setBounds(20, 422, 454, 184);
 			panel.setLayout(null);
 			panel.add(getLblFechaComienzoInscripcion());
 			panel.add(getDateComienzoInscripcion());
@@ -314,6 +324,7 @@ public class VentanaCrearCarrera extends JFrame {
 			panel.add(getLblFechaFinalInscripcion());
 			panel.add(getLblPrecio());
 			panel.add(getTextPrecio());
+			panel.add(getBtnAadirPlazoInscripcion());
 		}
 		return panel;
 	}
@@ -323,7 +334,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblFechaComienzoInscripcion = new JLabel("Fecha comienzo inscripcion:");
 			lblFechaComienzoInscripcion.setLabelFor(getDateComienzoInscripcion());
 			lblFechaComienzoInscripcion.setDisplayedMnemonic('e');
-			lblFechaComienzoInscripcion.setBounds(10, 11, 260, 28);
+			lblFechaComienzoInscripcion.setBounds(10, 11, 199, 28);
 		}
 		return lblFechaComienzoInscripcion;
 	}
@@ -337,11 +348,11 @@ public class VentanaCrearCarrera extends JFrame {
 			});
 			dateComienzoInscripcion.setRequestFocusEnabled(false);
 			dateComienzoInscripcion.setDateFormatString("dd/MM/yyyy");
-			dateComienzoInscripcion.setBounds(293, 11, 128, 20);
+			dateComienzoInscripcion.setBounds(294, 11, 128, 20);
 			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
 			try {
 
-				fechaCompeticion.setDate(sf.parse("09-11-2017"));
+				dateComienzoInscripcion.setDate(sf.parse("09-11-2017"));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -352,7 +363,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JDateChooser getDateFinalInscripcion() {
 		if (dateFinalInscripcion == null) {
 			dateFinalInscripcion = new JDateChooser();
-			dateFinalInscripcion.setBounds(293, 42, 128, 20);
+			dateFinalInscripcion.setBounds(294, 52, 128, 20);
 			dateFinalInscripcion.getCalendarButton().addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -374,7 +385,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblFechaFinalInscripcion = new JLabel("Fecha final inscripcion:");
 			lblFechaFinalInscripcion.setDisplayedMnemonic('h');
 			lblFechaFinalInscripcion.setLabelFor(getDateFinalInscripcion());
-			lblFechaFinalInscripcion.setBounds(10, 42, 260, 28);
+			lblFechaFinalInscripcion.setBounds(10, 50, 260, 28);
 		}
 		return lblFechaFinalInscripcion;
 	}
@@ -384,7 +395,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblPrecio = new JLabel("Precio:");
 			lblPrecio.setLabelFor(getTextPrecio());
 			lblPrecio.setDisplayedMnemonic('r');
-			lblPrecio.setBounds(10, 81, 66, 28);
+			lblPrecio.setBounds(10, 89, 66, 28);
 		}
 		return lblPrecio;
 	}
@@ -392,7 +403,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextPrecio() {
 		if (textPrecio == null) {
 			textPrecio = new JTextField();
-			textPrecio.setBounds(86, 85, 116, 20);
+			textPrecio.setBounds(294, 93, 128, 20);
 			textPrecio.setColumns(10);
 		}
 		return textPrecio;
@@ -401,7 +412,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JLabel getLblLugar() {
 		if (lblLugar == null) {
 			lblLugar = new JLabel("Lugar:");
-			lblLugar.setBounds(614, 62, 96, 17);
+			lblLugar.setBounds(616, 88, 96, 17);
 		}
 		return lblLugar;
 	}
@@ -409,9 +420,54 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextLugar() {
 		if (textLugar == null) {
 			textLugar = new JTextField();
-			textLugar.setBounds(720, 59, 124, 20);
+			textLugar.setBounds(715, 86, 124, 20);
 			textLugar.setColumns(10);
 		}
 		return textLugar;
+	}
+	private JButton getBtnAadirPlazoInscripcion() {
+		if (btnAadirPlazoInscripcion == null) {
+			btnAadirPlazoInscripcion = new JButton("A\u00F1adir Plazo Inscripcion");
+			btnAadirPlazoInscripcion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(compruebaFechas())
+						añadePlazoTabla();
+				}
+			});
+			btnAadirPlazoInscripcion.setBounds(10, 124, 428, 52);
+		}
+		return btnAadirPlazoInscripcion;
+	}
+	private JTable getTablePlazos() {
+		if (tablePlazos == null) {
+			tablePlazos = new JTable();
+			String[] nombreColumnas = {"Plazo","Fecha Apertura","Fecha Finalizacion","Precio"};
+			modeloTabla = new ModeloNoEditable(nombreColumnas,0);
+			tablePlazos.setModel(modeloTabla);
+			tablePlazos.setRowHeight(30);
+			tablePlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
+			tablePlazos.setBounds(20, 150, 454, 203);			
+		}
+		return tablePlazos;
+	}
+	
+	public void añadirFilas(){	
+		Object[] nuevaFila = new Object[4];
+		nuevaFila[0] = "Plazo 1";
+		nuevaFila[1] = getDateComienzoInscripcion().getDate();
+		nuevaFila[2]  = getDateFinalInscripcion().getDate();
+		nuevaFila[3] = getTextPrecio().getText();
+		modeloTabla.addRow(nuevaFila);
+	}
+	
+	
+	private  void añadePlazoTabla(){
+		añadirFilas();
+	}
+	
+	private void borrarPlazoTabla(){
+		if(tablePlazos.getSelectionModel()!=null){
+			modeloTabla.removeRow(tablePlazos.getSelectedRow());	
+		}
 	}
 }
