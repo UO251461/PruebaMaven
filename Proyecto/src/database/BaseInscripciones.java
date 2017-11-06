@@ -88,6 +88,7 @@ public class BaseInscripciones {
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
 			rs = ps.executeQuery();
+			
 		} catch (SQLException sql) {
 			// SI YA ESTÁ REGISTRADO NO HACE NADA
 		} finally {
