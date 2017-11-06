@@ -33,6 +33,7 @@ public class VentanaUsuario extends JDialog {
 	private JPanel panel;
 	private JButton btPagar;
 	private ArrayList<Inscripcion> datos;
+	private JPanel panel_1;
 
 //	/**
 //	 * Launch the application.
@@ -67,6 +68,7 @@ public class VentanaUsuario extends JDialog {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getScrollPane());
 		contentPane.add(getPanel(), BorderLayout.SOUTH);
+		contentPane.add(getPanel_1(), BorderLayout.NORTH);
 	}
 
 	private JTable getTablaInscripciones() {
@@ -169,6 +171,12 @@ public class VentanaUsuario extends JDialog {
 			btPagar.setEnabled(false);
 		}
 		return btPagar;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+		}
+		return panel_1;
 	}
 }
 
