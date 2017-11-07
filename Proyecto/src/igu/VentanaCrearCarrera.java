@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ import com.toedter.calendar.JDateChooser;
 
 import logica.Inscripcion;
 import logica.ModeloNoEditable;
+import logica.Plazo;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -26,6 +28,8 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class VentanaCrearCarrera extends JFrame {
 
@@ -33,6 +37,7 @@ public class VentanaCrearCarrera extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int numeroMaxPlazos = 5;
 
 	private JPanel contentPane;
 	private ModeloNoEditable modeloTabla;
@@ -51,7 +56,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JLabel lblFechaCompeticion;
 	private JLabel lblNumeroDePlazas;
 	private JTextField textPlazas;
-	private JPanel panel;
+	private JPanel panelPlazos;
 	private JLabel lblFechaComienzoInscripcion;
 	private JDateChooser dateComienzoInscripcion;
 	private JDateChooser dateFinalInscripcion;
@@ -60,8 +65,24 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField textPrecio;
 	private JLabel lblLugar;
 	private JTextField textLugar;
-	private JButton btnAadirPlazoInscripcion;
+	private JButton btnAñadirPlazoInscripcion;
 	private JTable tablePlazos;
+	private JButton btnBorrarPlazoInscripcion;
+	private JLabel lblPlazos;
+
+	private Plazo[] plazos = new Plazo[5];
+	private int numeroPlazos;
+	private JLabel lblCategorias;
+	private JTable tableCategorias;
+	private JButton btnBorrarCategoria;
+	private JPanel panelCategorias;
+	private JLabel lblNombreCategoria;
+	private JLabel lblLimiteInferior;
+	private JLabel lblLimiteSuperior;
+	private JButton btnAadirCategoria;
+	private JTextField textNombreCategoria;
+	private JTextField textLimiteInferior;
+	private JTextField textLimiteSuperior;
 
 	/**
 	 * Launch the application.
@@ -91,11 +112,17 @@ public class VentanaCrearCarrera extends JFrame {
 		contentPane.add(getLblFechaCompeticion());
 		contentPane.add(getLblNumeroDePlazas());
 		contentPane.add(getTextPlazas());
-		contentPane.add(getPanel());
+		contentPane.add(getPanelPlazos());
 		contentPane.add(getDateCompeticion());
 		contentPane.add(getLblLugar());
 		contentPane.add(getTextLugar());
 		contentPane.add(getTablePlazos());
+		contentPane.add(getBtnBorrarPlazoInscripcion());
+		contentPane.add(getLblPlazos());
+		contentPane.add(getLblCategorias());
+		contentPane.add(getTableCategorias());
+		contentPane.add(getBtnBorrarCategoria());
+		contentPane.add(getPanelCategorias());
 	}
 
 	private JButton getBtnCrear() {
@@ -104,59 +131,110 @@ public class VentanaCrearCarrera extends JFrame {
 			btnCrear.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (compruebaCampos()) {
-						vp.getBase().getBaseCarrera().crearCarrera(getTextNombreCarrera().getText(),
-								Double.parseDouble(getTextPrecio().getText()), getDateCompeticion().getDate(),
-								getDateComienzoInscripcion().getDate(), getDateFinalInscripcion().getDate(),
-								Double.parseDouble(getTextDistancia().getText()), getTextTipo().getText(),
-								Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText());
-						JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+						creaCarrera();
 						dispose();
 					}
 				}
 
 			});
-			btnCrear.setBounds(911, 572, 86, 23);
+			btnCrear.setBounds(911, 583, 86, 23);
 		}
 		return btnCrear;
 	}
 
+	private void creaCarrera() {
+		if (this.numeroPlazos == 1) {
+			vp.getBase().getBaseCarrera().crearCarrera1Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText());
+			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+		}
+
+		if (this.numeroPlazos == 2) {
+			vp.getBase().getBaseCarrera().crearCarrera2Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion());
+			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+		}
+
+		if (this.numeroPlazos == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera3Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion());
+			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+		}
+		if (this.numeroPlazos == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera4Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(),
+					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
+					plazos[3].getFechaFinalizaInscripcion());
+			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+		}
+		if (this.numeroPlazos == 5) {
+			vp.getBase().getBaseCarrera().crearCarrera5Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(),
+					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
+					plazos[3].getFechaFinalizaInscripcion(), 
+					plazos[4].getPrecio(), plazos[4].getFechaEmpiezaInscripcion(),
+					plazos[4].getFechaFinalizaInscripcion());
+			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+		}
+
+	}
+
 	private boolean compruebaCampos() {
 		if (stringNoVacio(getTextNombreCarrera().getText()))
-			if (esNumericoYNoVacio(getTextPrecio().getText()) && Double.parseDouble(getTextPrecio().getText())>0)
-				if (compruebaFechas())
-					if (esNumericoYNoVacio(getTextDistancia().getText()) && Double.parseDouble(getTextDistancia().getText())>0)
-						if (stringNoVacio(getTextTipo().getText()))
-							if (esNumericoYNoVacio(getTextPlazas().getText())  && Integer.parseInt(getTextDistancia().getText())>0)
-								if (stringNoVacio(getTextLugar().getText()))
-									return true;
-								else {
-									JOptionPane.showMessageDialog(this,
-											"El lugar de la carrera NO ha sido introducido correctamente");
-									return false;
-								}
+			if (compruebaFechas())
+				if (esNumericoYNoVacio(getTextDistancia().getText())
+						&& Double.parseDouble(getTextDistancia().getText()) > 0)
+					if (stringNoVacio(getTextTipo().getText()))
+						if (esNumericoYNoVacio(getTextPlazas().getText())
+								&& Integer.parseInt(getTextPlazas().getText()) > 0)
+							if (stringNoVacio(getTextLugar().getText()))
+								return true;
 							else {
 								JOptionPane.showMessageDialog(this,
-										"El numero de plazas de la carrera NO ha sido introducido correctamente");
+										"El lugar de la carrera NO ha sido introducido correctamente");
 								return false;
 							}
 						else {
 							JOptionPane.showMessageDialog(this,
-									"El tipo de la carrera NO ha sido introducido correctamente");
+									"El numero de plazas de la carrera NO ha sido introducido correctamente");
 							return false;
 						}
 					else {
 						JOptionPane.showMessageDialog(this,
-								"La distancia de la carrera NO ha sido introducido correctamente");
+								"El tipo de la carrera NO ha sido introducido correctamente");
 						return false;
 					}
 				else {
 					JOptionPane.showMessageDialog(this,
-							"Las fechas no son concordantes entre ellas, la primera ha de ser la fecha de inscripcion,"
-									+ " despues la fecha final de la inscripcion y por ultimo la fecha de competicion");
+							"La distancia de la carrera NO ha sido introducido correctamente");
 					return false;
 				}
 			else {
-				JOptionPane.showMessageDialog(this, "El precio de la carrera NO ha sido introducido correctamente");
+				JOptionPane.showMessageDialog(this,
+						"Las fechas no son concoordantes entre ellas, no se ha de solapar ningun plazo de inscripcion "
+								+ "y todos deben ser antes de la fecha de competicion. Ademas la fecha inicial de inscripcion debe ser "
+								+ "antes que la fecha final de inscripcion de cada plazo.");
 				return false;
 			}
 		else {
@@ -165,14 +243,73 @@ public class VentanaCrearCarrera extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private void creaPlazos() {
+		this.plazos = new Plazo[5];
+		Vector<Object> contenido = modeloTabla.getDataVector();
+
+		for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+
+			Vector<Object> fila = (Vector<Object>) contenido.get(i);
+
+			String fecha1 = (String) fila.elementAt(1);
+			java.sql.Date fechaei = convertirStringFecha(fecha1);
+
+			String fecha2 = (String) fila.elementAt(2);
+			java.sql.Date fechafi = convertirStringFecha(fecha2);
+
+			String pre = (String) fila.elementAt(3);
+			Double precio = Double.parseDouble(pre);
+
+			this.plazos[i] = new Plazo(fechaei, fechafi, precio);
+
+		}
+	}
+
 	private boolean compruebaFechas() {
-		// new Date() es la fecha actual
-		if(getDateCompeticion().getDate()!=null && getDateFinalInscripcion().getDate()!=null && getDateComienzoInscripcion().getDate()!=null)
-			if (getDateCompeticion().getDate().after(getDateFinalInscripcion().getDate())
-				&& getDateCompeticion().getDate().after(getDateComienzoInscripcion().getDate()))
-				if (getDateFinalInscripcion().getDate().after(getDateComienzoInscripcion().getDate()))
-					if (getDateComienzoInscripcion().getDate().after(new Date()))
-						return true;
+		creaPlazos();		
+		for (int i = 0; i < this.numeroPlazos; i++) {			
+			for (int j = 0; j < this.numeroPlazos; j++) {
+				if (i != j) {
+					System.out.println("i: " + i + " j: " + j);
+					if (plazoEntrePlazo(plazos[i], plazos[j]))
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/*Si la fecha que vas a comparar es anterior al argumento date,
+	 *  el método devolverá un valor menor a cero. Si la fecha que vas
+	 *   a comparar es posterior al argumento date, el método devolverá
+	 *    un valor mayor a cero. Si las fechas son iguales, el método 
+	 *    devolverá un cero
+	 *    	 */
+	
+	private boolean plazoEntrePlazo(Plazo plazo1, Plazo plazo2) {
+		if(plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())==0 && 
+				plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaFinalizaInscripcion())==0) 
+				{
+			System.out.println("Son iguales");
+			return true;
+		}
+		if(plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())==0){
+			System.out.println("Empieza el dia que aun sigue otro");
+			return true;
+		}
+		
+
+		if (plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())<0
+				&& plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())>0){	
+			System.out.println("Se solapa la fecha empieza");
+			return true;
+		}
+		if (plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaFinalizaInscripcion())<0
+				&& plazo1.getFechaFinalizaInscripcion().after(plazo2.getFechaFinalizaInscripcion())){
+			System.out.println("Se solapa la fecha finaliza");
+			return true;
+		}
 		return false;
 	}
 
@@ -180,7 +317,7 @@ public class VentanaCrearCarrera extends JFrame {
 		return cadena.isEmpty() ? false : true;
 	}
 
-	private boolean esNumericoYNoVacio(String cadena) {	
+	private boolean esNumericoYNoVacio(String cadena) {
 		if (!cadena.isEmpty()) {
 			for (int i = 0; i < cadena.length(); ++i) {
 				char caracter = cadena.charAt(i);
@@ -200,7 +337,7 @@ public class VentanaCrearCarrera extends JFrame {
 					dispose();
 				}
 			});
-			btnAtras.setBounds(784, 572, 96, 23);
+			btnAtras.setBounds(785, 583, 96, 23);
 		}
 		return btnAtras;
 	}
@@ -265,7 +402,7 @@ public class VentanaCrearCarrera extends JFrame {
 	private JDateChooser getDateCompeticion() {
 		if (fechaCompeticion == null) {
 			fechaCompeticion = new JDateChooser();
-			fechaCompeticion.setBounds(153, 86, 87, 20);
+			fechaCompeticion.setBounds(153, 86, 124, 20);
 			fechaCompeticion.getCalendarButton().addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 				}
@@ -312,21 +449,21 @@ public class VentanaCrearCarrera extends JFrame {
 		return textPlazas;
 	}
 
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panel.setBounds(20, 422, 454, 184);
-			panel.setLayout(null);
-			panel.add(getLblFechaComienzoInscripcion());
-			panel.add(getDateComienzoInscripcion());
-			panel.add(getDateFinalInscripcion());
-			panel.add(getLblFechaFinalInscripcion());
-			panel.add(getLblPrecio());
-			panel.add(getTextPrecio());
-			panel.add(getBtnAadirPlazoInscripcion());
+	private JPanel getPanelPlazos() {
+		if (panelPlazos == null) {
+			panelPlazos = new JPanel();
+			panelPlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panelPlazos.setBounds(10, 387, 454, 184);
+			panelPlazos.setLayout(null);
+			panelPlazos.add(getLblFechaComienzoInscripcion());
+			panelPlazos.add(getDateComienzoInscripcion());
+			panelPlazos.add(getDateFinalInscripcion());
+			panelPlazos.add(getLblFechaFinalInscripcion());
+			panelPlazos.add(getLblPrecio());
+			panelPlazos.add(getTextPrecio());
+			panelPlazos.add(getBtnAñadirPlazoInscripcion());
 		}
-		return panel;
+		return panelPlazos;
 	}
 
 	private JLabel getLblFechaComienzoInscripcion() {
@@ -425,49 +562,207 @@ public class VentanaCrearCarrera extends JFrame {
 		}
 		return textLugar;
 	}
-	private JButton getBtnAadirPlazoInscripcion() {
-		if (btnAadirPlazoInscripcion == null) {
-			btnAadirPlazoInscripcion = new JButton("A\u00F1adir Plazo Inscripcion");
-			btnAadirPlazoInscripcion.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(compruebaFechas())
-						añadePlazoTabla();
+
+	private JButton getBtnAñadirPlazoInscripcion() {
+		if (btnAñadirPlazoInscripcion == null) {
+			btnAñadirPlazoInscripcion = new JButton("A\u00F1adir Plazo Inscripcion");
+			btnAñadirPlazoInscripcion.setMnemonic('a');
+			btnAñadirPlazoInscripcion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {					
+					añadePlazoTabla();
+					if (tablePlazos.getRowCount() == numeroMaxPlazos) {
+						btnAñadirPlazoInscripcion.setEnabled(false);
+						JOptionPane.showMessageDialog(null,
+								"Ha llegado al limite de plazos de inscripcion, para añadir mas debe borrar alguno");
+					}
 				}
 			});
-			btnAadirPlazoInscripcion.setBounds(10, 124, 428, 52);
+			btnAñadirPlazoInscripcion.setBounds(10, 124, 428, 52);
 		}
-		return btnAadirPlazoInscripcion;
+		return btnAñadirPlazoInscripcion;
 	}
+
 	private JTable getTablePlazos() {
 		if (tablePlazos == null) {
 			tablePlazos = new JTable();
-			String[] nombreColumnas = {"Plazo","Fecha Apertura","Fecha Finalizacion","Precio"};
-			modeloTabla = new ModeloNoEditable(nombreColumnas,0);
+			String[] nombreColumnas = { "Plazo", "Fecha Apertura", "Fecha Finalizacion", "Precio" };
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			tablePlazos.setModel(modeloTabla);
 			tablePlazos.setRowHeight(30);
 			tablePlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
-			tablePlazos.setBounds(20, 150, 454, 203);			
+			tablePlazos.setBounds(10, 177, 454, 150);
 		}
 		return tablePlazos;
 	}
-	
-	public void añadirFilas(){	
+
+	@SuppressWarnings("deprecation")
+	public void añadirFilas() {
 		Object[] nuevaFila = new Object[4];
-		nuevaFila[0] = "Plazo 1";
-		nuevaFila[1] = getDateComienzoInscripcion().getDate();
-		nuevaFila[2]  = getDateFinalInscripcion().getDate();
+		nuevaFila[0] = "Plazo " + (tablePlazos.getRowCount() + 1);
+
+		java.sql.Date fechaCI = new java.sql.Date(getDateComienzoInscripcion().getDate().getTime());
+		nuevaFila[1] = fechaCI.getDate() + "/" + fechaCI.getMonth() + "/" + (fechaCI.getYear() + 1900);
+
+		java.sql.Date fechaFI = new java.sql.Date(getDateFinalInscripcion().getDate().getTime());
+		nuevaFila[2] = fechaFI.getDate() + "/" + fechaFI.getMonth() + "/" + (fechaFI.getYear() + 1900);
 		nuevaFila[3] = getTextPrecio().getText();
 		modeloTabla.addRow(nuevaFila);
 	}
-	
-	
-	private  void añadePlazoTabla(){
-		añadirFilas();
+
+	private void añadePlazoTabla() {
+		if (getDateComienzoInscripcion().getDate().before(getDateFinalInscripcion().getDate()) && getDateComienzoInscripcion().getDate().after(new Date()) &&
+				getDateComienzoInscripcion().getDate().compareTo(getDateFinalInscripcion().getDate())!=0 &&
+				getDateFinalInscripcion().getDate().before(getDateCompeticion().getDate())){
+						if (esNumericoYNoVacio(getTextPrecio().getText()) && Double.parseDouble(getTextPrecio().getText()) > 0){
+							añadirFilas();
+							this.numeroPlazos++;
+						}
+						else
+							JOptionPane.showMessageDialog(this,
+									"El precio del plazo es incorrecto, revise que no se encuentre vacio o haya introducido un numero o este sea negativo");			
+		}			
+		else
+			JOptionPane.showMessageDialog(this, "Las fechas del plazo son incorrectas ya que no concuerdan, reviselas");
+
 	}
-	
-	private void borrarPlazoTabla(){
-		if(tablePlazos.getSelectionModel()!=null){
-			modeloTabla.removeRow(tablePlazos.getSelectedRow());	
+
+	private java.sql.Date convertirStringFecha(String cadena) {
+		SimpleDateFormat format = new SimpleDateFormat("d/MM/yyyy");
+		Date parsed = null;
+		try {
+			parsed = format.parse(cadena);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		if (parsed != null) {
+			java.sql.Date sql = new java.sql.Date(parsed.getTime());
+			return sql;
+		}
+		return null;
+	}
+
+	private void borrarPlazoTabla() {
+		if (tablePlazos.getSelectionModel() != null && tablePlazos.getSelectedRow() != -1) {
+			modeloTabla.removeRow(tablePlazos.getSelectedRow());
+			this.numeroPlazos--;
+		}
+	}
+
+	private JButton getBtnBorrarPlazoInscripcion() {
+		if (btnBorrarPlazoInscripcion == null) {
+			btnBorrarPlazoInscripcion = new JButton("Borrar Plazo Inscripcion");
+			btnBorrarPlazoInscripcion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					borrarPlazoTabla();
+					if (!btnAñadirPlazoInscripcion.isEnabled() && tablePlazos.getRowCount() < numeroMaxPlazos)
+						btnAñadirPlazoInscripcion.setEnabled(true);
+				}
+			});
+			btnBorrarPlazoInscripcion.setBounds(10, 338, 454, 38);
+		}
+		return btnBorrarPlazoInscripcion;
+	}
+
+	private JLabel getLblPlazos() {
+		if (lblPlazos == null) {
+			lblPlazos = new JLabel("PLAZOS");
+			lblPlazos.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lblPlazos.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPlazos.setBounds(10, 137, 454, 29);
+		}
+		return lblPlazos;
+	}
+	private JLabel getLblCategorias() {
+		if (lblCategorias == null) {
+			lblCategorias = new JLabel("CATEGORIAS");
+			lblCategorias.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lblCategorias.setHorizontalAlignment(SwingConstants.CENTER);
+			lblCategorias.setBounds(583, 137, 331, 23);
+		}
+		return lblCategorias;
+	}
+	private JTable getTableCategorias() {
+		if (tableCategorias == null) {
+			tableCategorias = new JTable();
+			tableCategorias.setBorder(new LineBorder(new Color(0, 0, 0)));
+			tableCategorias.setBounds(531, 177, 454, 150);
+		}
+		return tableCategorias;
+	}
+	private JButton getBtnBorrarCategoria() {
+		if (btnBorrarCategoria == null) {
+			btnBorrarCategoria = new JButton("Borrar Categoria");
+			btnBorrarCategoria.setBounds(531, 338, 466, 38);
+		}
+		return btnBorrarCategoria;
+	}
+	private JPanel getPanelCategorias() {
+		if (panelCategorias == null) {
+			panelCategorias = new JPanel();
+			panelCategorias.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panelCategorias.setBounds(531, 387, 466, 184);
+			panelCategorias.setLayout(null);
+			panelCategorias.add(getLblNombreCategoria());
+			panelCategorias.add(getLblLimiteInferior());
+			panelCategorias.add(getLblLimiteSuperior());
+			panelCategorias.add(getBtnAadirCategoria());
+			panelCategorias.add(getTextNombreCategoria());
+			panelCategorias.add(getTextLimiteInferior());
+			panelCategorias.add(getTextLimiteSuperior());
+		}
+		return panelCategorias;
+	}
+	private JLabel getLblNombreCategoria() {
+		if (lblNombreCategoria == null) {
+			lblNombreCategoria = new JLabel("Nombre de la categoria:");
+			lblNombreCategoria.setBounds(21, 11, 143, 31);
+		}
+		return lblNombreCategoria;
+	}
+	private JLabel getLblLimiteInferior() {
+		if (lblLimiteInferior == null) {
+			lblLimiteInferior = new JLabel("Limite de edad inferior :");
+			lblLimiteInferior.setBounds(21, 54, 143, 31);
+		}
+		return lblLimiteInferior;
+	}
+	private JLabel getLblLimiteSuperior() {
+		if (lblLimiteSuperior == null) {
+			lblLimiteSuperior = new JLabel("Limite de edad superior:");
+			lblLimiteSuperior.setBounds(21, 83, 143, 25);
+		}
+		return lblLimiteSuperior;
+	}
+	private JButton getBtnAadirCategoria() {
+		if (btnAadirCategoria == null) {
+			btnAadirCategoria = new JButton("A\u00F1adir Categoria");
+			btnAadirCategoria.setMnemonic('c');
+			btnAadirCategoria.setBounds(10, 121, 435, 52);
+		}
+		return btnAadirCategoria;
+	}
+	private JTextField getTextNombreCategoria() {
+		if (textNombreCategoria == null) {
+			textNombreCategoria = new JTextField();
+			textNombreCategoria.setBounds(229, 16, 216, 20);
+			textNombreCategoria.setColumns(10);
+		}
+		return textNombreCategoria;
+	}
+	private JTextField getTextLimiteInferior() {
+		if (textLimiteInferior == null) {
+			textLimiteInferior = new JTextField();
+			textLimiteInferior.setBounds(229, 59, 216, 20);
+			textLimiteInferior.setColumns(10);
+		}
+		return textLimiteInferior;
+	}
+	private JTextField getTextLimiteSuperior() {
+		if (textLimiteSuperior == null) {
+			textLimiteSuperior = new JTextField();
+			textLimiteSuperior.setBounds(229, 84, 216, 20);
+			textLimiteSuperior.setColumns(10);
+		}
+		return textLimiteSuperior;
 	}
 }
