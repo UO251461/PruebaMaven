@@ -52,11 +52,13 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		
 		base = new Base();
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
 		contentPane = new JPanel();
+		setLocationRelativeTo(this);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -121,7 +123,7 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaUsuario(String dni){
 		VentanaUsuario vu = new VentanaUsuario(dni);
 		vu.setLocationRelativeTo(this);
-		//vu.setModal(true);
+		vu.setModal(true);
 		vu.setVisible(true);
 	}
 	private JButton getBtClasificacion() {
