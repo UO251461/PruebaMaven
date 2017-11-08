@@ -38,7 +38,7 @@ public class InscripcionesClub {
 				Carrera carrera = vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada();
 				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 				Date fecha = formato.parse(fields[4]);
-				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3],fields[0],fields[1]),null,"");
+				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3].toUpperCase(),fields[0],fields[1]),null,"");
 				inscripcion.asignarCategoria(fecha, carrera);
 				inscripciones.add(inscripcion);
 				line = br.readLine();

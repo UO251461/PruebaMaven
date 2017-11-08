@@ -157,13 +157,14 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	private JButton getBtnInscribir() {
 		if (btnInscribir == null) {
 			btnInscribir = new JButton("Inscribir");
+			btnInscribir.setEnabled(false);
 			btnInscribir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inscripciones = inscripcionClub.getInscripcionesClub();
 					boolean inscrito = false;
 					for(Inscripcion ins : inscripciones) {
-						mostrarDatos(ins);
-						//inscrito = registrar(ins);
+						//mostrarDatos(ins);
+						inscrito = registrar(ins);
 						if(inscrito)
 							contadorOK++;
 						else
@@ -222,6 +223,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						inscripcionClub.leerFichero(textoInscripcion);
 						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
 						inscripciones = inscripcionClub.getInscripcionesClub();
+						btnInscribir.setEnabled(true);
 					}
 					
 				}
