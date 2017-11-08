@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import database.Base;
 import logica.Carrera;
+import logica.GestorExtractos;
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
@@ -19,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -47,6 +49,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnInscripcionesClub;
 	private JButton btnMostrarEstadoInscripciones;
 	private boolean organizador;
+	private JButton btnGestionarExtractos;
 
 	/**
 	 * Create the frame.
@@ -164,7 +167,8 @@ public class VentanaCarreras extends JDialog {
 					btnSiguiente.setEnabled(true);
 					btnInfoCarrera.setEnabled(true);
 					btnInscripcionesClub.setEnabled(true);
-					btnMostrarEstadoInscripciones.setEnabled(true);}
+					btnMostrarEstadoInscripciones.setEnabled(true);
+					btnGestionarExtractos.setEnabled(true);}
 				}
 			});
 
@@ -194,6 +198,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnInfoCarrera());
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
+			panelBotonesCarrera.add(getBtnGestionarExtractos());
 		}
 		return panelBotonesCarrera;
 	}
@@ -248,8 +253,32 @@ public class VentanaCarreras extends JDialog {
 	}
 	
 	private void mostrarCorredoresDeCompeticion() {
+		dispose();
 		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this);
 		vc.setLocationRelativeTo(null);
 		vc.setVisible(true);
+	}
+	private JButton getBtnGestionarExtractos() {
+		if (btnGestionarExtractos == null) {
+			btnGestionarExtractos = new JButton("Gestionar Extractos");
+			btnGestionarExtractos.setEnabled(false);
+			btnGestionarExtractos.setVisible(organizador);
+			btnGestionarExtractos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					generarExtractos();
+				}
+			});
+		}
+		return btnGestionarExtractos;
+	}
+	
+	private void generarExtractos() {
+		File fichero = new File("documentos/extracto" + vp.getBase().getBaseCarrera().getCarreraSeleccionada().getIdcarrera()+"-" + 
+				vp.getBase().getBaseCarrera().getCarreraSeleccionada().getOrganizador().getIdorganizador()+".txt");
+		GestorExtractos gestor = new GestorExtractos(this);
+		gestor.leerFichero(fichero);
+		vp.getBase().getBaseInscripciones().generarIncidencias(gestor);
+
 	}
 }

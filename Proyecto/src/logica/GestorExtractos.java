@@ -60,9 +60,12 @@ public class GestorExtractos {
 	
 	public String comentario(Incidencia incidencia) {
 		String inc = "";
+		Inscripcion insc = vc.getBase().getBaseInscripciones().getInscripcionByIds(incidencia.getIdCompeti(), incidencia.getOrganizador(), incidencia.getDni());
+		Date fecha =insc.getFecha();
+		fecha.setDate(fecha.getDate()+2);
 		double pago = incidencia.getPago() ;
 		if(incidencia != null) { 
-		if(incidencia.getFecha().after(vc.getBase().getBaseInscripciones().getInscripcionByIds(incidencia.getIdCompeti(), incidencia.getOrganizador(), incidencia.getDni()).getFecha())) {
+		if(incidencia.getFecha().after(fecha)) {
 				inc = "PAGO_FUER_PLAZO";
 			}
 		else {	

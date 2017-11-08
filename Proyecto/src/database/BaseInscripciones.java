@@ -102,7 +102,7 @@ public class BaseInscripciones {
 		}
 		return inscrito;
 	}
-
+	
 	/*
 	 * Metodo que devuelve
 	 */
@@ -469,16 +469,22 @@ public class BaseInscripciones {
 		try {
 			Connection conexion = getConnection();
 			PreparedStatement pst = conexion.prepareStatement("update INSCRIPCION set INCIDENCIA = ?,CANTIDAD= ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI= ?");
-			ResultSet rst = null;
+			
 			for(Incidencia inc : incidencias.getIncidencias()) {
 				pst.setString(1, incidencias.comentario(inc));
-				pst.setFloat(2,(float) (inc.getPago() - getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera().getPrecio()));
+				float pagoCuota = getPrecioCarrera(getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera().getIdcarrera(),getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(),
+						inc.getDni()).getCarrera().getOrganizador().getIdorganizador() ) ;
+				float pagoTotal = (float) (inc.getPago() - pagoCuota);
+				pst.setFloat(2,pagoTotal);
 				pst.setString(3, inc.getIdCompeti());
 				pst.setString(4, inc.getOrganizador());
 				pst.setString(5, inc.getDni());
-				rst =  pst.executeQuery();
+				ResultSet rst =  pst.executeQuery();
+				rst.close();
 			}
-			rst.close();
+			
+			
+		
 			pst.close();
 			conexion.close();
 		}catch(SQLException e) {
@@ -492,18 +498,45 @@ public class BaseInscripciones {
 		Inscripcion inscripcion;
 		try {
 			Connection con = getConnection();
-			PreparedStatement pst = con.prepareStatement("select estado , fecha , categoria from inscripcion where idCompetifcion = ? and idOrganizador = ? and dni = ?");
+			PreparedStatement pst = con.prepareStatement("select estado , fecha , categoria from inscripcion where idCompeticion = ? and idOrganizador = ? and dni = ?");
 			pst.setString(1, idCompeticion);
 			pst.setString(2, idOrganizacion);
 			pst.setString(3, dni);
 			ResultSet rst = pst.executeQuery();
+			if(rst.next()) {
 			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rst.getString("estado"), rst.getDate("fecha"), rst.getString("categoria") );
-			return inscripcion;
+			return inscripcion;}
+			
+			rst.close();
+			pst.close();
+			con.close();
 		}catch(SQLException se) {
 			
 		}
 		return null;
 
+	}
+	
+	private float getPrecioCarrera(String idCompeti, String idOrganizador) {
+		float precio = 0;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("select precio from competicion where idCompeticion = ? and idOrganizador = ?");
+			pst.setString(1, idCompeti);
+			pst.setString(2, idOrganizador);
+			
+			ResultSet rst = pst.executeQuery();
+			if(rst.next()) {
+			precio = rst.getFloat("precio");
+			}
+			
+			rst.close();
+			pst.close();
+			con.close();
+		}catch(SQLException se) {
+			
+		}
+		return precio;
 	}
 	
 

@@ -48,6 +48,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private Carrera carrera;
 	private JTable tabla;
 	private ModeloNoEditable modeloTabla;
+	private VentanaCarreras vc;
 
 //	/**
 //	 * Launch the application.
@@ -70,6 +71,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCorredoresDeCompeticion(VentanaCarreras competicion) {
+		this.vc = competicion;
 		this.carrera = competicion.getBase().getBaseCarrera().getCarreraSeleccionada();
 		base = competicion.getBase();
 		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera.getIdcarrera());
@@ -148,6 +150,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 			btnAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
+					vc.setVisible(true);
 				}
 			});
 		}
