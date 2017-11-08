@@ -72,7 +72,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	public VentanaCorredoresDeCompeticion(VentanaCarreras competicion) {
 		this.carrera = competicion.getBase().getBaseCarrera().getCarreraSeleccionada();
 		base = competicion.getBase();
-		//cargarModelo();
+		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera.getIdcarrera());
 		
 		setTitle("Corredores Competicion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -184,16 +184,19 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	public void addFilas(){
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getInscripcionesCarrera();
-		Object[] nuevaFila = new Object[5];
+		Object[] nuevaFila = new Object[4];
 		for(Inscripcion ins : datos) {
 			nuevaFila[0] = ins.getCorredor().getDni();
 			nuevaFila[1] = ins.getCorredor().getNombre();
 			nuevaFila[2] = ins.getCategoria();
 			Date fecha = ins.getFecha();
-			nuevaFila[3] = fecha.getDay() +"/" +fecha.getMonth() + "/"+(fecha.getYear() +1900);
+			nuevaFila[3] = fecha.getDate() +"/" +(fecha.getMonth()+1) + "/"+(fecha.getYear() +1900);
+			modeloTabla.addRow(nuevaFila); 
 		}
+		
 	}
 	
 	private  void actualizarTabla(){

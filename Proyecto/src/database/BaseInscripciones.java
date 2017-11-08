@@ -112,7 +112,7 @@ public class BaseInscripciones {
 
 			con = getConnection();
 			String consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
-					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'INSCRITO' order by fecha";
+					+ "i.categoria,nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'INSCRITO' order by fecha";
 			PreparedStatement pst = con.prepareStatement(consulta);
 
 			pst.setString(1, idCompeticion);
@@ -123,11 +123,12 @@ public class BaseInscripciones {
 				inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"), rs1.getString("idorganizador"),
 						rs1.getString("dni"), rs1.getString("estado"), rs1.getDate("fecha"), rs1.getString("categoria"),
 						rs1.getString("nombre")));
+				
 
 			}
 
 			consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
-					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PRE-INSCRITO' order by fecha";
+					+ "i.categoria,nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PRE-INSCRITO' order by fecha";
 			PreparedStatement pst2 = con.prepareStatement(consulta);
 
 			pst2.setString(1, idCompeticion);
@@ -142,7 +143,7 @@ public class BaseInscripciones {
 			}
 
 			consulta = "select i.idcompeticion, i.idorganizador,i.dni,i.estado,i.fecha, "
-					+ "i.categoria,c.nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PENDIENTE_DE_PAGO' order by fecha";
+					+ "i.categoria,nombre from inscripcion i, corredor c where i.dni = c.dni and i.idcompeticion = ? and i.estado = 'PENDIENTE_DE_PAGO' order by fecha";
 			PreparedStatement pst3 = con.prepareStatement(consulta);
 
 			pst3.setString(1, idCompeticion);

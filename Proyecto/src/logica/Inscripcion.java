@@ -21,6 +21,8 @@ public class Inscripcion {
 			this.categoria = categoria;
 		}
 		
+		
+		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
@@ -31,7 +33,7 @@ public class Inscripcion {
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
-			corredor = new Corredor(dni, 0, "", "", "");
+			corredor = new Corredor(dni, 0, "", nombre, "");
 			Organizador organizador = new Organizador("", idOrganizador);
 			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
 			this.estado = pagado;
