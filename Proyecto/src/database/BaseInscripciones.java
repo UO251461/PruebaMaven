@@ -505,5 +505,57 @@ public class BaseInscripciones {
 		return null;
 
 	}
+	
+
+	public void actualizarDorsales(){
+		try {
+			Connection con= getConnection();
+			PreparedStatement ps = con.prepareStatement("select iDCOMPETICION "
+					+ "from competicion "
+					+ "where FECHA_FINAL_INS<=?");
+			Date date = new Date();
+			ps.setDate(1, new java.sql.Date( date.getTime()));
+
+			ResultSet rs = ps.executeQuery();
+			//mientras haya competiciones con la fecha de inscripcion terminada, asignar dorsales
+			while(rs.next()){
+				PreparedStatement ps2 = con.prepareStatement("select max(dorsal) max "
+						+ "from inscripcion "
+						+ "where IDCOMPETICION=?");
+				ps2.setString(1, rs.getString("idcompeticion"));
+				ResultSet rs2= ps2.executeQuery();
+				rs2.next();
+				int dorsal=10;
+				if(rs2.getInt("MAX")>0)
+					dorsal=rs2.getInt("MAX");
+				Statement st3 = con.createStatement();
+				ResultSet rs3 =  st3.executeQuery("select * "
+						+ "from inscripcion where estado='INSCRITO' and dorsal is null order by fecha asc");
+				dorsal++;
+				PreparedStatement ps4 = con.prepareStatement("UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
+				
+				while(rs3.next()){
+					ps4.setInt(1, dorsal);
+					ps4.setString(2, rs3.getString("idcompeticion"));
+					ps4.setString(3, rs3.getString("idorganizador"));
+					ps4.setString(4, rs3.getString("dni"));
+					ps4.executeQuery();	
+					dorsal++;
+				}
+				ps4.close();
+				rs3.close();
+				st3.close();
+				rs2.close();
+				ps2.close();
+			}
+						
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
