@@ -180,28 +180,19 @@ public class Ventana_Inscripcion_Club extends JFrame {
 
 		Boolean inscrito = false;
 		@SuppressWarnings("deprecation")
-		String date = inscripcion.getFecha().getDate() + "/" + (inscripcion.getFecha().getMonth() + 1) + "/"
-				+ (inscripcion.getFecha().getYear() + 1900);
+		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "-" +(inscripcion.getCorredor().getFechaNacimiento().getMonth() +1)+ "-"+ (inscripcion.getCorredor().getFechaNacimiento().getYear() +1900);
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
-
-		inscripcion = new Inscripcion(inscripcion.getCarrera().getIdcarrera(),
-				inscripcion.getCarrera().getOrganizador().getIdorganizador(), inscripcion.getCorredor().getDni(),
-				carreraSel.getPrecio());
-
-																			// INSCRIPCION DEL CORREDOR
-		// SE COMPRUEBA QUE NO SEA MENOR DE EDAD
-		Corredor c = inscripcion.getCorredor();
-		c.setDni(inscripcion.getCorredor().getDni());
-		c.setNombre(inscripcion.getCorredor().getNombre());
-		c.setApellido(inscripcion.getCorredor().getApellido());
-		c.setSexo(inscripcion.getCorredor().getSexo());
+		if(inscripcion.getCategoria().equals("Sin categoria")){
+			return false;
+		}
+		else {
 		try {
 			inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		}
 		return inscrito;
 	}
 
