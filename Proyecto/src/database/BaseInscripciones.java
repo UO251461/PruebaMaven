@@ -476,7 +476,7 @@ public class BaseInscripciones {
 				pst.setString(3, inc.getIdCompeti());
 				pst.setString(4, inc.getOrganizador());
 				pst.setString(5, inc.getDni());
-				rst =  ps.executeQuery();
+				rst =  pst.executeQuery();
 			}
 			rst.close();
 			pst.close();
@@ -496,8 +496,8 @@ public class BaseInscripciones {
 			pst.setString(1, idCompeticion);
 			pst.setString(2, idOrganizacion);
 			pst.setString(3, dni);
-			ResultSet rst = ps.executeQuery();
-			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rs.getString("estado"), rst.getDate("fecha"), rs.getString("categoria") );
+			ResultSet rst = pst.executeQuery();
+			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rst.getString("estado"), rst.getDate("fecha"), rst.getString("categoria") );
 			return inscripcion;
 		}catch(SQLException se) {
 			
