@@ -324,9 +324,9 @@ public class VentanaInscripcion extends JFrame {
 		
 		inscripcion = new Inscripcion(carreraSel.getIdcarrera(), carreraSel.getOrganizador().getIdorganizador() ,txtDni.getText(), carreraSel.getPrecio()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
 		inscripcion.asignarCategoria(fecha.getDate(),carreraSel);//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
-		//SE COMPRUEBA QUE NO SEA MENOR DE EDAD
-		if(inscripcion.getCategoria().equals("Menor de edad"))
-			JOptionPane.showMessageDialog(this, "Usted es menor de edad y no puede inscribirse en la carrera");
+		//SE COMPRUEBA QUE NO TENGA CATEGORIA
+		if(inscripcion.getCategoria().equals("Sin categoria"))
+			JOptionPane.showMessageDialog(this, "Usted es menor de edad o no tiene una categoria asignada y no puede inscribirse en la carrera");
 		else{
 			Corredor c = inscripcion.getCorredor();
 			c.setDni(txtDni.getText());
@@ -401,8 +401,8 @@ public class VentanaInscripcion extends JFrame {
 			txtTitulo.setFocusable(false);
 			txtTitulo.setEditable(false);
 			txtTitulo.setFont(new Font("Arial Black", Font.BOLD, 16));
-			//txtTitulo.setText(vc.getInscripcion.getCompeticion().gerNombreCompeticion(););			
-			txtTitulo.setText("CARERRA PRUEBA CON UN TITULO LARGOOOOOOOOOOOOOOOO LAAAAAARGGGGGGGGGGO");
+			txtTitulo.setText(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());			
+			//txtTitulo.setText("CARERRA PRUEBA CON UN TITULO LARGOOOOOOOOOOOOOOOO LAAAAAARGGGGGGGGGGO");
 			txtTitulo.setBounds(75, 24, 426, 81);
 		}
 		return txtTitulo;

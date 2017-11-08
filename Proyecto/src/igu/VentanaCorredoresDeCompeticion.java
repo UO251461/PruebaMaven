@@ -23,7 +23,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -39,9 +42,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JButton btnAtras;
-//	private DefaultListModel<Inscripcion> modeloCorredores = new DefaultListModel<Inscripcion>();
-	private Base base = new Base();
-	// private Carrera carrera;
+	private Base base ;
 	private Carrera carrera;
 	private JTable tabla;
 	private ModeloNoEditable modeloTabla;
@@ -66,8 +67,9 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCorredoresDeCompeticion(Carrera competicion) {
-		this.carrera = competicion;
+	public VentanaCorredoresDeCompeticion(VentanaCarreras competicion) {
+		this.carrera = competicion.getBase().getBaseCarrera().getCarreraSeleccionada();
+		base = competicion.getBase();
 		//cargarModelo();
 		
 		setTitle("Corredores Competicion");
@@ -189,9 +191,10 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		Object[] nuevaFila = new Object[5];
 		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
 			nuevaFila[0]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getDni();
-//			nuevaFila[1]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getNombre();
-//			nuevaFila[2]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getCategoria();
-//			nuevaFila[3]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getFecha().toGMTString();
+			nuevaFila[1]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getNombre();
+			nuevaFila[2]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCategoria();
+			Date fecha = base.getBaseInscripciones().getInscripcionesCarrera().get(i).getFecha();
+			nuevaFila[3] = fecha.getDate() +"/" +fecha.getMonth()+"/"+(fecha.getYear() +1900);
 		}
 	}
 	

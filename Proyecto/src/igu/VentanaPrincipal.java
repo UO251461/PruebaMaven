@@ -31,6 +31,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnUsuario;
 	private JButton btClasificacion;
 	private JButton btnAsignarDorsal;
+	private JButton btnCrearCarrera;
 
 	/**
 	 * Launch the application.
@@ -52,11 +53,13 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		
 		base = new Base();
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
 		contentPane = new JPanel();
+		setLocationRelativeTo(this);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -97,6 +100,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
+			panel.add(getBtnCrearCarrera());
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
 			panel.add(getBtClasificacion());
@@ -159,5 +163,24 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return btnAsignarDorsal;
+	}
+	private JButton getBtnCrearCarrera() {
+		if (btnCrearCarrera == null) {
+			btnCrearCarrera = new JButton("Crear Carrera");
+			btnCrearCarrera.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarVentanaCrearCarrera();
+				}
+			});
+		}
+		return btnCrearCarrera;
+	}
+
+
+	private void mostrarVentanaCrearCarrera(){
+		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
+		vc.setLocationRelativeTo(this);
+		vc.setVisible(true);
+		this.setVisible(false);
 	}
 }

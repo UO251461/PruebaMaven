@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import javax.swing.JDialog;
 
+import igu.VentanaInformeIncidencias;
 import logica.*;
 
 public class BaseInscripciones {
@@ -88,6 +90,7 @@ public class BaseInscripciones {
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
 			rs = ps.executeQuery();
+			
 		} catch (SQLException sql) {
 			// SI YA ESTÁ REGISTRADO NO HACE NADA
 		} finally {
@@ -374,6 +377,120 @@ public class BaseInscripciones {
 		}
 		
 		return null;
+	}
+	
+	
+<<<<<<< Updated upstream
+	/**
+	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
+	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
+	 * si "Devolución" estado de la inscripción->INSCRITO, 
+	 * si "Fuera de plazo" estado -> ANULADO, 
+	 * si "No pagado" estado -> "ANULADO", 
+	 * si "(BLANCO)" estado -> "INSCRITO", 
+	 * luego se mostrará una ventana con los datos de las incidencias :el número de pagos menos, 
+	 * no pagados, pagos ok, pago demás, pago fuera de plazo, cantidad procesados.(SAMUEL)
+	 */
+	public void gestionarIncidenciasActuales(){
+		int cLeidos=0;
+		int nPagoMenos=0;
+		int nPagoMas=0;
+		int nPagadoFueraPlazo=0;
+		int nNoPagados=0;
+		int nPagosOk=0;
+		String campoIncidencia = "";
+		try {
+			con = getConnection();
+			ps = con.prepareStatement("select IDCOMPETICION, IDORGANIZADOR, DNI, INCIDENCIA from INSCRIPCION");
+			rs = ps.executeQuery();
+			PreparedStatement ps2 = con.prepareStatement("UPDATE INSCRIPCION SET ESTADO = ? WHERE IDCOMPETICION=? AND IDORGANIZADOR=? AND DNI = ?");
+			while(rs.next()){
+				campoIncidencia = rs.getString("INCIDENCIA");
+				
+				ps2.setString(2, rs.getString("IDCOMPETICION"));
+				ps2.setString(3, rs.getString("IDORGANIZADOR"));
+				ps2.setString(4, rs.getString("DNI"));
+				
+				if( campoIncidencia == null){
+					ps2.setString(1, "INSCRITO");					
+					nPagosOk++;
+				}
+				else if(campoIncidencia.equals("PAGO_MENOS")){
+					ps2.setString(1, "ANULADO");	
+					nPagoMenos++;
+				}
+				else if(campoIncidencia.equals("PAGO_MAS")){
+					ps2.setString(1, "INSCRITO");	
+					nPagoMas++;
+				}
+				else if(campoIncidencia.equals("PAGO_FUERA_PLAZO")){
+					ps2.setString(1, "ANULADO");
+					nPagadoFueraPlazo++;
+				}
+				else if(campoIncidencia.equals("NO_PAGADO")){
+					ps2.setString(1, "ANULADO");
+					nNoPagados++;
+				}
+				
+				ps2.executeQuery();
+				cLeidos++;		
+			}
+			
+				
+			ps2.close();
+			
+			VentanaInformeIncidencias vi = new VentanaInformeIncidencias(nPagosOk, nPagoMenos, nPagoMas, nPagadoFueraPlazo, nNoPagados, cLeidos);
+			vi.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			vi.setVisible(true);
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			
+			cerrarConexion();
+		}
+=======
+	public void generarIncidencias(GestorExtractos incidencias) {
+		
+		try {
+			Connection conexion = getConnection();
+			PreparedStatement pst = conexion.prepareStatement("update INSCRIPCION set INCIDENCIA = ?,CANTIDAD= ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI= ?");
+			ResultSet rst = null;
+			for(Incidencia inc : incidencias.getIncidencias()) {
+				pst.setString(1, incidencias.comentario(inc));
+				pst.setFloat(2,(float) (inc.getPago() - getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera().getPrecio()));
+				pst.setString(3, inc.getIdCompeti());
+				pst.setString(4, inc.getOrganizador());
+				pst.setString(5, inc.getDni());
+				rst =  ps.executeQuery();
+			}
+			rst.close();
+			pst.close();
+			conexion.close();
+		}catch(SQLException e) {
+			
+		}finally {
+			
+		}
+	}
+	
+	public Inscripcion getInscripcionByIds(String idCompeticion,String idOrganizacion,String dni) {
+		Inscripcion inscripcion;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("select estado , fecha , categoria from inscripcion where idCompetifcion = ? and idOrganizador = ? and dni = ?");
+			pst.setString(1, idCompeticion);
+			pst.setString(2, idOrganizacion);
+			pst.setString(3, dni);
+			ResultSet rst = ps.executeQuery();
+			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rs.getString("estado"), rst.getDate("fecha"), rs.getString("categoria") );
+			return inscripcion;
+		}catch(SQLException se) {
+			
+		}
+		return null;
+>>>>>>> Stashed changes
 	}
 
 }
