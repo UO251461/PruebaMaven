@@ -227,6 +227,7 @@ public class VentanaCarreras extends JDialog {
 	}
 	
 	private void mostrarInscripcionClub() {
+		dispose();
 		Ventana_Inscripcion_Club vinscripcion = new Ventana_Inscripcion_Club(this);
 		vinscripcion.setLocationRelativeTo(null);
 		vinscripcion.setVisible(true);

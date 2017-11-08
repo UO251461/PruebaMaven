@@ -134,6 +134,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
+					vc.setVisible(true);
 				}
 			});
 		}
