@@ -47,6 +47,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblAcceso;
 	private JPanel pnBase;
 	private boolean organizador;
+	private JPanel panel_3;
+	private JButton btnCambiarA;
 
 	/**
 	 * Launch the application.
@@ -206,6 +208,7 @@ public class VentanaPrincipal extends JFrame {
 			panelPrincipal.setLayout(new BorderLayout(0, 0));
 			panelPrincipal.add(getLblAplicacion());
 			panelPrincipal.add(getPanel(), BorderLayout.SOUTH);
+			panelPrincipal.add(getPanel_3(), BorderLayout.NORTH);
 		}
 		return panelPrincipal;
 	}
@@ -291,5 +294,41 @@ public class VentanaPrincipal extends JFrame {
 		btnCrearCarrera.setVisible(true);
 		btnAsignarDorsal.setVisible(true);
 		btnUsuario.setVisible(false);
+	}
+	private JPanel getPanel_3() {
+		if (panel_3 == null) {
+			panel_3 = new JPanel();
+			panel_3.add(getBtnCambiarA());
+		}
+		return panel_3;
+	}
+	private JButton getBtnCambiarA() {
+		if (btnCambiarA == null) {
+			btnCambiarA = new JButton();
+			if(organizador)
+				btnCambiarA.setText("Cambiar a corredor");
+			else
+				btnCambiarA.setText("Cambiar a organizador");
+			btnCambiarA.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(organizador){
+						btnCambiarA.setText("Cambiar a organizador");
+						accesoCorredor();
+						
+					}else{
+						btnCambiarA.setText("Cambiar a corredor");
+						accesoOrganizador();
+					}
+				}
+			});
+		}
+		return btnCambiarA;
+	}
+	
+	private void accesoCorredor(){
+		organizador=false;
+		btnCrearCarrera.setVisible(false);
+		btnAsignarDorsal.setVisible(false);
+		btnUsuario.setVisible(true);
 	}
 }
