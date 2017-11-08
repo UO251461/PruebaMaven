@@ -460,13 +460,12 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
-<<<<<<< Updated upstream
-		}
-=======
-		
-	}
 
->>>>>>> Stashed changes
+		}
+
+		
+
+
 	public void generarIncidencias(GestorExtractos incidencias) {
 		
 		try {
