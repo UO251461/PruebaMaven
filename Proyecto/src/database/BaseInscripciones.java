@@ -68,12 +68,14 @@ public class BaseInscripciones {
 	 * @param inscripcion
 	 * @throws SQLException
 	 */
-	public void registrarCorredor(String fecha, 
+
+	public boolean registrarCorredor(String fecha, 
 			Inscripcion inscripcion) throws SQLException {// (String dni, String
 															// nombre, String
 															// aplllido, String
 															// fecha, String
 															// sexo)
+		boolean inscrito;
 		try {
 			con = getConnection();
 
@@ -90,14 +92,15 @@ public class BaseInscripciones {
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
 			rs = ps.executeQuery();
-			
+		
 		} catch (SQLException sql) {
-			// SI YA ESTÁ REGISTRADO NO HACE NADA
+		
 		} finally {
-			inscribirCompeticion(inscripcion);
+			inscrito = inscribirCompeticion(inscripcion);
 			cerrarConexion();
+			
 		}
-
+		return inscrito;
 	}
 
 	/*
@@ -169,7 +172,8 @@ public class BaseInscripciones {
 		}
 	}
 
-	public void inscribirCompeticion(Inscripcion inscripcion) throws SQLException {
+	public boolean inscribirCompeticion(Inscripcion inscripcion) throws SQLException {
+		boolean inscrito = false;
 		try {
 			// CONSULTA ADAPTADA PARA AÑADIRLE LA CATEGORIA
 			con = getConnection();
@@ -185,17 +189,20 @@ public class BaseInscripciones {
 			inscripcion.setFecha(fecha);
 			
 			rs = ps.executeQuery();
-
+			if(rs.next()) {
+				inscrito = true;}
 			// si no no esta inscrito(Samuel)
 			//inscripcion.setId_competicion(inscripcion.getCarrera());
 			//inscripcion.setId_organizador(inscripcion.getId_organizador());
 			inscripcion.setEstado("PRE-INSCRITO");
 			//inscripcion.setPrecio(inscripcion.getPrecio());
-			
 
-		} finally {
-			cerrarConexion();
+		}catch(SQLException se) {
+		
 		}
+			cerrarConexion();
+			return inscrito;
+		
 	}
 
 	public ArrayList<Inscripcion> getInscripciones() {
@@ -380,6 +387,10 @@ public class BaseInscripciones {
 	}
 	
 	
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	/**
 	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
 	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
@@ -449,7 +460,13 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
+<<<<<<< Updated upstream
 		}
+=======
+		
+	}
+
+>>>>>>> Stashed changes
 	public void generarIncidencias(GestorExtractos incidencias) {
 		
 		try {
@@ -489,7 +506,10 @@ public class BaseInscripciones {
 			
 		}
 		return null;
+<<<<<<< Updated upstream
 		
+=======
+>>>>>>> Stashed changes
 	}
 
 }

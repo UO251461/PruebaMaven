@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import database.Base;
 import igu.Ventana_Inscripcion_Club;
+import oracle.sql.DATE;
 
 public class InscripcionesClub {
 
@@ -37,7 +38,9 @@ public class InscripcionesClub {
 				Carrera carrera = vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada();
 				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 				Date fecha = formato.parse(fields[4]);
-				inscripcion = new Inscripcion(carrera.getIdcarrera(), carrera.getOrganizador().getIdorganizador() , fields[2],"",fecha,"" ); 
+				Date fechaHoy = new Date();
+				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3],fields[0],fields[1]),fechaHoy,"");
+				inscripcion.asignarCategoria(fecha, carrera);
 				inscripciones.add(inscripcion);
 				line = br.readLine();
 			}

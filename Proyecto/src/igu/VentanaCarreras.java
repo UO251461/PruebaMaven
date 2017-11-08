@@ -155,7 +155,7 @@ public class VentanaCarreras extends JFrame {
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() != null) {
+					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() == null) {
 					btnSiguiente.setEnabled(true);
 					btnInfoCarrera.setEnabled(true);
 					btnInscripcionesClub.setEnabled(true);

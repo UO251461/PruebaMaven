@@ -32,6 +32,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JTable;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaCorredoresDeCompeticion extends JFrame {
 
@@ -108,7 +110,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JPanel getPnlBotones() {
 		if (pnlBotones == null) {
 			pnlBotones = new JPanel();
-			pnlBotones.setLayout(new BorderLayout(0, 0));
+			pnlBotones.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 			pnlBotones.add(getBtnAtras());
 		}
 		return pnlBotones;
@@ -143,6 +145,11 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
+			btnAtras.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
 		}
 		return btnAtras;
 	}
@@ -171,30 +178,21 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 			//modifico el ancho de la columna 0
 			tabla.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tabla.getTableHeader().setReorderingAllowed(false);
-			tabla.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					//programar el doble click
-					if(arg0.getClickCount()==2){
-						//si se hace doble click, que muestre la clasificacion de esa carrera
-					}
-				}
-			});
-			addFilas(); //aqui o antes de pasarle el modelo
+			addFilas();
 		}
 		return tabla;
 	}
 	
 	
 	public void addFilas(){
-		ArrayList<Inscripcion> datos;
+		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getInscripcionesCarrera();
 		Object[] nuevaFila = new Object[5];
-		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
-			nuevaFila[0]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getDni();
-			nuevaFila[1]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCorredor().getNombre();
-			nuevaFila[2]= base.getBaseInscripciones().getInscripcionesCarrera().get(i).getCategoria();
-			Date fecha = base.getBaseInscripciones().getInscripcionesCarrera().get(i).getFecha();
-			nuevaFila[3] = fecha.getDate() +"/" +fecha.getMonth()+"/"+(fecha.getYear() +1900);
+		for(Inscripcion ins : datos) {
+			nuevaFila[0] = ins.getCorredor().getDni();
+			nuevaFila[1] = ins.getCorredor().getNombre();
+			nuevaFila[2] = ins.getCategoria();
+			Date fecha = ins.getFecha();
+			nuevaFila[3] = fecha.getDay() +"/" +fecha.getMonth() + "/"+(fecha.getYear() +1900);
 		}
 	}
 	

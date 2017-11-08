@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import logica.Carrera;
+import logica.Corredor;
 import logica.Inscripcion;
 import logica.InscripcionesClub;
 import oracle.sql.DATE;
@@ -46,8 +47,8 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	private JTextField txtProcesadosOk;
 	private JLabel lblProcesadosIncorrectamente;
 	private JTextField txtProcesadosKo;
-	private JFileChooser jfInscripcion = null;
-	private InscripcionesClub inscripcionClub = null;
+	private JFileChooser jfInscripcion ;
+	private InscripcionesClub inscripcionClub ;
 	private JButton btnContinuar;
 	private ArrayList<Inscripcion> inscripciones;
 	private VentanaCarreras vc;
@@ -57,7 +58,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	private JTextField txtCarrera;
 	private JLabel lblPrecio;
 	private JTextField txtPrecio;
-	private InscripcionesClub ins;
+	private JTextField txtLocalizacion;
 
 //	/**
 //	 * Launch the application.
@@ -80,7 +81,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	 */
 	public Ventana_Inscripcion_Club(VentanaCarreras vc) {
 		this.vc = vc;
-		this.ins = new InscripcionesClub(this);
+		this.inscripcionClub = new InscripcionesClub(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 673, 376);
 		contentPane = new JPanel();
@@ -123,12 +124,18 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			panelPrincipal.add(getTxtCarrera());
 			panelPrincipal.add(getLblPrecio());
 			panelPrincipal.add(getTxtPrecio());
+			panelPrincipal.add(getTxtLocalizacion());
 		}
 		return panelPrincipal;
 	}
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
 		}
 		return btnCancelar;
 	}
@@ -151,24 +158,33 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			btnInscribir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inscripciones = inscripcionClub.getInscripcionesClub();
-					for(Inscripcion ins : inscripciones) {
-						try {
+					boolean inscrito = false;
+					
+					for (Inscripcion ins : inscripciones) {		
+							Corredor corredor = ins.getCorredor();
+							@SuppressWarnings("deprecation")
+							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
+							try {
+								inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(fecha, ins);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+
+					
 						
-						vc.getBase().getBaseInscripciones().registrarCorredor(DATE.getCurrentDate().stringValue(),ins);
-						
-						ins.asignarCategoria(ins.getFecha(), vc.getBase().getBaseCarrera().getCarreraSeleccionada());
-						contadorOK++;}
-						catch(SQLException se) {
-						//	JOptionPane.showMessageDialog(null, se.getMessage());
-							contadorKO++;
-						} finally {
 							btnContinuar.setEnabled(true);
-						}
-						}
-					txtProcesados.setText(String.valueOf(inscripciones.size())); 
+						
+						if(inscrito)
+							contadorOK++;
+						else
+							contadorKO++;
+					}
+					
+					txtProcesados.setText(String.valueOf(inscripciones.size()));
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
-					
+
 				}
 			});
 		}
@@ -190,8 +206,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 					int respuesta = getJFInscripcion().showOpenDialog(null);
 					if(respuesta == getJFInscripcion().APPROVE_OPTION) {
 						File textoInscripcion = jfInscripcion.getSelectedFile();
-						ins.leerFichero(textoInscripcion);
-						inscripciones = ins.getInscripcionesClub();
+						inscripcionClub.leerFichero(textoInscripcion);
+						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
+						inscripciones = inscripcionClub.getInscripcionesClub();
 					}
 					
 				}
@@ -308,5 +325,14 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			txtPrecio.setColumns(10);
 		}
 		return txtPrecio;
+	}
+	private JTextField getTxtLocalizacion() {
+		if (txtLocalizacion == null) {
+			txtLocalizacion = new JTextField();
+			txtLocalizacion.setEditable(false);
+			txtLocalizacion.setBounds(279, 89, 283, 20);
+			txtLocalizacion.setColumns(10);
+		}
+		return txtLocalizacion;
 	}
 }
