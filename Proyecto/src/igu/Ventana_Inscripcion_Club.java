@@ -162,7 +162,8 @@ public class Ventana_Inscripcion_Club extends JFrame {
 					inscripciones = inscripcionClub.getInscripcionesClub();
 					boolean inscrito = false;
 					for(Inscripcion ins : inscripciones) {
-						inscrito = registrar(ins);
+						mostrarDatos(ins);
+						//inscrito = registrar(ins);
 						if(inscrito)
 							contadorOK++;
 						else
@@ -177,11 +178,16 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		return btnInscribir;
 	}
 
+	private void mostrarDatos(Inscripcion ins) {
+		System.out.println(ins.getCorredor().getNombre() + " " + ins.getCorredor().getApellido() + " " + ins.getCorredor().getFechaNacimiento().getDate() + "/"+
+	ins.getCorredor().getFechaNacimiento().getMonth() +"/" + (ins.getCorredor().getFechaNacimiento().getYear()+1900)+ "  " + ins.getCorredor().getDni());
+	}
+	
 	private boolean registrar(Inscripcion inscripcion)  {
 
 		Boolean inscrito = false;
 		@SuppressWarnings("deprecation")
-		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "-" +(inscripcion.getCorredor().getFechaNacimiento().getMonth() +1)+ "-"+ (inscripcion.getCorredor().getFechaNacimiento().getYear() +1900);
+		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "/" +(inscripcion.getCorredor().getFechaNacimiento().getMonth() +1)+ "/"+ (inscripcion.getCorredor().getFechaNacimiento().getYear() +1900);
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 		if(inscripcion.getCategoria().equals("Sin categoria")){
 			return false;
