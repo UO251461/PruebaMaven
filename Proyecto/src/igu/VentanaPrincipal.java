@@ -107,7 +107,6 @@ public class VentanaPrincipal extends JFrame {
 		VentanaCarreras vcarrera = new VentanaCarreras(this, organizador);
 		vcarrera.setLocationRelativeTo(null);		;
 		vcarrera.setVisible(true);
-		this.setVisible(false);
 	}
 	
 	public Base getBase(){
@@ -199,7 +198,6 @@ public class VentanaPrincipal extends JFrame {
 		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
 		vc.setLocationRelativeTo(this);
 		vc.setVisible(true);
-		this.setVisible(false);
 	}
 	private JPanel getPanelPrincipal() {
 		if (panelPrincipal == null) {

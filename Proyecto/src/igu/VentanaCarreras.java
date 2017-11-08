@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -21,7 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VentanaCarreras extends JFrame {
+public class VentanaCarreras extends JDialog {
 
 	/**
 	 * 
@@ -51,10 +52,11 @@ public class VentanaCarreras extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCarreras(VentanaPrincipal vp, boolean organizador) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModal(true);
 		this.organizador=organizador;
 		this.vp = vp;
 		setTitle("Carreras");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 987, 481);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -125,10 +127,11 @@ public class VentanaCarreras extends JFrame {
 	}
 	
 	private void mostrarInscripcion(){
+		dispose();
 		VentanaInscripcion vinscripcion = new VentanaInscripcion(this);
-		vinscripcion.setLocationRelativeTo(null);		;
+		vinscripcion.setLocationRelativeTo(this);		
 		vinscripcion.setVisible(true);
-		this.setVisible(false);
+		
 	}
 
 	private JScrollPane getScrollCentro() {

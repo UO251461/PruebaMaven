@@ -394,8 +394,8 @@ public class BaseInscripciones {
 	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
 	 * si "Devolución" estado de la inscripción->INSCRITO, 
 	 * si "Fuera de plazo" estado -> ANULADO, 
-	 * si "No pagado" estado -> "ANULADO", 
-	 * si "(BLANCO)" estado -> "INSCRITO", 
+	 * si Pago correcto" estado -> "INSCRITO", 
+	 * si "(BLANCO)" estado -> "ANULADO", 
 	 * luego se mostrará una ventana con los datos de las incidencias :el número de pagos menos, 
 	 * no pagados, pagos ok, pago demás, pago fuera de plazo, cantidad procesados.(SAMUEL)
 	 */
@@ -420,8 +420,8 @@ public class BaseInscripciones {
 				ps2.setString(4, rs.getString("DNI"));
 				
 				if( campoIncidencia == null){
-					ps2.setString(1, "INSCRITO");					
-					nPagosOk++;
+					ps2.setString(1, "ANULADO");					
+					nNoPagados++;
 				}
 				else if(campoIncidencia.equals("PAGO_MENOS")){
 					ps2.setString(1, "ANULADO");	
@@ -435,9 +435,9 @@ public class BaseInscripciones {
 					ps2.setString(1, "ANULADO");
 					nPagadoFueraPlazo++;
 				}
-				else if(campoIncidencia.equals("NO_PAGADO")){
-					ps2.setString(1, "ANULADO");
-					nNoPagados++;
+				else if(campoIncidencia.equals("PAGO_CORRECTO")){
+					ps2.setString(1, "INSCRITO");
+					nPagosOk++;
 				}
 				
 				ps2.executeQuery();
@@ -458,8 +458,8 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
-
-		}
+		
+	}
 
 		
 
