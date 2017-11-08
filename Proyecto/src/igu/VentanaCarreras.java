@@ -1,7 +1,6 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,13 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 
 public class VentanaCarreras extends JFrame {
 
@@ -112,7 +108,7 @@ public class VentanaCarreras extends JFrame {
 
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
-			btnSiguiente = new JButton("Siguiente");
+			btnSiguiente = new JButton("Inscribirse");
 			btnSiguiente.setEnabled(false);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -196,13 +192,13 @@ public class VentanaCarreras extends JFrame {
 		}
 		return panelBotonesCarrera;
 	}
+	
 	private JButton getBtnInfoCarrera() {
 		if (btnInfoCarrera == null) {
 			btnInfoCarrera = new JButton("Mostrar Informacion Carrera");
 			btnInfoCarrera.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					JOptionPane.showMessageDialog(null, "Prueba para mostrar nombre de carrera seleccionada: " + listCarreras.getSelectedValue().getNombre(), "Informacion de la carrera " 
-							+ listCarreras.getSelectedValue().getNombre(),1);
+					JOptionPane.showMessageDialog(null, listCarreras.getSelectedValue().infoCarrera(),listCarreras.getSelectedValue().getNombre(), 1);
 					
 				}
 			});
@@ -244,7 +240,7 @@ public class VentanaCarreras extends JFrame {
 	}
 	
 	private void mostrarCorredoresDeCompeticion() {
-		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this.getBase().getBaseCarrera().getCarreraSeleccionada());
+		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this);
 		vc.setLocationRelativeTo(null);
 		vc.setVisible(true);
 	}
