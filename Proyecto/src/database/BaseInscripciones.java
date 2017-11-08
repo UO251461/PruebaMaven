@@ -66,12 +66,13 @@ public class BaseInscripciones {
 	 * @param inscripcion
 	 * @throws SQLException
 	 */
-	public void registrarCorredor(String fecha, 
+	public boolean registrarCorredor(String fecha, 
 			Inscripcion inscripcion) throws SQLException {// (String dni, String
 															// nombre, String
 															// aplllido, String
 															// fecha, String
 															// sexo)
+		boolean inscrito = false;
 		try {
 			con = getConnection();
 
@@ -91,10 +92,10 @@ public class BaseInscripciones {
 		} catch (SQLException sql) {
 			// SI YA ESTÁ REGISTRADO NO HACE NADA
 		} finally {
-			inscribirCompeticion(inscripcion);
+			inscrito = inscribirCompeticion(inscripcion);
 			cerrarConexion();
 		}
-
+		return inscrito;
 	}
 
 	/*
@@ -166,7 +167,8 @@ public class BaseInscripciones {
 		}
 	}
 
-	public void inscribirCompeticion(Inscripcion inscripcion) throws SQLException {
+	public boolean inscribirCompeticion(Inscripcion inscripcion) throws SQLException {
+		boolean inscrito = false;
 		try {
 			// CONSULTA ADAPTADA PARA AÑADIRLE LA CATEGORIA
 			con = getConnection();
@@ -182,7 +184,8 @@ public class BaseInscripciones {
 			inscripcion.setFecha(fecha);
 			
 			rs = ps.executeQuery();
-
+			if(rs.next())
+				inscrito = true;
 			// si no no esta inscrito(Samuel)
 			//inscripcion.setId_competicion(inscripcion.getCarrera());
 			//inscripcion.setId_organizador(inscripcion.getId_organizador());
@@ -192,7 +195,9 @@ public class BaseInscripciones {
 
 		} finally {
 			cerrarConexion();
+			
 		}
+		return inscrito;
 	}
 
 	public ArrayList<Inscripcion> getInscripciones() {

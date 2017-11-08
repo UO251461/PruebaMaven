@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import logica.Carrera;
+import logica.Corredor;
 import logica.Inscripcion;
 import logica.InscripcionesClub;
 import oracle.sql.DATE;
@@ -28,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 
@@ -174,6 +176,10 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return btnInscribir;
 	}
+	
+	
+	
+	
 	private JLabel getLblAadirArchivoDe() {
 		if (lblAadirArchivoDe == null) {
 			lblAadirArchivoDe = new JLabel("A\u00F1adir archivo de corredores: ");
