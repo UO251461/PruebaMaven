@@ -387,10 +387,7 @@ public class BaseInscripciones {
 	}
 	
 	
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 	/**
 	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
 	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
@@ -505,10 +502,7 @@ public class BaseInscripciones {
 			
 		}
 		return null;
-<<<<<<< Updated upstream
-		
-=======
->>>>>>> Stashed changes
+
 	}
 
 }
