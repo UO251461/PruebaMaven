@@ -18,6 +18,7 @@ import logica.ModeloNoEditable;
 import logica.Plazo;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -30,7 +31,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class VentanaCrearCarrera extends JFrame {
+public class VentanaCrearCarrera extends JDialog {
 
 	/**
 	 * 
@@ -99,10 +100,11 @@ public class VentanaCrearCarrera extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaCrearCarrera(VentanaPrincipal vp) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModal(true);
 		setResizable(false);
 		this.vp = vp;
 		setTitle("Crear Carrera");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1013, 646);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

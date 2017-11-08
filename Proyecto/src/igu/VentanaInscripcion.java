@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JRadioButton;
@@ -35,7 +36,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 
-public class VentanaInscripcion extends JFrame {
+public class VentanaInscripcion extends JDialog {
 
 	/**
 	 * 
@@ -70,10 +71,10 @@ public class VentanaInscripcion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInscripcion(VentanaCarreras vc) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.vc = vc;
 		setTitle("Registrarse");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 566, 599);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
