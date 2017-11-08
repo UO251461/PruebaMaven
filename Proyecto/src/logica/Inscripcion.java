@@ -17,7 +17,7 @@ public class Inscripcion {
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.categoria = categoria;
@@ -26,7 +26,7 @@ public class Inscripcion {
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.categoria = categoria;
@@ -35,7 +35,7 @@ public class Inscripcion {
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
@@ -45,7 +45,7 @@ public class Inscripcion {
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria, String sexo) {
 			corredor = new Corredor(dni, 0, sexo, "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
@@ -56,7 +56,7 @@ public class Inscripcion {
 		
 		public Inscripcion(String idCarrera, String idOrganizador, String dni, double pre) {
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", pre, null, null, null, 0, "", organizador, 0, idCarrera,"Oviedo");
+			carrera = new Carrera("", pre, null, null, null, 0, "", organizador, 0, idCarrera,"Oviedo",null);
 			corredor = new Corredor(dni, 0, "", "", "");
 		}
 
@@ -106,11 +106,13 @@ public class Inscripcion {
 		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
 			int actual = new Date().getYear();			
 			int edad = actual - fechaNacimiento.getYear();
-			for(int i=0;i<carrera.getCategorias().length;i++){
-				if(edad >= carrera.getCategorias()[i].getLimiteInferior() && edad < carrera.getCategorias()[i].getLimiteSuperior()){
+			for(int i=0;i<carrera.getCategorias().length;i++){			
+				if(edad >= carrera.getCategorias()[i].getLimiteInferior() && edad < carrera.getCategorias()[i].getLimiteSuperior()){					
 					this.categoria = carrera.getCategorias()[i].getCategoria();
 				}
 			}
+			if(this.categoria == null)
+				this.categoria = "Sin categoria";
 		}
 		
 		@Override
