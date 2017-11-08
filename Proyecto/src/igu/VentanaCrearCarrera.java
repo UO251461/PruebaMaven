@@ -140,6 +140,7 @@ public class VentanaCrearCarrera extends JFrame {
 					if (compruebaCampos()) {
 						creaCarrera();
 						dispose();
+						vp.setVisible(true);
 					}
 				}
 

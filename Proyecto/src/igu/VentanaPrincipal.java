@@ -181,5 +181,6 @@ public class VentanaPrincipal extends JFrame {
 		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
 		vc.setLocationRelativeTo(this);
 		vc.setVisible(true);
+		this.setVisible(false);
 	}
 }
