@@ -13,7 +13,7 @@ public class Carrera {
 	private Organizador organizador;
 	private int plazasDisponibles;
 	private String idcarrera;
-	private Categoria[] categorias;
+	private Categoria[] categorias = new Categoria[4];
 	private String lugar;
 	
 	private double precio2;
@@ -35,7 +35,7 @@ public class Carrera {
 	
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,Categoria[] cat) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -48,11 +48,11 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+		this.categorias = cat;
 	}
 	
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,double precio2,Date fechaFinalizaInscripcion2,Date fechaEmpiezaInscripcion2) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,double precio2,Date fechaFinalizaInscripcion2,Date fechaEmpiezaInscripcion2,Categoria[]cat) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -65,7 +65,7 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+		this.categorias = cat;
 		this.precio2 = precio2;
 		this.fechaEmpiezaInscripcion2 = fechaEmpiezaInscripcion2;
 		this.fechaFinalizaInscripcion2 = fechaFinalizaInscripcion2;
@@ -73,7 +73,7 @@ public class Carrera {
 	
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
 			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,double precio2,Date fechaFinalizaInscripcion2,Date fechaEmpiezaInscripcion2,
-			double precio3,Date fechaFinalizaInscripcion3,Date fechaEmpiezaInscripcion3) {
+			double precio3,Date fechaFinalizaInscripcion3,Date fechaEmpiezaInscripcion3,Categoria[]cat) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -86,7 +86,7 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+		this.categorias = cat;
 		this.precio2 = precio2;
 		this.fechaEmpiezaInscripcion2 = fechaEmpiezaInscripcion2;
 		this.fechaFinalizaInscripcion2 = fechaFinalizaInscripcion2;
@@ -97,7 +97,7 @@ public class Carrera {
 	
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
 			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,double precio2,Date fechaFinalizaInscripcion2,Date fechaEmpiezaInscripcion2,
-			double precio3,Date fechaFinalizaInscripcion3,Date fechaEmpiezaInscripcion3,double precio4,Date fechaFinalizaInscripcion4,Date fechaEmpiezaInscripcion4) {
+			double precio3,Date fechaFinalizaInscripcion3,Date fechaEmpiezaInscripcion3,double precio4,Date fechaFinalizaInscripcion4,Date fechaEmpiezaInscripcion4,Categoria[] cat) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -110,7 +110,7 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+		this.categorias = cat;
 		this.precio2 = precio2;
 		this.fechaEmpiezaInscripcion2 = fechaEmpiezaInscripcion2;
 		this.fechaFinalizaInscripcion2 = fechaFinalizaInscripcion2;
@@ -125,7 +125,7 @@ public class Carrera {
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
 			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,double precio2,Date fechaFinalizaInscripcion2,Date fechaEmpiezaInscripcion2,
 			double precio3,Date fechaFinalizaInscripcion3,Date fechaEmpiezaInscripcion3,double precio4,Date fechaFinalizaInscripcion4,Date fechaEmpiezaInscripcion4,
-			double precio5,Date fechaFinalizaInscripcion5,Date fechaEmpiezaInscripcion5) {
+			double precio5,Date fechaFinalizaInscripcion5,Date fechaEmpiezaInscripcion5,Categoria[] cat) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -138,7 +138,7 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
+		this.categorias = cat;
 		this.precio2 = precio2;
 		this.fechaEmpiezaInscripcion2 = fechaEmpiezaInscripcion2;
 		this.fechaFinalizaInscripcion2 = fechaFinalizaInscripcion2;
@@ -151,37 +151,6 @@ public class Carrera {
 		this.precio5 = precio5;
 		this.fechaEmpiezaInscripcion5 = fechaEmpiezaInscripcion5;
 		this.fechaFinalizaInscripcion5 = fechaFinalizaInscripcion5;
-	}
-	
-	//Como los limites y las categorias son generales los inicializo aqui, aunque se deberian pasar en el constructor
-	// para hacer bien el rellenar categorias
-	private int[] crearLimiteInferior(){
-		int[] limiteInferior = {0,18,35,40};		
-		return limiteInferior;
-	}
-	
-	private int[] crearLimiteSuperior(){
-		int[] limiteSuperior = {18,35,40,200};		
-		return limiteSuperior;
-	}
-	
-	private String[] crearStringCategoria(){
-		String[] categorias = {"Menor de edad","Senior","Veterano A","Veterano B"};		
-		return categorias;
-	}	
-	
-	private void rellenarCategorias(int[]limitesInferiores,int[]limitesSuperiores,String[]categ){		
-		
-		//Obtenemos los datos de las categorias y son correctos
-		if(limitesInferiores.length == limitesSuperiores.length && limitesSuperiores.length == categ.length){
-			//inicializar array de categorias si todo es correcto
-			this.categorias = new Categoria[limitesSuperiores.length];
-			for(int i=0;i<categ.length;i++){
-				if(limitesInferiores[i] < limitesSuperiores[i]){
-					this.categorias[i] = new Categoria(limitesInferiores[i],limitesSuperiores[i],categ[i]);
-				}				
-			}
-		}
 	}
 	
 	public Categoria[] getCategorias(){
@@ -382,5 +351,16 @@ public class Carrera {
 	public void setCategorias(Categoria[] categorias) {
 		this.categorias = categorias;
 	}
-
+	
+	public String infoCarrera(){
+		String[] fech1 = String.valueOf(this.fechaFinalizaInscripcion).split("-");
+		String info = "Nombre: " +nombre +  ".\n" + 
+				"Precio: " + precio + " euros.\n" + 
+				"Fecha Finalizacion del plazo de inscripcion actual: " + fech1[2] + "/" + fech1[1] + "/" + fech1[0] + ".\n" + 
+				"Distancia: " + distancia + "km.\n" + 
+				"Tipo: " + tipo + "\n" + 
+				"Plazas disponibles: " + plazasDisponibles + ".\n" +
+				"Lugar: " + lugar+".";
+		return info;
+	}
 }

@@ -1,12 +1,9 @@
 package igu;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -16,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
-import logica.Inscripcion;
+import logica.Categoria;
 import logica.ModeloNoEditable;
 import logica.Plazo;
 
@@ -27,9 +24,11 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import javax.swing.JScrollPane;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class VentanaCrearCarrera extends JFrame {
 
@@ -41,6 +40,7 @@ public class VentanaCrearCarrera extends JFrame {
 
 	private JPanel contentPane;
 	private ModeloNoEditable modeloTabla;
+	private ModeloNoEditable modeloCategorias;
 
 	private VentanaPrincipal vp;
 	private JButton btnCrear;
@@ -74,15 +74,22 @@ public class VentanaCrearCarrera extends JFrame {
 	private int numeroPlazos;
 	private JLabel lblCategorias;
 	private JTable tableCategorias;
-	private JButton btnBorrarCategoria;
-	private JPanel panelCategorias;
+	private JScrollPane scrollPlazos;
+	private JScrollPane scrollCategorias;
+	private JButton btnAñadirCategoria;
+	private JButton btnEliminarCategoria;
+	
+	
+	private JPanel panelCategoria;
 	private JLabel lblNombreCategoria;
-	private JLabel lblLimiteInferior;
-	private JLabel lblLimiteSuperior;
-	private JButton btnAadirCategoria;
+	private JLabel lblLimiteInferiorEdad;
+	private JLabel lblLimiteSuperiorEdad;
 	private JTextField textNombreCategoria;
-	private JTextField textLimiteInferior;
-	private JTextField textLimiteSuperior;
+	private JTextField textLimiteInferiorEdad;
+	private JTextField textLimiteSuperiorEdad;
+	
+	private Categoria[] categorias = new Categoria[4];
+	private int numeroCategorias = 3;
 
 	/**
 	 * Launch the application.
@@ -116,13 +123,13 @@ public class VentanaCrearCarrera extends JFrame {
 		contentPane.add(getDateCompeticion());
 		contentPane.add(getLblLugar());
 		contentPane.add(getTextLugar());
-		contentPane.add(getTablePlazos());
 		contentPane.add(getBtnBorrarPlazoInscripcion());
 		contentPane.add(getLblPlazos());
 		contentPane.add(getLblCategorias());
-		contentPane.add(getTableCategorias());
-		contentPane.add(getBtnBorrarCategoria());
-		contentPane.add(getPanelCategorias());
+		contentPane.add(getScrollPlazos());
+		contentPane.add(getScrollCategorias());
+		contentPane.add(getBtnEliminarCategoria());
+		contentPane.add(getPanelCategoria());
 	}
 
 	private JButton getBtnCrear() {
@@ -143,36 +150,80 @@ public class VentanaCrearCarrera extends JFrame {
 	}
 
 	private void creaCarrera() {
-		if (this.numeroPlazos == 1) {
-			vp.getBase().getBaseCarrera().crearCarrera1Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+		if (this.numeroPlazos == 1 && this.numeroCategorias == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera1Plazo3categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
 					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
 					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
-					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText());
-			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
+		}
+		
+		if (this.numeroPlazos == 1 && this.numeroCategorias == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera1Plazo4categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior(),
+					categorias[3].getCategoria(),categorias[3].getLimiteInferior(),categorias[3].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 		}
 
-		if (this.numeroPlazos == 2) {
-			vp.getBase().getBaseCarrera().crearCarrera2Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+		if (this.numeroPlazos == 2 && numeroCategorias == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera2Plazo3categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
 					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
 					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
 					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
 					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
-					plazos[1].getFechaFinalizaInscripcion());
-			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+					plazos[1].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
+		}
+		
+		if (this.numeroPlazos == 2 && numeroCategorias == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera2Plazo4categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior(),
+					categorias[3].getCategoria(),categorias[3].getLimiteInferior(),categorias[3].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 		}
 
-		if (this.numeroPlazos == 3) {
-			vp.getBase().getBaseCarrera().crearCarrera3Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+		if (this.numeroPlazos == 3 && numeroCategorias == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera3Plazo3categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
 					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
 					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
 					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
 					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
 					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
-					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion());
-			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(), categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 		}
-		if (this.numeroPlazos == 4) {
-			vp.getBase().getBaseCarrera().crearCarrera4Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+		
+		if (this.numeroPlazos == 3 && numeroCategorias == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera3Plazo4categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(), categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior(),
+					categorias[3].getCategoria(),categorias[3].getLimiteInferior(),categorias[3].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
+		}
+		if (this.numeroPlazos == 4 && numeroCategorias == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera4Plazo3categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
 					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
 					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
 					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
@@ -180,11 +231,29 @@ public class VentanaCrearCarrera extends JFrame {
 					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
 					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(),
 					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
-					plazos[3].getFechaFinalizaInscripcion());
-			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+					plazos[3].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 		}
-		if (this.numeroPlazos == 5) {
-			vp.getBase().getBaseCarrera().crearCarrera5Plazo(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+		
+		if (this.numeroPlazos == 4 && numeroCategorias == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera4Plazo4categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(),
+					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
+					plazos[3].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior(),
+					categorias[3].getCategoria(),categorias[3].getLimiteInferior(),categorias[3].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
+		}
+		if (this.numeroPlazos == 5 && numeroCategorias == 3) {
+			vp.getBase().getBaseCarrera().crearCarrera5Plazo3categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
 					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
 					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
 					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
@@ -194,51 +263,77 @@ public class VentanaCrearCarrera extends JFrame {
 					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
 					plazos[3].getFechaFinalizaInscripcion(), 
 					plazos[4].getPrecio(), plazos[4].getFechaEmpiezaInscripcion(),
-					plazos[4].getFechaFinalizaInscripcion());
-			JOptionPane.showMessageDialog(null, "Su carrera ha sido creada satisfactoriamente");
+					plazos[4].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior());
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
+		}
+		
+		if (this.numeroPlazos == 5 && numeroCategorias == 4) {
+			vp.getBase().getBaseCarrera().crearCarrera5Plazo4categorias(getTextNombreCarrera().getText(), plazos[0].getPrecio(),
+					getDateCompeticion().getDate(), plazos[0].getFechaEmpiezaInscripcion(),
+					plazos[0].getFechaFinalizaInscripcion(), Double.parseDouble(getTextDistancia().getText()),
+					getTextTipo().getText(), Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(),
+					plazos[1].getPrecio(), plazos[1].getFechaEmpiezaInscripcion(),
+					plazos[1].getFechaFinalizaInscripcion(), plazos[2].getPrecio(),
+					plazos[2].getFechaEmpiezaInscripcion(), plazos[2].getFechaFinalizaInscripcion(),
+					plazos[3].getPrecio(), plazos[3].getFechaEmpiezaInscripcion(),
+					plazos[3].getFechaFinalizaInscripcion(), 
+					plazos[4].getPrecio(), plazos[4].getFechaEmpiezaInscripcion(),
+					plazos[4].getFechaFinalizaInscripcion(),categorias[0].getCategoria(),
+					categorias[0].getLimiteInferior(),categorias[0].getLimiteSuperior(),categorias[1].getCategoria(),categorias[1].getLimiteInferior(),
+					categorias[1].getLimiteSuperior(),categorias[2].getCategoria(),categorias[2].getLimiteInferior(),categorias[2].getLimiteSuperior(),
+					categorias[3].getCategoria(),categorias[3].getLimiteInferior(),categorias[3].getLimiteSuperior());
+			
+			JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 		}
 
 	}
 
 	private boolean compruebaCampos() {
-		if (stringNoVacio(getTextNombreCarrera().getText()))
-			if (compruebaFechas())
-				if (esNumericoYNoVacio(getTextDistancia().getText())
-						&& Double.parseDouble(getTextDistancia().getText()) > 0)
-					if (stringNoVacio(getTextTipo().getText()))
-						if (esNumericoYNoVacio(getTextPlazas().getText())
-								&& Integer.parseInt(getTextPlazas().getText()) > 0)
-							if (stringNoVacio(getTextLugar().getText()))
-								return true;
+		if(compruebaCategorias())
+			if (stringNoVacio(getTextNombreCarrera().getText()))
+				if (compruebaFechas())
+					if (esNumericoYNoVacio(getTextDistancia().getText())
+							&& Double.parseDouble(getTextDistancia().getText()) > 0)
+						if (stringNoVacio(getTextTipo().getText()))
+							if (esNumericoYNoVacio(getTextPlazas().getText())
+									&& Integer.parseInt(getTextPlazas().getText()) > 0)
+								if (stringNoVacio(getTextLugar().getText()))
+									return true;
+								else {
+									JOptionPane.showMessageDialog(this,
+											"El lugar de la carrera NO ha sido introducido correctamente");
+									return false;
+								}
 							else {
 								JOptionPane.showMessageDialog(this,
-										"El lugar de la carrera NO ha sido introducido correctamente");
+										"El numero de plazas de la carrera NO ha sido introducido correctamente");
 								return false;
 							}
 						else {
 							JOptionPane.showMessageDialog(this,
-									"El numero de plazas de la carrera NO ha sido introducido correctamente");
+									"El tipo de la carrera NO ha sido introducido correctamente");
 							return false;
 						}
 					else {
 						JOptionPane.showMessageDialog(this,
-								"El tipo de la carrera NO ha sido introducido correctamente");
+								"La distancia de la carrera NO ha sido introducido correctamente");
 						return false;
 					}
 				else {
 					JOptionPane.showMessageDialog(this,
-							"La distancia de la carrera NO ha sido introducido correctamente");
+							"Las fechas no son concoordantes entre ellas, no se ha de solapar ningun plazo de inscripcion "
+									+ "y todos deben ser antes de la fecha de competicion. Ademas la fecha inicial de inscripcion debe ser "
+									+ "antes que la fecha final de inscripcion de cada plazo.");
 					return false;
 				}
 			else {
-				JOptionPane.showMessageDialog(this,
-						"Las fechas no son concoordantes entre ellas, no se ha de solapar ningun plazo de inscripcion "
-								+ "y todos deben ser antes de la fecha de competicion. Ademas la fecha inicial de inscripcion debe ser "
-								+ "antes que la fecha final de inscripcion de cada plazo.");
+				JOptionPane.showMessageDialog(this, "El nombre de la carrera NO ha sido introducido correctamente");
 				return false;
 			}
-		else {
-			JOptionPane.showMessageDialog(this, "El nombre de la carrera NO ha sido introducido correctamente");
+		else{
+			JOptionPane.showMessageDialog(this, "Categorias introducidas ERRONEAMENTE (se solapan categorias o algunos de sus nombres coinciden)");
 			return false;
 		}
 	}
@@ -265,13 +360,69 @@ public class VentanaCrearCarrera extends JFrame {
 
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void creaCategorias(){
+		this.categorias = new Categoria[4];
+		Vector<Object> contenido = modeloCategorias.getDataVector();
+
+		for (int i = 0; i < modeloCategorias.getRowCount(); i++) {
+
+			Vector<Object> fila = (Vector<Object>) contenido.get(i);
+
+			String nombrec = (String) fila.elementAt(0);		
+
+			String linferior = (String) fila.elementAt(1);
+			int limiteInferior = Integer.parseInt(linferior);
+
+			String lsuperior = (String) fila.elementAt(2);
+			int limiteSuperior = Integer.parseInt(lsuperior);
+
+			this.categorias[i] = new Categoria(limiteInferior, limiteSuperior, nombrec);
+
+		}
+	}
+	
+	private boolean compruebaCategorias(){
+		creaCategorias();		
+		for(int i=0;i<numeroCategorias;i++)
+			for(int j=0;j<numeroCategorias;j++)
+				if(i!=j){
+					if(!noSolapaCategorias(categorias[i],categorias[j]))
+						return false;
+				}
+		return true;
+			
+	}
+	
+	private boolean noSolapaCategorias(Categoria cat1,Categoria cat2){
+		if(cat1.getCategoria().equals(cat2.getCategoria())){
+			return false;
+		}
+		if(cat1.getLimiteInferior() == cat2.getLimiteInferior()){
+			return false;
+		}
+		if(cat1.getLimiteSuperior() == cat2.getLimiteSuperior()){
+			return false;
+		}
+		if(cat1.getLimiteInferior()<cat2.getLimiteInferior() && cat1.getLimiteSuperior()>cat2.getLimiteInferior()){
+			return false;
+		}
+		if(cat1.getLimiteInferior()<cat2.getLimiteSuperior() && cat1.getLimiteSuperior() > cat2.getLimiteSuperior()){
+			return false;
+		}
+		return true;
+	
+
+	}
 
 	private boolean compruebaFechas() {
-		creaPlazos();		
+		creaPlazos();	
+		if(this.numeroPlazos == 0)
+			return false;
 		for (int i = 0; i < this.numeroPlazos; i++) {			
 			for (int j = 0; j < this.numeroPlazos; j++) {
 				if (i != j) {
-					System.out.println("i: " + i + " j: " + j);
 					if (plazoEntrePlazo(plazos[i], plazos[j]))
 						return false;
 				}
@@ -289,25 +440,22 @@ public class VentanaCrearCarrera extends JFrame {
 	
 	private boolean plazoEntrePlazo(Plazo plazo1, Plazo plazo2) {
 		if(plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())==0 && 
-				plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaFinalizaInscripcion())==0) 
-				{
-			System.out.println("Son iguales");
+				plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaFinalizaInscripcion())==0) {
 			return true;
 		}
 		if(plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())==0){
-			System.out.println("Empieza el dia que aun sigue otro");
-			return true;
+		return true;
 		}
 		
 
 		if (plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())<0
 				&& plazo1.getFechaFinalizaInscripcion().compareTo(plazo2.getFechaEmpiezaInscripcion())>0){	
-			System.out.println("Se solapa la fecha empieza");
+
 			return true;
 		}
 		if (plazo1.getFechaEmpiezaInscripcion().compareTo(plazo2.getFechaFinalizaInscripcion())<0
 				&& plazo1.getFechaFinalizaInscripcion().after(plazo2.getFechaFinalizaInscripcion())){
-			System.out.println("Se solapa la fecha finaliza");
+
 			return true;
 		}
 		return false;
@@ -355,6 +503,15 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextNombreCarrera() {
 		if (textNombreCarrera == null) {
 			textNombreCarrera = new JTextField();
+			textNombreCarrera.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					if(textNombreCarrera.getText().length()>20){
+						JOptionPane.showMessageDialog(null, "El texto del nombre de la carrera es demasiado largo");
+						textNombreCarrera.setText("");
+					}
+				}
+			});
 			textNombreCarrera.setBounds(153, 26, 194, 20);
 			textNombreCarrera.setColumns(10);
 		}
@@ -374,6 +531,15 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextTipo() {
 		if (textTipo == null) {
 			textTipo = new JTextField();
+			textTipo.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(textTipo.getText().length()>20){
+						JOptionPane.showMessageDialog(null, "El texto del tipo de la carrera es demasiado largo");
+						textTipo.setText("");
+					}
+				}
+			});
 			textTipo.setBounds(434, 26, 124, 20);
 			textTipo.setColumns(10);
 		}
@@ -453,7 +619,7 @@ public class VentanaCrearCarrera extends JFrame {
 		if (panelPlazos == null) {
 			panelPlazos = new JPanel();
 			panelPlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panelPlazos.setBounds(10, 387, 454, 184);
+			panelPlazos.setBounds(10, 422, 454, 184);
 			panelPlazos.setLayout(null);
 			panelPlazos.add(getLblFechaComienzoInscripcion());
 			panelPlazos.add(getDateComienzoInscripcion());
@@ -557,6 +723,15 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTextField getTextLugar() {
 		if (textLugar == null) {
 			textLugar = new JTextField();
+			textLugar.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(textLugar.getText().length()>20){
+						JOptionPane.showMessageDialog(null, "El texto del lugar de la carrera es demasiado largo");
+						textLugar.setText("");
+					}
+				}
+			});
 			textLugar.setBounds(715, 86, 124, 20);
 			textLugar.setColumns(10);
 		}
@@ -590,7 +765,6 @@ public class VentanaCrearCarrera extends JFrame {
 			tablePlazos.setModel(modeloTabla);
 			tablePlazos.setRowHeight(30);
 			tablePlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
-			tablePlazos.setBounds(10, 177, 454, 150);
 		}
 		return tablePlazos;
 	}
@@ -658,7 +832,7 @@ public class VentanaCrearCarrera extends JFrame {
 						btnAñadirPlazoInscripcion.setEnabled(true);
 				}
 			});
-			btnBorrarPlazoInscripcion.setBounds(10, 338, 454, 38);
+			btnBorrarPlazoInscripcion.setBounds(10, 373, 454, 38);
 		}
 		return btnBorrarPlazoInscripcion;
 	}
@@ -668,7 +842,7 @@ public class VentanaCrearCarrera extends JFrame {
 			lblPlazos = new JLabel("PLAZOS");
 			lblPlazos.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblPlazos.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlazos.setBounds(10, 137, 454, 29);
+			lblPlazos.setBounds(10, 134, 454, 29);
 		}
 		return lblPlazos;
 	}
@@ -684,85 +858,190 @@ public class VentanaCrearCarrera extends JFrame {
 	private JTable getTableCategorias() {
 		if (tableCategorias == null) {
 			tableCategorias = new JTable();
+			tableCategorias.setRowHeight(20);
+			String[] nombreColumnas = { "Nombre Categoria", "Limite Inferior de Edad", "Limite Superior de Edad"};
+			modeloCategorias = new ModeloNoEditable(nombreColumnas, 0);
+			cargaModelo();
+			tableCategorias.setModel(modeloCategorias);
+			tableCategorias.getColumnModel().getColumn(0).setPreferredWidth(188);
+			tableCategorias.getColumnModel().getColumn(0).setMinWidth(30);
+			tableCategorias.getColumnModel().getColumn(0).setMaxWidth(2147483644);
+			tableCategorias.getColumnModel().getColumn(1).setPreferredWidth(174);
+			tableCategorias.getColumnModel().getColumn(2).setPreferredWidth(205);
 			tableCategorias.setBorder(new LineBorder(new Color(0, 0, 0)));
-			tableCategorias.setBounds(531, 177, 454, 150);
 		}
 		return tableCategorias;
 	}
-	private JButton getBtnBorrarCategoria() {
-		if (btnBorrarCategoria == null) {
-			btnBorrarCategoria = new JButton("Borrar Categoria");
-			btnBorrarCategoria.setBounds(531, 338, 466, 38);
-		}
-		return btnBorrarCategoria;
+	
+	private void cargaModelo(){
+		Object[] nuevaFila = new Object[3];
+		nuevaFila[0] = "Senior" ;
+		nuevaFila[1] = "18" ;
+		nuevaFila[2] = "35" ;
+		modeloCategorias.addRow(nuevaFila);
+		
+		nuevaFila = new Object[3];
+		nuevaFila[0] = "Veterano A" ;
+		nuevaFila[1] = "35" ;
+		nuevaFila[2] = "40" ;
+		modeloCategorias.addRow(nuevaFila);
+		
+		nuevaFila = new Object[3];
+		nuevaFila[0] = "Veterano B" ;
+		nuevaFila[1] = "40" ;
+		nuevaFila[2] = "200" ;
+		modeloCategorias.addRow(nuevaFila);
 	}
-	private JPanel getPanelCategorias() {
-		if (panelCategorias == null) {
-			panelCategorias = new JPanel();
-			panelCategorias.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panelCategorias.setBounds(531, 387, 466, 184);
-			panelCategorias.setLayout(null);
-			panelCategorias.add(getLblNombreCategoria());
-			panelCategorias.add(getLblLimiteInferior());
-			panelCategorias.add(getLblLimiteSuperior());
-			panelCategorias.add(getBtnAadirCategoria());
-			panelCategorias.add(getTextNombreCategoria());
-			panelCategorias.add(getTextLimiteInferior());
-			panelCategorias.add(getTextLimiteSuperior());
+	
+	public void añadirFilaCategoria() {
+		Object[] nuevaFila = new Object[3];
+		nuevaFila[0] = getTextNombreCategoria().getText() ;
+		nuevaFila[1] = getTextLimiteInferiorEdad().getText() ;
+		nuevaFila[2] = getTextLimiteSuperiorEdad().getText() ;
+		modeloCategorias.addRow(nuevaFila);
+	}
+
+	private void añadeCategoriaTabla() {
+		if( esNumericoYNoVacio(getTextLimiteInferiorEdad().getText()) && esNumericoYNoVacio(getTextLimiteSuperiorEdad().getText()) && !getTextNombreCategoria().getText().isEmpty() )
+			if(Integer.parseInt(getTextLimiteInferiorEdad().getText())<Integer.parseInt(getTextLimiteSuperiorEdad().getText()) && Integer.parseInt(getTextLimiteInferiorEdad().getText())>17){
+				añadirFilaCategoria();
+				numeroCategorias++;
+				btnEliminarCategoria.setEnabled(true);
+				btnAñadirCategoria.setEnabled(false);
+			}
+			else
+				JOptionPane.showMessageDialog(this, "El limite inferior de edad no es menor que el superior, o permite inscribirse a los menores de edad");
+			
+		else 
+			JOptionPane.showMessageDialog(this, "Los campos de los limites estan vacios o no son numericos o el campo del nombre se encuentra vacio");
+			
+
+	}
+	
+	private void borrarCategoriaTabla() {
+		if (tableCategorias.getSelectionModel() != null && tableCategorias.getSelectedRow() != -1) {
+			numeroCategorias--;
+			btnEliminarCategoria.setEnabled(false);
+			btnAñadirCategoria.setEnabled(true);
+			modeloCategorias.removeRow(tableCategorias.getSelectedRow());	
 		}
-		return panelCategorias;
+	}
+	
+	private JScrollPane getScrollPlazos() {
+		if (scrollPlazos == null) {
+			scrollPlazos = new JScrollPane();
+			scrollPlazos.setBounds(10, 174, 454, 172);
+			scrollPlazos.setViewportView(getTablePlazos());
+		}
+		return scrollPlazos;
+	}
+	private JScrollPane getScrollCategorias() {
+		if (scrollCategorias == null) {
+			scrollCategorias = new JScrollPane();
+			scrollCategorias.setBounds(494, 171, 503, 106);
+			scrollCategorias.setViewportView(getTableCategorias());
+		}
+		return scrollCategorias;
+	}
+	private JButton getBtnAñadirCategoria() {
+		if (btnAñadirCategoria == null) {
+			btnAñadirCategoria = new JButton("Añadir Categoria");
+			btnAñadirCategoria.setBounds(10, 204, 483, 23);
+			btnAñadirCategoria.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					añadeCategoriaTabla();
+				}
+			});
+		}
+		return btnAñadirCategoria;
+	}
+	private JButton getBtnEliminarCategoria() {
+		if (btnEliminarCategoria == null) {
+			btnEliminarCategoria = new JButton("Eliminar Categoria");
+			btnEliminarCategoria.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					borrarCategoriaTabla();
+				}
+			});
+			btnEliminarCategoria.setBounds(526, 288, 436, 38);
+			btnEliminarCategoria.setEnabled(false);
+		}
+		return btnEliminarCategoria;
+	}
+	private JPanel getPanelCategoria() {
+		if (panelCategoria == null) {
+			panelCategoria = new JPanel();
+			panelCategoria.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panelCategoria.setBounds(494, 337, 503, 238);
+			panelCategoria.setLayout(null);
+			panelCategoria.add(getBtnAñadirCategoria());
+			panelCategoria.add(getLblNombreCategoria());
+			panelCategoria.add(getLblLimiteInferiorEdad());
+			panelCategoria.add(getLblLimiteSuperiorEdad());
+			panelCategoria.add(getTextNombreCategoria());
+			panelCategoria.add(getTextLimiteInferiorEdad());
+			panelCategoria.add(getTextLimiteSuperiorEdad());
+		}
+		return panelCategoria;
 	}
 	private JLabel getLblNombreCategoria() {
 		if (lblNombreCategoria == null) {
-			lblNombreCategoria = new JLabel("Nombre de la categoria:");
-			lblNombreCategoria.setBounds(21, 11, 143, 31);
+			lblNombreCategoria = new JLabel("Nombre categoria:");
+			lblNombreCategoria.setDisplayedMnemonic('c');
+			lblNombreCategoria.setLabelFor(getTextNombreCategoria());
+			lblNombreCategoria.setBounds(10, 27, 171, 28);
 		}
 		return lblNombreCategoria;
 	}
-	private JLabel getLblLimiteInferior() {
-		if (lblLimiteInferior == null) {
-			lblLimiteInferior = new JLabel("Limite de edad inferior :");
-			lblLimiteInferior.setBounds(21, 54, 143, 31);
+	private JLabel getLblLimiteInferiorEdad() {
+		if (lblLimiteInferiorEdad == null) {
+			lblLimiteInferiorEdad = new JLabel("Limite inferior de edad:");
+			lblLimiteInferiorEdad.setLabelFor(getTextLimiteInferiorEdad());
+			lblLimiteInferiorEdad.setDisplayedMnemonic('i');
+			lblLimiteInferiorEdad.setBounds(10, 79, 171, 28);
 		}
-		return lblLimiteInferior;
+		return lblLimiteInferiorEdad;
 	}
-	private JLabel getLblLimiteSuperior() {
-		if (lblLimiteSuperior == null) {
-			lblLimiteSuperior = new JLabel("Limite de edad superior:");
-			lblLimiteSuperior.setBounds(21, 83, 143, 25);
+	private JLabel getLblLimiteSuperiorEdad() {
+		if (lblLimiteSuperiorEdad == null) {
+			lblLimiteSuperiorEdad = new JLabel("Limite superior de edad:");
+			lblLimiteSuperiorEdad.setDisplayedMnemonic('s');
+			lblLimiteSuperiorEdad.setLabelFor(getTextLimiteSuperiorEdad());
+			lblLimiteSuperiorEdad.setBounds(10, 122, 171, 28);
 		}
-		return lblLimiteSuperior;
-	}
-	private JButton getBtnAadirCategoria() {
-		if (btnAadirCategoria == null) {
-			btnAadirCategoria = new JButton("A\u00F1adir Categoria");
-			btnAadirCategoria.setMnemonic('c');
-			btnAadirCategoria.setBounds(10, 121, 435, 52);
-		}
-		return btnAadirCategoria;
+		return lblLimiteSuperiorEdad;
 	}
 	private JTextField getTextNombreCategoria() {
 		if (textNombreCategoria == null) {
 			textNombreCategoria = new JTextField();
-			textNombreCategoria.setBounds(229, 16, 216, 20);
+			textNombreCategoria.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(textNombreCategoria.getText().length()>20){
+						JOptionPane.showMessageDialog(null, "El texto del nombre de la categoria es demasiado largo");
+						textNombreCategoria.setText("");
+					}
+				}
+			});
+			textNombreCategoria.setBounds(191, 31, 291, 24);
 			textNombreCategoria.setColumns(10);
 		}
 		return textNombreCategoria;
 	}
-	private JTextField getTextLimiteInferior() {
-		if (textLimiteInferior == null) {
-			textLimiteInferior = new JTextField();
-			textLimiteInferior.setBounds(229, 59, 216, 20);
-			textLimiteInferior.setColumns(10);
+	private JTextField getTextLimiteInferiorEdad() {
+		if (textLimiteInferiorEdad == null) {
+			textLimiteInferiorEdad = new JTextField();
+			textLimiteInferiorEdad.setBounds(191, 83, 291, 24);
+			textLimiteInferiorEdad.setColumns(10);
 		}
-		return textLimiteInferior;
+		return textLimiteInferiorEdad;
 	}
-	private JTextField getTextLimiteSuperior() {
-		if (textLimiteSuperior == null) {
-			textLimiteSuperior = new JTextField();
-			textLimiteSuperior.setBounds(229, 84, 216, 20);
-			textLimiteSuperior.setColumns(10);
+	private JTextField getTextLimiteSuperiorEdad() {
+		if (textLimiteSuperiorEdad == null) {
+			textLimiteSuperiorEdad = new JTextField();
+			textLimiteSuperiorEdad.setBounds(191, 126, 291, 24);
+			textLimiteSuperiorEdad.setColumns(10);
 		}
-		return textLimiteSuperior;
+		return textLimiteSuperiorEdad;
 	}
 }
