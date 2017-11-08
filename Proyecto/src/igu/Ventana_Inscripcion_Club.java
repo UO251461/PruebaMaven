@@ -152,6 +152,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		return jfInscripcion;
 	}
 	
+	
 	private JButton getBtnInscribir() {
 		if (btnInscribir == null) {
 			btnInscribir = new JButton("Inscribir");
@@ -159,37 +160,51 @@ public class Ventana_Inscripcion_Club extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					inscripciones = inscripcionClub.getInscripcionesClub();
 					boolean inscrito = false;
-					
-					for (Inscripcion ins : inscripciones) {		
-							Corredor corredor = ins.getCorredor();
-							@SuppressWarnings("deprecation")
-							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
-							try {
-								inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(fecha, ins);
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-					
-						
-							btnContinuar.setEnabled(true);
-						
+					for(Inscripcion ins : inscripciones) {
+						inscrito = registrar(ins);
 						if(inscrito)
 							contadorOK++;
 						else
 							contadorKO++;
 					}
-					
-					txtProcesados.setText(String.valueOf(inscripciones.size()));
+					txtProcesados.setText(String.valueOf(inscripciones.size())); 
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
-
 				}
 			});
 		}
 		return btnInscribir;
 	}
+
+	private boolean registrar(Inscripcion inscripcion)  {
+
+		Boolean inscrito = false;
+		@SuppressWarnings("deprecation")
+		String date = inscripcion.getFecha().getDate() + "/" + (inscripcion.getFecha().getMonth() + 1) + "/"
+				+ (inscripcion.getFecha().getYear() + 1900);
+		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
+
+		inscripcion = new Inscripcion(inscripcion.getCarrera().getIdcarrera(),
+				inscripcion.getCarrera().getOrganizador().getIdorganizador(), inscripcion.getCorredor().getDni(),
+				carreraSel.getPrecio());
+
+																			// INSCRIPCION DEL CORREDOR
+		// SE COMPRUEBA QUE NO SEA MENOR DE EDAD
+		Corredor c = inscripcion.getCorredor();
+		c.setDni(inscripcion.getCorredor().getDni());
+		c.setNombre(inscripcion.getCorredor().getNombre());
+		c.setApellido(inscripcion.getCorredor().getApellido());
+		c.setSexo(inscripcion.getCorredor().getSexo());
+		try {
+			inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return inscrito;
+	}
+
 	private JLabel getLblAadirArchivoDe() {
 		if (lblAadirArchivoDe == null) {
 			lblAadirArchivoDe = new JLabel("A\u00F1adir archivo de corredores: ");
