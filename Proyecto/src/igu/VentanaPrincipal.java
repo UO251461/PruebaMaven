@@ -290,5 +290,6 @@ public class VentanaPrincipal extends JFrame {
 		organizador=true;
 		btnCrearCarrera.setVisible(true);
 		btnAsignarDorsal.setVisible(true);
+
 	}
 }
