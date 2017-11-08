@@ -84,7 +84,8 @@ public class VentanaPrincipal extends JFrame {
 
 	private JLabel getLblAplicacion() {
 		if (lblAplicacion == null) {
-			lblAplicacion = new JLabel("Aplicacion");
+			lblAplicacion = new JLabel("Bienvenido");
+			lblAplicacion.setFont(new Font("Impact", Font.BOLD, 66));
 			lblAplicacion.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblAplicacion;
@@ -103,7 +104,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void mostrarCarreras(){
-		VentanaCarreras vcarrera = new VentanaCarreras(this);
+		VentanaCarreras vcarrera = new VentanaCarreras(this, organizador);
 		vcarrera.setLocationRelativeTo(null);		;
 		vcarrera.setVisible(true);
 		this.setVisible(false);

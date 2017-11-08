@@ -45,16 +45,17 @@ public class VentanaCarreras extends JFrame {
 	private JButton btnInfoCarrera;
 	private JButton btnInscripcionesClub;
 	private JButton btnMostrarEstadoInscripciones;
+	private boolean organizador;
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaCarreras(VentanaPrincipal vp) {
-		
+	public VentanaCarreras(VentanaPrincipal vp, boolean organizador) {
+		this.organizador=organizador;
 		this.vp = vp;
 		setTitle("Carreras");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 859, 481);
+		setBounds(100, 100, 987, 481);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -110,6 +111,7 @@ public class VentanaCarreras extends JFrame {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Inscribirse");
 			btnSiguiente.setEnabled(false);
+			btnSiguiente.setVisible(!organizador);
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
@@ -210,6 +212,7 @@ public class VentanaCarreras extends JFrame {
 		if (btnInscripcionesClub == null) {
 			btnInscripcionesClub = new JButton("Inscripcion de Club");
 			btnInscripcionesClub.setEnabled(false);
+			btnInscripcionesClub.setVisible(!organizador);
 			btnInscripcionesClub.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
@@ -229,6 +232,7 @@ public class VentanaCarreras extends JFrame {
 		if (btnMostrarEstadoInscripciones == null) {
 			btnMostrarEstadoInscripciones = new JButton("Mostrar estado inscripciones");
 			btnMostrarEstadoInscripciones.setEnabled(false);
+			btnMostrarEstadoInscripciones.setVisible(organizador);
 			btnMostrarEstadoInscripciones.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
