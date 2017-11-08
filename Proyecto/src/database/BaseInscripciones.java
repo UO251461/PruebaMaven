@@ -380,6 +380,7 @@ public class BaseInscripciones {
 	}
 	
 	
+<<<<<<< Updated upstream
 	/**
 	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
 	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
@@ -449,6 +450,47 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
+=======
+	public void generarIncidencias(GestorExtractos incidencias) {
+		
+		try {
+			Connection conexion = getConnection();
+			PreparedStatement pst = conexion.prepareStatement("update INSCRIPCION set INCIDENCIA = ?,CANTIDAD= ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI= ?");
+			ResultSet rst = null;
+			for(Incidencia inc : incidencias.getIncidencias()) {
+				pst.setString(1, incidencias.comentario(inc));
+				pst.setFloat(2,(float) (inc.getPago() - getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera().getPrecio()));
+				pst.setString(3, inc.getIdCompeti());
+				pst.setString(4, inc.getOrganizador());
+				pst.setString(5, inc.getDni());
+				rst =  ps.executeQuery();
+			}
+			rst.close();
+			pst.close();
+			conexion.close();
+		}catch(SQLException e) {
+			
+		}finally {
+			
+		}
+	}
+	
+	public Inscripcion getInscripcionByIds(String idCompeticion,String idOrganizacion,String dni) {
+		Inscripcion inscripcion;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("select estado , fecha , categoria from inscripcion where idCompetifcion = ? and idOrganizador = ? and dni = ?");
+			pst.setString(1, idCompeticion);
+			pst.setString(2, idOrganizacion);
+			pst.setString(3, dni);
+			ResultSet rst = ps.executeQuery();
+			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rs.getString("estado"), rst.getDate("fecha"), rs.getString("categoria") );
+			return inscripcion;
+		}catch(SQLException se) {
+			
+		}
+		return null;
+>>>>>>> Stashed changes
 	}
 
 }

@@ -240,7 +240,7 @@ public class VentanaCarreras extends JFrame {
 	}
 	
 	private void mostrarCorredoresDeCompeticion() {
-		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this.getBase().getBaseCarrera().getCarreraSeleccionada());
+		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this);
 		vc.setLocationRelativeTo(null);
 		vc.setVisible(true);
 	}
