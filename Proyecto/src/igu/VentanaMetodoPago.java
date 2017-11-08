@@ -88,6 +88,34 @@ public class VentanaMetodoPago extends JDialog {
 		}
 	}
 	
+	
+	public VentanaMetodoPago(Inscripcion ins) {
+		setTitle("Metodo de Pago");
+		try {
+			
+			inscripcion = ins;
+			base=new Base();
+			base.inicializar();
+			setBounds(300, 300, 605, 140);
+			getContentPane().setLayout(new BorderLayout());
+			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+			getContentPane().add(contentPanel, BorderLayout.CENTER);
+			contentPanel.setLayout(null);
+			
+			contentPanel.add(getRdbtnTarjeta());
+			contentPanel.add(getRdbtnTransferencia());
+			
+			contentPanel.add(getPanel());
+			getContentPane().add(getPaneok(), BorderLayout.SOUTH);
+			//setLocationRelativeTo(pre);
+			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();

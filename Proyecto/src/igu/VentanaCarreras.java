@@ -43,6 +43,8 @@ public class VentanaCarreras extends JFrame {
 	private VentanaPrincipal vp;
 	private JPanel panelBotonesCarrera;
 	private JButton btnInfoCarrera;
+	private JButton btnInscripcionesClub;
+	private JButton btnMostrarEstadoInscripciones;
 
 	/**
 	 * Create the frame.
@@ -153,14 +155,19 @@ public class VentanaCarreras extends JFrame {
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() != null) {
 					btnSiguiente.setEnabled(true);
 					btnInfoCarrera.setEnabled(true);
+					btnInscripcionesClub.setEnabled(true);
+					btnMostrarEstadoInscripciones.setEnabled(true);}
 				}
 			});
 
 		}
 		return listCarreras;
 	}
+	
+
 
 
 
@@ -178,8 +185,10 @@ public class VentanaCarreras extends JFrame {
 	private JPanel getPanelBotonesCarrera() {
 		if (panelBotonesCarrera == null) {
 			panelBotonesCarrera = new JPanel();
-			panelBotonesCarrera.setLayout(new GridLayout(1, 0, 0, 0));
+			panelBotonesCarrera.setLayout(new GridLayout(10, 1, 0, 0));
 			panelBotonesCarrera.add(getBtnInfoCarrera());
+			panelBotonesCarrera.add(getBtnInscripcionesClub());
+			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 		}
 		return panelBotonesCarrera;
 	}
@@ -196,5 +205,43 @@ public class VentanaCarreras extends JFrame {
 			btnInfoCarrera.setEnabled(false);
 		}
 		return btnInfoCarrera;
+	}
+	private JButton getBtnInscripcionesClub() {
+		if (btnInscripcionesClub == null) {
+			btnInscripcionesClub = new JButton("Inscripcion de Club");
+			btnInscripcionesClub.setEnabled(false);
+			btnInscripcionesClub.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					mostrarInscripcionClub();
+				}
+			});
+		}
+		return btnInscripcionesClub;
+	}
+	
+	private void mostrarInscripcionClub() {
+		Ventana_Inscripcion_Club vinscripcion = new Ventana_Inscripcion_Club(this);
+		vinscripcion.setLocationRelativeTo(null);
+		vinscripcion.setVisible(true);
+	}
+	private JButton getBtnMostrarEstadoInscripciones() {
+		if (btnMostrarEstadoInscripciones == null) {
+			btnMostrarEstadoInscripciones = new JButton("Mostrar estado inscripciones");
+			btnMostrarEstadoInscripciones.setEnabled(false);
+			btnMostrarEstadoInscripciones.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					mostrarCorredoresDeCompeticion();
+				}
+			});
+		}
+		return btnMostrarEstadoInscripciones;
+	}
+	
+	private void mostrarCorredoresDeCompeticion() {
+		VentanaCorredoresDeCompeticion vc = new VentanaCorredoresDeCompeticion(this.getBase().getBaseCarrera().getCarreraSeleccionada());
+		vc.setLocationRelativeTo(null);
+		vc.setVisible(true);
 	}
 }
