@@ -267,6 +267,7 @@ public class VentanaCarreras extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
 					generarExtractos();
+					vp.getBase().getBaseInscripciones().gestionarIncidenciasActuales();
 				}
 			});
 		}

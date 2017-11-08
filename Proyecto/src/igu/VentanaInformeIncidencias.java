@@ -31,6 +31,8 @@ public class VentanaInformeIncidencias extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaInformeIncidencias(int ok,int menos, int mas, int fuera, int noPagado, int total) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModal(true);
 		this.ok = ok;
 		this.menos = menos;
 		this.mas = mas;
