@@ -450,7 +450,7 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
-
+	}
 	public void generarIncidencias(GestorExtractos incidencias) {
 		
 		try {
