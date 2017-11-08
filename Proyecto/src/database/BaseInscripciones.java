@@ -380,7 +380,6 @@ public class BaseInscripciones {
 	}
 	
 	
-<<<<<<< Updated upstream
 	/**
 	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
 	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
@@ -450,7 +449,7 @@ public class BaseInscripciones {
 			
 			cerrarConexion();
 		}
-=======
+		}
 	public void generarIncidencias(GestorExtractos incidencias) {
 		
 		try {
@@ -490,7 +489,7 @@ public class BaseInscripciones {
 			
 		}
 		return null;
->>>>>>> Stashed changes
+		
 	}
 
 }
