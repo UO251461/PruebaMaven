@@ -111,20 +111,24 @@ public class VentanaUsuario extends JDialog {
 	
 	
 	public void añadirFilas(){
-		Object[] nuevaFila = new Object[7];
+		Object[] nuevaFila = new Object[6];
 		datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
-			nuevaFila[0]= i.getCarrera().getNombre();
+			nuevaFila[0]= i.getCarrera().getIdcarrera();
 			//nuevaFila[]= i.getId_organizador();
 			nuevaFila[1]= i.getEstado();
 			nuevaFila[2]= i.getFecha();
-			nuevaFila[3]=i.getDorsal();
+			if(i.getDorsal()<=0)
+				nuevaFila[3]="---";
+			else
+				nuevaFila[3]=i.getDorsal();
 			if(i.getTiempo()==0)
 				nuevaFila[4]="---";
 			else
 				nuevaFila[4]=i.getTiempo();
-			nuevaFila[5]=i.getCategoria();
-			nuevaFila[6]="";
+			
+			nuevaFila[5]=i.getComentario();
+			
 			modeloTabla.addRow(nuevaFila);
 		}
 	}

@@ -13,12 +13,15 @@ public class Inscripcion {
 		private double tiempo;
 		private Corredor corredor;//CORREDOR TIENE ID, DNI, Sexo
 		
+		private String comentario;
+		
 		
 		public Inscripcion(Carrera carrera, Corredor corredor, Date fecha, String categoria) {
 			this.carrera = carrera;
 			this.corredor = corredor;
 			this.fecha = fecha;
 			this.categoria = categoria;
+			this.comentario="";
 		}
 		
 		
@@ -41,7 +44,7 @@ public class Inscripcion {
 			this.categoria = categoria;
 		}
 		
-		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String comentario) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
 			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null);
@@ -49,6 +52,7 @@ public class Inscripcion {
 			this.fecha = fecha;
 			this.dorsal=dorsal;
 			this.tiempo=tiempo;
+			this.comentario=comentario;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria, String sexo) {
@@ -132,6 +136,9 @@ public class Inscripcion {
 		public Corredor getCorredor() {
 			return corredor;
 		}
-	
+		
+		public String getComentario(){
+			return comentario;
+		}
 }
 

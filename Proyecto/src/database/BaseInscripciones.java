@@ -260,9 +260,9 @@ public class BaseInscripciones {
 			while (rs.next()) {
 				datos.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 						rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-						rs.getDouble("TIEMPO")));
+						rs.getDouble("TIEMPO"), rs.getString("INCIDENCIA")));
 			}
-
+			
 			rs.close();
 			ps.close();
 			con.close();
