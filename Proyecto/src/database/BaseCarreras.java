@@ -750,9 +750,18 @@ public class BaseCarreras {
 	}
 
 	public int getDosalesReservados(String idCarrera, String idOrganizador) {
-		// select dorsalReservado
-//		from competicion
-//		where
-		return 0;
+		int dorsales=-1;
+		try {
+			Connection con = getConnection();
+			PreparedStatement st = con.prepareStatement("select dorsalReservado from competicion where idcarrera=? and idorganizador=?");
+			ResultSet rs=st.executeQuery();
+			dorsales=rs.getInt("dorsalReservado");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return dorsales;
 	}
 }
