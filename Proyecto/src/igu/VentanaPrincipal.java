@@ -72,7 +72,6 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
 		organizador=false;
 		base = new Base();
-		base.getBaseInscripciones().actualizarDorsales();
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
