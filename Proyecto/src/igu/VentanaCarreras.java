@@ -169,7 +169,8 @@ public class VentanaCarreras extends JDialog {
 					btnInfoCarrera.setEnabled(true);
 					btnInscripcionesClub.setEnabled(true);
 					btnMostrarEstadoInscripciones.setEnabled(true);
-					btnGestionarExtractos.setEnabled(true);}
+					btnGestionarExtractos.setEnabled(true);
+					btnAsginarDorsales.setEnabled(true);}
 				}
 			});
 
@@ -287,9 +288,11 @@ public class VentanaCarreras extends JDialog {
 	private JButton getBtnAsginarDorsales() {
 		if (btnAsginarDorsales == null) {
 			btnAsginarDorsales = new JButton("Asginar Dorsales");
+			btnAsginarDorsales.setEnabled(false);
+			btnAsginarDorsales.setVisible(organizador);
 			btnAsginarDorsales.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					//this.vp.getBase().getBaseInscripciones().actualizarDorsales(listCarreras.getSelectedValue(), idOrganizador);
+					vp.getBase().getBaseInscripciones().actualizarDorsales(listCarreras.getSelectedValue().getIdcarrera(), listCarreras.getSelectedValue().getOrganizador().getIdorganizador());
 				}
 			});
 		}
