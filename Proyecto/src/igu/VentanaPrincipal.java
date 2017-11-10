@@ -18,8 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -121,7 +119,6 @@ public class VentanaPrincipal extends JFrame {
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
 			panel.add(getBtClasificacion());
-			panel.add(getBtnAsignarDorsal());
 		}
 		return panel;
 	}
@@ -164,24 +161,7 @@ public class VentanaPrincipal extends JFrame {
 		vc.setModal(true);
 		vc.setVisible(true);
 	}
-	private JButton getBtnAsignarDorsal() {
-		if (btnAsignarDorsal == null) {
-			btnAsignarDorsal = new JButton("Asignar dorsal");
-			btnAsignarDorsal.setVisible(false);
-			btnAsignarDorsal.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la competición");
-					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
-					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
-					if(isAsignada)					
-						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
-					else
-						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
-				}
-			});
-		}
-		return btnAsignarDorsal;
-	}
+
 	private JButton getBtnCrearCarrera() {
 		if (btnCrearCarrera == null) {
 			btnCrearCarrera = new JButton("Crear Carrera");

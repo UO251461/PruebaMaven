@@ -540,7 +540,7 @@ public class BaseInscripciones {
 	}
 	
 
-	public void actualizarDorsales(){
+	public void actualizarDorsales(String idCompeticion, String idOrganizador){
 		try {
 			Connection con= getConnection();
 			PreparedStatement ps = con.prepareStatement("select iDCOMPETICION "

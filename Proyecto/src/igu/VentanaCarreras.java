@@ -50,6 +50,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnMostrarEstadoInscripciones;
 	private boolean organizador;
 	private JButton btnGestionarExtractos;
+	private JButton btnAsginarDorsales;
 
 	/**
 	 * Create the frame.
@@ -199,6 +200,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
+			panelBotonesCarrera.add(getBtnAsginarDorsales());
 		}
 		return panelBotonesCarrera;
 	}
@@ -281,5 +283,16 @@ public class VentanaCarreras extends JDialog {
 		gestor.leerFichero(fichero);
 		vp.getBase().getBaseInscripciones().generarIncidencias(gestor);
 
+	}
+	private JButton getBtnAsginarDorsales() {
+		if (btnAsginarDorsales == null) {
+			btnAsginarDorsales = new JButton("Asginar Dorsales");
+			btnAsginarDorsales.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					//this.vp.getBase().getBaseInscripciones().actualizarDorsales(listCarreras.getSelectedValue(), idOrganizador);
+				}
+			});
+		}
+		return btnAsginarDorsales;
 	}
 }
