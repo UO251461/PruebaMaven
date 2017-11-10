@@ -748,4 +748,11 @@ public class BaseCarreras {
 		}
 
 	}
+
+	public int getDosalesReservados(String idCarrera, String idOrganizador) {
+		// select dorsalReservado
+//		from competicion
+//		where
+		return 0;
+	}
 }
