@@ -294,6 +294,7 @@ public class VentanaCarreras extends JDialog {
 				public void actionPerformed(ActionEvent arg0) {
 					String idCarrera=listCarreras.getSelectedValue().getIdcarrera();
 					String idOrganizador=listCarreras.getSelectedValue().getOrganizador().getIdorganizador();
+					//int plazas=listCarreras.getSelectedValue().getPlazasDisponibles();
 					if(vp.getBase().getBaseCarrera().getDosalesReservados(idCarrera, idOrganizador)==-1){
 						int dorsales=Integer.parseInt(JOptionPane.showInputDialog("Introduce el número de dorsales que desea reservar:"));
 						if(dorsales<0)
