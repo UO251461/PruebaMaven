@@ -298,10 +298,12 @@ public class VentanaCarreras extends JDialog {
 					if(vp.getBase().getBaseCarrera().getDosalesReservados(idCarrera, idOrganizador)==-1){
 						int dorsales=Integer.parseInt(JOptionPane.showInputDialog("Introduce el número de dorsales que desea reservar:"));
 						if(dorsales<0)
-							dorsales=Integer.parseInt(JOptionPane.showInputDialog("Numero de dorsales incorrecto.\nPor favor, vuelva a introducir el número de dorsales que desea reservar:"));
+							JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
+						else 
+							vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador, dorsales);
 					}
-						
-					vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador);
+					else					
+						vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador,-1);
 				}
 			});
 		}

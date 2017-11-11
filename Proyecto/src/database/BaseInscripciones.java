@@ -22,7 +22,6 @@ public class BaseInscripciones {
 	private ArrayList<Inscripcion> inscripciones;
 	private ArrayList<Inscripcion> inscripcionesCarrera;
 
-	
 	public BaseInscripciones() {
 		inscripciones = new ArrayList<Inscripcion>();
 		inscripcionesCarrera = new ArrayList<Inscripcion>();
@@ -32,9 +31,24 @@ public class BaseInscripciones {
 	 * Cierra debidamente la conexion (Samuel)
 	 */
 	private void cerrarConexion() {
-		if(con!=null)try {con.close();}catch(SQLException sq) {sq.printStackTrace();}
-		if(ps!=null)try {ps.close();}catch(SQLException sq) {sq.printStackTrace();}
-		if(rs!=null)try {rs.close();}catch(SQLException sq) {sq.printStackTrace();}
+		if (con != null)
+			try {
+				con.close();
+			} catch (SQLException sq) {
+				sq.printStackTrace();
+			}
+		if (ps != null)
+			try {
+				ps.close();
+			} catch (SQLException sq) {
+				sq.printStackTrace();
+			}
+		if (rs != null)
+			try {
+				rs.close();
+			} catch (SQLException sq) {
+				sq.printStackTrace();
+			}
 
 	}
 
@@ -58,8 +72,10 @@ public class BaseInscripciones {
 	}
 
 	/**
-	 * Si el corredor no esta en la tabla registro lo inserta y rellena sus datos en el objeto inscripcion,
-	 * en caso contrariorecupera los datos de la tabla y los  rellena en inscripcion (Samuel)
+	 * Si el corredor no esta en la tabla registro lo inserta y rellena sus
+	 * datos en el objeto inscripcion, en caso contrariorecupera los datos de la
+	 * tabla y los rellena en inscripcion (Samuel)
+	 * 
 	 * @param dni
 	 * @param nombre
 	 * @param apellido
@@ -69,12 +85,16 @@ public class BaseInscripciones {
 	 * @throws SQLException
 	 */
 
-	public boolean registrarCorredor(String fecha, 
-			Inscripcion inscripcion) throws SQLException {// (String dni, String
-															// nombre, String
-															// aplllido, String
-															// fecha, String
-															// sexo)
+	public boolean registrarCorredor(String fecha, Inscripcion inscripcion) throws SQLException {// (String
+																									// dni,
+																									// String
+																									// nombre,
+																									// String
+																									// aplllido,
+																									// String
+																									// fecha,
+																									// String
+																									// sexo)
 		boolean inscrito;
 		try {
 			con = getConnection();
@@ -92,17 +112,17 @@ public class BaseInscripciones {
 			ps.setString(4, fecha);
 			ps.setString(5, sexo);
 			rs = ps.executeQuery();
-		
+
 		} catch (SQLException sql) {
-		
+
 		} finally {
 			inscrito = inscribirCompeticion(inscripcion);
 			cerrarConexion();
-			
+
 		}
 		return inscrito;
 	}
-	
+
 	/*
 	 * Metodo que devuelve
 	 */
@@ -123,7 +143,6 @@ public class BaseInscripciones {
 				inscripcionesCarrera.add(new Inscripcion(rs1.getString("idcompeticion"), rs1.getString("idorganizador"),
 						rs1.getString("dni"), rs1.getString("estado"), rs1.getDate("fecha"), rs1.getString("categoria"),
 						rs1.getString("nombre")));
-				
 
 			}
 
@@ -186,24 +205,25 @@ public class BaseInscripciones {
 			ps.setString(3, inscripcion.getCorredor().getDni());
 			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
 			ps.setString(5, inscripcion.getCategoria());
-			
-			inscripcion.setFecha(fecha);
-			
-			rs = ps.executeQuery();
-			if(rs.next()) {
-				inscrito = true;}
-			// si no no esta inscrito(Samuel)
-			//inscripcion.setId_competicion(inscripcion.getCarrera());
-			//inscripcion.setId_organizador(inscripcion.getId_organizador());
-			inscripcion.setEstado("PRE-INSCRITO");
-			//inscripcion.setPrecio(inscripcion.getPrecio());
 
-		}catch(SQLException se) {
-		
+			inscripcion.setFecha(fecha);
+
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				inscrito = true;
+			}
+			// si no no esta inscrito(Samuel)
+			// inscripcion.setId_competicion(inscripcion.getCarrera());
+			// inscripcion.setId_organizador(inscripcion.getId_organizador());
+			inscripcion.setEstado("PRE-INSCRITO");
+			// inscripcion.setPrecio(inscripcion.getPrecio());
+
+		} catch (SQLException se) {
+
 		}
-			cerrarConexion();
-			return inscrito;
-		
+		cerrarConexion();
+		return inscrito;
+
 	}
 
 	public ArrayList<Inscripcion> getInscripciones() {
@@ -262,7 +282,7 @@ public class BaseInscripciones {
 						rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
 						rs.getDouble("TIEMPO"), rs.getString("INCIDENCIA")));
 			}
-			
+
 			rs.close();
 			ps.close();
 			con.close();
@@ -283,8 +303,9 @@ public class BaseInscripciones {
 			Connection con = getConnection();
 			// se crean las clasificaciones absolutas
 			if (n == 0) {
-				
-				PreparedStatement ps=con.prepareStatement("SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni  ORDER BY TIEMPO");
+
+				PreparedStatement ps = con.prepareStatement(
+						"SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni  ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
@@ -296,27 +317,27 @@ public class BaseInscripciones {
 				ps.close();
 			} else if (n == 1) {
 				// se crean las clasificaciones masculinas
-				PreparedStatement ps=con.prepareStatement(
+				PreparedStatement ps = con.prepareStatement(
 						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO"),rs.getString("Categoria") ,"HOMBRE"));
+							rs.getDouble("TIEMPO"), rs.getString("Categoria"), "HOMBRE"));
 				}
 				rs.close();
 				ps.close();
 			} else if (n == 2) {
 				// se crean las clasificaciones femeninas
-				PreparedStatement ps=con.prepareStatement(
+				PreparedStatement ps = con.prepareStatement(
 						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
 				ps.setString(1, competicion);
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
 							rs.getString("DNI"), rs.getString("ESTADO"), rs.getDate("FECHA"), rs.getInt("DORSAL"),
-							rs.getDouble("TIEMPO"), rs.getString("Categoria"),"MUJER"));
+							rs.getDouble("TIEMPO"), rs.getString("Categoria"), "MUJER"));
 				}
 				rs.close();
 				ps.close();
@@ -336,20 +357,18 @@ public class BaseInscripciones {
 		boolean asignada = false;
 		try {
 			con = getConnection();
-			ps = con.prepareStatement(
-					"SELECT dni FROM inscripcion WHERE estado = 'INSCRITO' AND idcompeticion = ?"
+			ps = con.prepareStatement("SELECT dni FROM inscripcion WHERE estado = 'INSCRITO' AND idcompeticion = ?"
 					+ " AND  idorganizador = ? ORDER BY FECHA ASC");
 			ps.setString(1, idcompeticion);
 			ps.setString(2, idorganizador);
-			
+
 			PreparedStatement corredorInscrito = con.prepareStatement(
 					"UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
-			
-			
+
 			rs = ps.executeQuery();
 			// se dejan los 10 primeros (requisito)
 			int numeroDorsal = 11;
-			
+
 			while (rs.next()) {
 				asignada = true;
 				corredorInscrito.setInt(1, numeroDorsal);
@@ -364,7 +383,7 @@ public class BaseInscripciones {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cerrarConexion();
 		}
 		return asignada;
@@ -376,204 +395,201 @@ public class BaseInscripciones {
 			ps = con.prepareStatement("select DNI, NOMBRE, APELLIDO, SEXO from CORREDOR where dni = ?");
 			ps.setString(1, dni);
 			rs = ps.executeQuery();
-			if(rs.next())
-				return new Corredor(rs.getString("DNI"), 0, rs.getString("SEXO"), rs.getString("NOMBRE"), rs.getString("APELLIDO"));
+			if (rs.next())
+				return new Corredor(rs.getString("DNI"), 0, rs.getString("SEXO"), rs.getString("NOMBRE"),
+						rs.getString("APELLIDO"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cerrarConexion();
 		}
-		
+
 		return null;
 	}
-	
-	
 
 	/**
-	 * Método que gestiona los estados de las inscripciones según el campo "incidencias" .
-	 * Si de una inscripcion el campo "incidencia" está en "Falta dinero"estado de la inscripción ->ANULADO, 
-	 * si "Devolución" estado de la inscripción->INSCRITO, 
-	 * si "Fuera de plazo" estado -> ANULADO, 
-	 * si Pago correcto" estado -> "INSCRITO", 
-	 * si "(BLANCO)" estado -> "ANULADO", 
-	 * luego se mostrará una ventana con los datos de las incidencias :el número de pagos menos, 
-	 * no pagados, pagos ok, pago demás, pago fuera de plazo, cantidad procesados.(SAMUEL)
+	 * Método que gestiona los estados de las inscripciones según el campo
+	 * "incidencias" . Si de una inscripcion el campo "incidencia" está en
+	 * "Falta dinero"estado de la inscripción ->ANULADO, si "Devolución" estado
+	 * de la inscripción->INSCRITO, si "Fuera de plazo" estado -> ANULADO, si
+	 * Pago correcto" estado -> "INSCRITO", si "(BLANCO)" estado -> "ANULADO",
+	 * luego se mostrará una ventana con los datos de las incidencias :el número
+	 * de pagos menos, no pagados, pagos ok, pago demás, pago fuera de plazo,
+	 * cantidad procesados.(SAMUEL)
 	 */
-	public void gestionarIncidenciasActuales(){
-		int cLeidos=0;
-		int nPagoMenos=0;
-		int nPagoMas=0;
-		int nPagadoFueraPlazo=0;
-		int nNoPagados=0;
-		int nPagosOk=0;
+	public void gestionarIncidenciasActuales() {
+		int cLeidos = 0;
+		int nPagoMenos = 0;
+		int nPagoMas = 0;
+		int nPagadoFueraPlazo = 0;
+		int nNoPagados = 0;
+		int nPagosOk = 0;
 		String campoIncidencia = "";
 		try {
 			con = getConnection();
 			ps = con.prepareStatement("select IDCOMPETICION, IDORGANIZADOR, DNI, INCIDENCIA from INSCRIPCION");
 			rs = ps.executeQuery();
-			PreparedStatement ps2 = con.prepareStatement("UPDATE INSCRIPCION SET ESTADO = ? WHERE IDCOMPETICION=? AND IDORGANIZADOR=? AND DNI = ?");
-			while(rs.next()){
+			PreparedStatement ps2 = con.prepareStatement(
+					"UPDATE INSCRIPCION SET ESTADO = ? WHERE IDCOMPETICION=? AND IDORGANIZADOR=? AND DNI = ?");
+			while (rs.next()) {
 				campoIncidencia = rs.getString("INCIDENCIA");
-				
+
 				ps2.setString(2, rs.getString("IDCOMPETICION"));
 				ps2.setString(3, rs.getString("IDORGANIZADOR"));
 				ps2.setString(4, rs.getString("DNI"));
-				
-				if( campoIncidencia == null){
-					ps2.setString(1, "ANULADO");					
+
+				if (campoIncidencia == null) {
+					ps2.setString(1, "ANULADO");
 					nNoPagados++;
-				}
-				else if(campoIncidencia.equals("PAGO_MENOS")){
-					ps2.setString(1, "ANULADO");	
+				} else if (campoIncidencia.equals("PAGO_MENOS")) {
+					ps2.setString(1, "ANULADO");
 					nPagoMenos++;
-				}
-				else if(campoIncidencia.equals("PAGO_MAS")){
-					ps2.setString(1, "INSCRITO");	
+				} else if (campoIncidencia.equals("PAGO_MAS")) {
+					ps2.setString(1, "INSCRITO");
 					nPagoMas++;
-				}
-				else if(campoIncidencia.equals("PAGO_FUERA_PLAZO")){
+				} else if (campoIncidencia.equals("PAGO_FUERA_PLAZO")) {
 					ps2.setString(1, "ANULADO");
 					nPagadoFueraPlazo++;
-				}
-				else if(campoIncidencia.equals("PAGO_CORRECTO")){
+				} else if (campoIncidencia.equals("PAGO_CORRECTO")) {
 					ps2.setString(1, "INSCRITO");
 					nPagosOk++;
 				}
-				
+
 				ps2.executeQuery();
-				cLeidos++;		
+				cLeidos++;
 			}
-			
-				
+
 			ps2.close();
-			
-			VentanaInformeIncidencias vi = new VentanaInformeIncidencias(nPagosOk, nPagoMenos, nPagoMas, nPagadoFueraPlazo, nNoPagados, cLeidos);
+
+			VentanaInformeIncidencias vi = new VentanaInformeIncidencias(nPagosOk, nPagoMenos, nPagoMas,
+					nPagadoFueraPlazo, nNoPagados, cLeidos);
 			vi.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			vi.setVisible(true);
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
-			
+		} finally {
+
 			cerrarConexion();
 		}
-		
+
 	}
 
-		
-
-
 	public void generarIncidencias(GestorExtractos incidencias) {
-		
+
 		try {
 			Connection conexion = getConnection();
-			PreparedStatement pst = conexion.prepareStatement("update INSCRIPCION set INCIDENCIA = ?,CANTIDAD= ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI= ?");
-			
-			for(Incidencia inc : incidencias.getIncidencias()) {
+			PreparedStatement pst = conexion.prepareStatement(
+					"update INSCRIPCION set INCIDENCIA = ?,CANTIDAD= ? WHERE IDCOMPETICION = ? AND IDORGANIZADOR = ? AND DNI= ?");
+
+			for (Incidencia inc : incidencias.getIncidencias()) {
 				pst.setString(1, incidencias.comentario(inc));
-				float pagoCuota = getPrecioCarrera(getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera().getIdcarrera(),getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(),
-						inc.getDni()).getCarrera().getOrganizador().getIdorganizador() ) ;
+				float pagoCuota = getPrecioCarrera(
+						getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera()
+								.getIdcarrera(),
+						getInscripcionByIds(inc.getIdCompeti(), inc.getOrganizador(), inc.getDni()).getCarrera()
+								.getOrganizador().getIdorganizador());
 				float pagoTotal = (float) (inc.getPago() - pagoCuota);
-				pst.setFloat(2,pagoTotal);
+				pst.setFloat(2, pagoTotal);
 				pst.setString(3, inc.getIdCompeti());
 				pst.setString(4, inc.getOrganizador());
 				pst.setString(5, inc.getDni());
-				ResultSet rst =  pst.executeQuery();
+				ResultSet rst = pst.executeQuery();
 				rst.close();
 			}
-			
-			
-		
+
 			pst.close();
 			conexion.close();
-		}catch(SQLException e) {
-			
-		}finally {
-			
+		} catch (SQLException e) {
+
+		} finally {
+
 		}
 	}
-	
-	public Inscripcion getInscripcionByIds(String idCompeticion,String idOrganizacion,String dni) {
+
+	public Inscripcion getInscripcionByIds(String idCompeticion, String idOrganizacion, String dni) {
 		Inscripcion inscripcion;
 		try {
 			Connection con = getConnection();
-			PreparedStatement pst = con.prepareStatement("select estado , fecha , categoria from inscripcion where idCompeticion = ? and idOrganizador = ? and dni = ?");
+			PreparedStatement pst = con.prepareStatement(
+					"select estado , fecha , categoria from inscripcion where idCompeticion = ? and idOrganizador = ? and dni = ?");
 			pst.setString(1, idCompeticion);
 			pst.setString(2, idOrganizacion);
 			pst.setString(3, dni);
 			ResultSet rst = pst.executeQuery();
-			if(rst.next()) {
-			inscripcion = new Inscripcion(idCompeticion,idOrganizacion, dni, rst.getString("estado"), rst.getDate("fecha"), rst.getString("categoria") );
-			return inscripcion;}
-			
+			if (rst.next()) {
+				inscripcion = new Inscripcion(idCompeticion, idOrganizacion, dni, rst.getString("estado"),
+						rst.getDate("fecha"), rst.getString("categoria"));
+				return inscripcion;
+			}
+
 			rst.close();
 			pst.close();
 			con.close();
-		}catch(SQLException se) {
-			
+		} catch (SQLException se) {
+
 		}
 		return null;
 
 	}
-	
+
 	private float getPrecioCarrera(String idCompeti, String idOrganizador) {
 		float precio = 0;
 		try {
 			Connection con = getConnection();
-			PreparedStatement pst = con.prepareStatement("select precio from competicion where idCompeticion = ? and idOrganizador = ?");
+			PreparedStatement pst = con
+					.prepareStatement("select precio from competicion where idCompeticion = ? and idOrganizador = ?");
 			pst.setString(1, idCompeti);
 			pst.setString(2, idOrganizador);
-			
+
 			ResultSet rst = pst.executeQuery();
-			if(rst.next()) {
-			precio = rst.getFloat("precio");
+			if (rst.next()) {
+				precio = rst.getFloat("precio");
 			}
-			
+
 			rst.close();
 			pst.close();
 			con.close();
-		}catch(SQLException se) {
-			
+		} catch (SQLException se) {
+
 		}
 		return precio;
 	}
-	
 
-	public void actualizarDorsales(String idCompeticion, String idOrganizador){
+	public void actualizarDorsales(String idCompeticion, String idOrganizador, int dorsal) {
 		try {
-			Connection con= getConnection();
-				PreparedStatement ps2 = con.prepareStatement("select max(dorsal) max "
-						+ "from inscripcion "
-						+ "where IDCOMPETICION=? and idorganizador=?");
-				ps2.setString(1, idCompeticion);
-				ps2.setString(2, idOrganizador);
-				ResultSet rs2= ps2.executeQuery();
-				rs2.next();
-				int dorsal=10;
-				if(rs2.getInt("MAX")>0)
-					dorsal=rs2.getInt("MAX");
-				PreparedStatement ps3 = con.prepareStatement("select * "
-						+ "from inscripcion where estado='INSCRITO' and IDCOMPETICION=? and idorganizador=? and dorsal is null order by fecha asc");
-				ps3.setString(1, idCompeticion);
-				ps3.setString(2, idOrganizador);
-				ResultSet rs3 =  ps3.executeQuery();
+			Connection con = getConnection();
+
+			PreparedStatement ps2 = con.prepareStatement(
+					"select max(dorsal) max " + "from inscripcion " + "where IDCOMPETICION=? and idorganizador=?");
+			ps2.setString(1, idCompeticion);
+			ps2.setString(2, idOrganizador);
+			ResultSet rs2 = ps2.executeQuery();
+			rs2.next();
+			if (dorsal==-1)
+				dorsal = rs2.getInt("MAX");
+			PreparedStatement ps3 = con.prepareStatement("select * "
+					+ "from inscripcion where estado='INSCRITO' and IDCOMPETICION=? and idorganizador=? and dorsal is null order by fecha asc");
+			ps3.setString(1, idCompeticion);
+			ps3.setString(2, idOrganizador);
+			ResultSet rs3 = ps3.executeQuery();
+			dorsal++;
+			PreparedStatement ps4 = con.prepareStatement(
+					"UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
+
+			while (rs3.next()) {
+				ps4.setInt(1, dorsal);
+				ps4.setString(2, idCompeticion);
+				ps4.setString(3, idOrganizador);
+				ps4.setString(4, rs3.getString("dni"));
+				ps4.executeQuery();
 				dorsal++;
-				PreparedStatement ps4 = con.prepareStatement("UPDATE inscripcion SET dorsal = ? WHERE idcompeticion = ? AND idorganizador = ? AND dni = ?");
-				
-				while(rs3.next()){
-					ps4.setInt(1, dorsal);
-					ps4.setString(2, idCompeticion);
-					ps4.setString(3, idOrganizador);
-					ps4.setString(4, rs3.getString("dni"));
-					ps4.executeQuery();	
-					dorsal++;
-				}
-				ps4.close();
-				rs3.close();
-				rs2.close();
-				ps2.close();
-			
+			}
+			ps4.close();
+			rs3.close();
+			rs2.close();
+			ps2.close();
+
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
