@@ -767,4 +767,24 @@ public class BaseCarreras {
 
 		return dorsales;
 	}
+	
+	public boolean setDorsal(String idCarrera, String idOrganizador,int dorsal){
+		Connection con;
+		try {
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement("UPDATE competicion SET dorsalReservado = ? WHERE idcompeticion = ? AND idorganizador = ?");
+			ps.setString(2, idCarrera);
+			ps.setString(3, idOrganizador);
+			ps.setInt(1, dorsal);
+			ps.executeQuery();
+			//System.out.println("toy aki con "+idCarrera+"  "+idOrganizador+"  "+dorsal);
+			ps.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
 }

@@ -305,7 +305,8 @@ public class VentanaCarreras extends JDialog {
 								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
 							else{ 
 								vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador, dorsales);
-							System.out.println("aki estoy");}
+								vp.getBase().getBaseCarrera().setDorsal(idCarrera, idOrganizador,dorsales);
+							}
 							}catch(NumberFormatException e){
 								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
 								//throw new RuntimeException("No se ha introducido un número",e);
@@ -313,8 +314,9 @@ public class VentanaCarreras extends JDialog {
 							}
 						}
 						
-					else					
+					else{					
 						vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador,-1);
+					}
 				}
 				}
 			});

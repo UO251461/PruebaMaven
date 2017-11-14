@@ -559,15 +559,18 @@ public class BaseInscripciones {
 	public void actualizarDorsales(String idCompeticion, String idOrganizador, int dorsal) {
 		try {
 			Connection con = getConnection();
-
+			if(dorsal==-1){
 			PreparedStatement ps2 = con.prepareStatement(
 					"select max(dorsal) max " + "from inscripcion " + "where IDCOMPETICION=? and idorganizador=?");
 			ps2.setString(1, idCompeticion);
 			ps2.setString(2, idOrganizador);
 			ResultSet rs2 = ps2.executeQuery();
-			rs2.next();
-			if (dorsal==-1)
+			
+			if(rs2.next())
 				dorsal = rs2.getInt("MAX");
+			rs2.close();
+			ps2.close();
+			}
 			PreparedStatement ps3 = con.prepareStatement("select * "
 					+ "from inscripcion where estado='INSCRITO' and IDCOMPETICION=? and idorganizador=? and dorsal is null order by fecha asc");
 			ps3.setString(1, idCompeticion);
@@ -587,8 +590,7 @@ public class BaseInscripciones {
 			}
 			ps4.close();
 			rs3.close();
-			rs2.close();
-			ps2.close();
+
 
 			con.close();
 		} catch (SQLException e) {
