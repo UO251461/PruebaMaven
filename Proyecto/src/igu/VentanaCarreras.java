@@ -296,14 +296,26 @@ public class VentanaCarreras extends JDialog {
 					String idOrganizador=listCarreras.getSelectedValue().getOrganizador().getIdorganizador();
 					//int plazas=listCarreras.getSelectedValue().getPlazasDisponibles();
 					if(vp.getBase().getBaseCarrera().getDosalesReservados(idCarrera, idOrganizador)==-1){
-						int dorsales=Integer.parseInt(JOptionPane.showInputDialog("Introduce el número de dorsales que desea reservar:"));
-						if(dorsales<0)
-							JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
-						else 
-							vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador, dorsales);
-					}
+						String numero=JOptionPane.showInputDialog("Introduce el número de dorsales que desea reservar:");
+						int dorsales=-1;
+						if(numero!=null && !numero.isEmpty()){
+							try{
+							dorsales=Integer.parseInt(numero);
+							if(dorsales<0)
+								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
+							else{ 
+								vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador, dorsales);
+							System.out.println("aki estoy");}
+							}catch(NumberFormatException e){
+								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
+								//throw new RuntimeException("No se ha introducido un número",e);
+								
+							}
+						}
+						
 					else					
 						vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador,-1);
+				}
 				}
 			});
 		}

@@ -33,7 +33,6 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel;
 	private JButton btnUsuario;
 	private JButton btClasificacion;
-	private JButton btnAsignarDorsal;
 	private JButton btnCrearCarrera;
 	private JPanel panelPrincipal;
 	private JPanel panelInicial;
@@ -271,7 +270,7 @@ public class VentanaPrincipal extends JFrame {
 	private void accesoOrganizador(){
 		organizador=true;
 		btnCrearCarrera.setVisible(true);
-		btnAsignarDorsal.setVisible(true);
+		
 		btnUsuario.setVisible(false);
 	}
 	private JPanel getPanel_3() {
@@ -307,7 +306,6 @@ public class VentanaPrincipal extends JFrame {
 	private void accesoCorredor(){
 		organizador=false;
 		btnCrearCarrera.setVisible(false);
-		btnAsignarDorsal.setVisible(false);
 		btnUsuario.setVisible(true);
 	}
 }

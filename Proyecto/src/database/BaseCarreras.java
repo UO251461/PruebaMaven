@@ -753,9 +753,12 @@ public class BaseCarreras {
 		int dorsales=-1;
 		try {
 			Connection con = getConnection();
-			PreparedStatement st = con.prepareStatement("select dorsalReservado from competicion where idcarrera=? and idorganizador=?");
+			PreparedStatement st = con.prepareStatement("select dorsalReservado from competicion where idcompeticion=? and idorganizador=?");
+			st.setString(1, idCarrera);
+			st.setString(2, idOrganizador);
 			ResultSet rs=st.executeQuery();
-			dorsales=rs.getInt("dorsalReservado");
+			if(rs.next())
+				dorsales=rs.getInt("dorsalReservado");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
