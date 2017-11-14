@@ -748,4 +748,43 @@ public class BaseCarreras {
 		}
 
 	}
+
+	public int getDosalesReservados(String idCarrera, String idOrganizador) {
+		int dorsales=-1;
+		try {
+			Connection con = getConnection();
+			PreparedStatement st = con.prepareStatement("select dorsalReservado from competicion where idcompeticion=? and idorganizador=?");
+			st.setString(1, idCarrera);
+			st.setString(2, idOrganizador);
+			ResultSet rs=st.executeQuery();
+			if(rs.next())
+				dorsales=rs.getInt("dorsalReservado");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return dorsales;
+	}
+	
+	public boolean setDorsal(String idCarrera, String idOrganizador,int dorsal){
+		Connection con;
+		try {
+			con = getConnection();
+			PreparedStatement ps = con.prepareStatement("UPDATE competicion SET dorsalReservado = ? WHERE idcompeticion = ? AND idorganizador = ?");
+			ps.setString(2, idCarrera);
+			ps.setString(3, idOrganizador);
+			ps.setInt(1, dorsal);
+			ps.executeQuery();
+			//System.out.println("toy aki con "+idCarrera+"  "+idOrganizador+"  "+dorsal);
+			ps.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
 }

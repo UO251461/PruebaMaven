@@ -18,8 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.Font;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -35,7 +33,6 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel;
 	private JButton btnUsuario;
 	private JButton btClasificacion;
-	private JButton btnAsignarDorsal;
 	private JButton btnCrearCarrera;
 	private JPanel panelPrincipal;
 	private JPanel panelInicial;
@@ -72,7 +69,6 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
 		organizador=false;
 		base = new Base();
-		base.getBaseInscripciones().actualizarDorsales();
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
@@ -122,7 +118,6 @@ public class VentanaPrincipal extends JFrame {
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
 			panel.add(getBtClasificacion());
-			panel.add(getBtnAsignarDorsal());
 		}
 		return panel;
 	}
@@ -165,24 +160,7 @@ public class VentanaPrincipal extends JFrame {
 		vc.setModal(true);
 		vc.setVisible(true);
 	}
-	private JButton getBtnAsignarDorsal() {
-		if (btnAsignarDorsal == null) {
-			btnAsignarDorsal = new JButton("Asignar dorsal");
-			btnAsignarDorsal.setVisible(false);
-			btnAsignarDorsal.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la competición");
-					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
-					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
-					if(isAsignada)					
-						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
-					else
-						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
-				}
-			});
-		}
-		return btnAsignarDorsal;
-	}
+
 	private JButton getBtnCrearCarrera() {
 		if (btnCrearCarrera == null) {
 			btnCrearCarrera = new JButton("Crear Carrera");
@@ -292,7 +270,7 @@ public class VentanaPrincipal extends JFrame {
 	private void accesoOrganizador(){
 		organizador=true;
 		btnCrearCarrera.setVisible(true);
-		btnAsignarDorsal.setVisible(true);
+		
 		btnUsuario.setVisible(false);
 	}
 	private JPanel getPanel_3() {
@@ -328,7 +306,6 @@ public class VentanaPrincipal extends JFrame {
 	private void accesoCorredor(){
 		organizador=false;
 		btnCrearCarrera.setVisible(false);
-		btnAsignarDorsal.setVisible(false);
 		btnUsuario.setVisible(true);
 	}
 }

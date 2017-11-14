@@ -50,6 +50,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnMostrarEstadoInscripciones;
 	private boolean organizador;
 	private JButton btnGestionarExtractos;
+	private JButton btnAsginarDorsales;
 
 	/**
 	 * Create the frame.
@@ -168,7 +169,8 @@ public class VentanaCarreras extends JDialog {
 					btnInfoCarrera.setEnabled(true);
 					btnInscripcionesClub.setEnabled(true);
 					btnMostrarEstadoInscripciones.setEnabled(true);
-					btnGestionarExtractos.setEnabled(true);}
+					btnGestionarExtractos.setEnabled(true);
+					btnAsginarDorsales.setEnabled(true);}
 				}
 			});
 
@@ -199,6 +201,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
+			panelBotonesCarrera.add(getBtnAsginarDorsales());
 		}
 		return panelBotonesCarrera;
 	}
@@ -281,5 +284,43 @@ public class VentanaCarreras extends JDialog {
 		gestor.leerFichero(fichero);
 		vp.getBase().getBaseInscripciones().generarIncidencias(gestor);
 
+	}
+	private JButton getBtnAsginarDorsales() {
+		if (btnAsginarDorsales == null) {
+			btnAsginarDorsales = new JButton("Asginar Dorsales");
+			btnAsginarDorsales.setEnabled(false);
+			btnAsginarDorsales.setVisible(organizador);
+			btnAsginarDorsales.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String idCarrera=listCarreras.getSelectedValue().getIdcarrera();
+					String idOrganizador=listCarreras.getSelectedValue().getOrganizador().getIdorganizador();
+					//int plazas=listCarreras.getSelectedValue().getPlazasDisponibles();
+					if(vp.getBase().getBaseCarrera().getDosalesReservados(idCarrera, idOrganizador)==-1){
+						String numero=JOptionPane.showInputDialog("Introduce el número de dorsales que desea reservar:");
+						int dorsales=-1;
+						if(numero!=null && !numero.isEmpty()){
+							try{
+							dorsales=Integer.parseInt(numero);
+							if(dorsales<0)
+								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
+							else{ 
+								vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador, dorsales);
+								vp.getBase().getBaseCarrera().setDorsal(idCarrera, idOrganizador,dorsales);
+							}
+							}catch(NumberFormatException e){
+								JOptionPane.showMessageDialog(null, "Datos incorretos.\nPor favor, vuelve a intentarlo");
+								//throw new RuntimeException("No se ha introducido un número",e);
+								
+							}
+						}
+						
+					else{					
+						vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador,-1);
+					}
+				}
+				}
+			});
+		}
+		return btnAsginarDorsales;
 	}
 }
