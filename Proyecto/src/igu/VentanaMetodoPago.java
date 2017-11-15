@@ -273,6 +273,7 @@ public class VentanaMetodoPago extends JDialog {
 	
 	private void continuarTarjeta() {
 		base.getBaseInscripciones().cambiarEstado("INSCRITO", inscripcion);
+		JOptionPane.showMessageDialog(this, "Felicidades, se ha tramitado su pago y usted esta inscrito en la carrera " + vi.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());
 		dispose();
 	}
 
