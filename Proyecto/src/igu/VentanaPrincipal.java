@@ -14,6 +14,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class VentanaPrincipal extends JFrame {
@@ -64,6 +68,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getLblAplicacion(), BorderLayout.NORTH);
 		contentPane.add(getPanel(), BorderLayout.SOUTH);
 	}
+	
+
 
 	private JLabel getLblAplicacion() {
 		if (lblAplicacion == null) {
@@ -142,7 +148,7 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaClasificacion(String competicion){
 		VentanaClasificacion vc = new VentanaClasificacion(competicion);
 		vc.setLocationRelativeTo(this);
-		vc.setModal(true);
+		vc.setModal(false);
 		vc.setVisible(true);
 	}
 	private JButton getBtnAsignarDorsal() {
@@ -178,6 +184,6 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaCrearCarrera(){
 		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
 		vc.setLocationRelativeTo(this);
-		vc.setVisible(true);
+		vc.setVisible(true);	
 	}
 }
