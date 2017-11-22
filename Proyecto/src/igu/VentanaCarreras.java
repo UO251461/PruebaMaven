@@ -51,6 +51,7 @@ public class VentanaCarreras extends JDialog {
 	private boolean organizador;
 	private JButton btnGestionarExtractos;
 	private JButton btnAsginarDorsales;
+	private JButton btnClasificacin;
 
 	/**
 	 * Create the frame.
@@ -201,6 +202,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
+			panelBotonesCarrera.add(getBtnClasificacin());
 			panelBotonesCarrera.add(getBtnAsginarDorsales());
 		}
 		return panelBotonesCarrera;
@@ -322,5 +324,26 @@ public class VentanaCarreras extends JDialog {
 			});
 		}
 		return btnAsginarDorsales;
+	}
+	private JButton getBtnClasificacin() {
+		if (btnClasificacin == null) {
+			btnClasificacin = new JButton("Clasificaci\u00F3n");
+			btnClasificacin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//mostrar la clasificacion
+					mostrarVentanaClasificacion(listCarreras.getSelectedValue().getIdcarrera());
+				}
+			});
+			btnClasificacin.setVisible(organizador);
+			btnClasificacin.setEnabled(false);
+		}
+		return btnClasificacin;
+	}
+	
+	private void mostrarVentanaClasificacion(String competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+		vc.setLocationRelativeTo(this);
+		vc.setModal(true);
+		vc.setVisible(true);
 	}
 }
