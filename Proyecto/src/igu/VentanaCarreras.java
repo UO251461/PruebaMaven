@@ -331,11 +331,19 @@ public class VentanaCarreras extends JDialog {
 			btnClasificacin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//mostrar la clasificacion
+					mostrarVentanaClasificacion(listCarreras.getSelectedValue().getIdcarrera());
 				}
 			});
-			btnClasificacin.setVisible(false);
+			btnClasificacin.setVisible(organizador);
 			btnClasificacin.setEnabled(false);
 		}
 		return btnClasificacin;
+	}
+	
+	private void mostrarVentanaClasificacion(String competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+		vc.setLocationRelativeTo(this);
+		vc.setModal(true);
+		vc.setVisible(true);
 	}
 }
