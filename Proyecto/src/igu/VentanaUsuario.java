@@ -1,12 +1,10 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -24,6 +22,10 @@ import java.awt.event.ActionEvent;
 
 public class VentanaUsuario extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ModeloNoEditable modeloTabla;//declaro el modelo de la tabla
 	private JPanel contentPane;
 	private JTable tablaInscripciones;
@@ -34,6 +36,8 @@ public class VentanaUsuario extends JDialog {
 	private JButton btPagar;
 	private ArrayList<Inscripcion> datos;
 	private JPanel panel_1;
+	private JButton btnCancelarInscripcion;
+	private JButton btnCederDorsal;
 
 //	/**
 //	 * Launch the application.
@@ -159,6 +163,8 @@ public class VentanaUsuario extends JDialog {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.add(getBtPagar());
+			panel.add(getBtnCancelarInscripcion());
+			panel.add(getBtnCederDorsal());
 		}
 		return panel;
 	}
@@ -181,6 +187,18 @@ public class VentanaUsuario extends JDialog {
 			panel_1 = new JPanel();
 		}
 		return panel_1;
+	}
+	private JButton getBtnCancelarInscripcion() {
+		if (btnCancelarInscripcion == null) {
+			btnCancelarInscripcion = new JButton("Cancelar Inscripcion");
+		}
+		return btnCancelarInscripcion;
+	}
+	private JButton getBtnCederDorsal() {
+		if (btnCederDorsal == null) {
+			btnCederDorsal = new JButton("Ceder Dorsal");
+		}
+		return btnCederDorsal;
 	}
 }
 
