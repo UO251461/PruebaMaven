@@ -150,10 +150,9 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 			btnAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-<<<<<<< Updated upstream
+
 					vc.setVisible(true);
-=======
->>>>>>> Stashed changes
+
 				}
 			});
 		}
@@ -193,22 +192,22 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	@SuppressWarnings("deprecation")
 	public void addFilas(){
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getInscripcionesCarrera();
-<<<<<<< Updated upstream
+
 		Object[] nuevaFila = new Object[4];
-=======
-		Object[] nuevaFila = new Object[5];
->>>>>>> Stashed changes
+
+		//Object[] nuevaFila = new Object[5];
+
 		for(Inscripcion ins : datos) {
 			nuevaFila[0] = ins.getCorredor().getDni();
 			nuevaFila[1] = ins.getCorredor().getNombre();
 			nuevaFila[2] = ins.getCategoria();
 			Date fecha = ins.getFecha();
-<<<<<<< Updated upstream
+
 			nuevaFila[3] = fecha.getDate() +"/" +(fecha.getMonth()+1) + "/"+(fecha.getYear() +1900);
 			modeloTabla.addRow(nuevaFila); 
-=======
+
 			nuevaFila[3] = fecha.getDay() +"/" +fecha.getMonth() + "/"+(fecha.getYear() +1900);
->>>>>>> Stashed changes
+
 		}
 		
 	}

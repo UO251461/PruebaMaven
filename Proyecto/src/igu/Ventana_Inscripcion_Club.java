@@ -134,10 +134,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-<<<<<<< Updated upstream
+
 					vc.setVisible(true);
-=======
->>>>>>> Stashed changes
+
 				}
 			});
 		}
@@ -165,11 +164,11 @@ public class Ventana_Inscripcion_Club extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					inscripciones = inscripcionClub.getInscripcionesClub();
 					boolean inscrito = false;
-<<<<<<< Updated upstream
+
 					for(Inscripcion ins : inscripciones) {
 						//mostrarDatos(ins);
 						inscrito = registrar(ins);
-=======
+					}
 					
 					for (Inscripcion ins : inscripciones) {		
 							Corredor corredor = ins.getCorredor();
@@ -186,25 +185,25 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						
 							btnContinuar.setEnabled(true);
 						
->>>>>>> Stashed changes
+
 						if(inscrito)
 							contadorOK++;
 						else
 							contadorKO++;
 					}
-<<<<<<< Updated upstream
+
 					txtProcesados.setText(String.valueOf(inscripciones.size())); 
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
-=======
+
 					
 					txtProcesados.setText(String.valueOf(inscripciones.size()));
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
 
->>>>>>> Stashed changes
+
 				}
-			});
+				});
 		}
 		return btnInscribir;
 	}
@@ -253,10 +252,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						inscripcionClub.leerFichero(textoInscripcion);
 						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
 						inscripciones = inscripcionClub.getInscripcionesClub();
-<<<<<<< Updated upstream
+
 						btnInscribir.setEnabled(true);
-=======
->>>>>>> Stashed changes
+
 					}
 					
 				}
