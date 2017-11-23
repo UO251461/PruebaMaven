@@ -38,7 +38,12 @@ public class InscripcionesClub {
 				Carrera carrera = vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada();
 				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 				Date fecha = formato.parse(fields[4]);
+<<<<<<< Updated upstream
 				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3].toUpperCase(),fields[0],fields[1]),null,"");
+=======
+				Date fechaHoy = new Date();
+				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3],fields[0],fields[1]),fechaHoy,"");
+>>>>>>> Stashed changes
 				inscripcion.asignarCategoria(fecha, carrera);
 				inscripciones.add(inscripcion);
 				line = br.readLine();
