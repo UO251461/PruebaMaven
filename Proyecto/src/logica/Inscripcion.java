@@ -26,6 +26,13 @@ public class Inscripcion {
 		
 		
 		
+		public Inscripcion(Carrera carrera, Corredor corredor, Date fecha, String categoria) {
+			this.carrera = carrera;
+			this.corredor = corredor;
+			this.fecha = fecha;
+			this.categoria = categoria;
+		}
+		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
