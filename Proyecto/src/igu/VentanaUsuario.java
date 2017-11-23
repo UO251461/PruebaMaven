@@ -39,22 +39,6 @@ public class VentanaUsuario extends JDialog {
 	private JButton btnCancelarInscripcion;
 	private JButton btnCederDorsal;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VentanaUsuario frame = new VentanaUsuario();
-//					frame.setVisible(true);
-//					
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
