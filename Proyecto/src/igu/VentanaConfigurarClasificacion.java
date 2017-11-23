@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ButtonGroup;
 
 public class VentanaConfigurarClasificacion extends JDialog {
 
@@ -35,6 +36,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JPanel pnSexo;
 	private JLabel lbNombre;
 	private Carrera carrera;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Create the dialog.
@@ -110,6 +112,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JRadioButton getRdbtnTodos_1() {
 		if (rdbtnTodos_1 == null) {
 			rdbtnTodos_1 = new JRadioButton("Todos");
+			buttonGroup.add(rdbtnTodos_1);
 			rdbtnTodos_1.setSelected(true);
 		}
 		return rdbtnTodos_1;
@@ -117,12 +120,14 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JRadioButton getRdbtnMasculino() {
 		if (rdbtnMasculino == null) {
 			rdbtnMasculino = new JRadioButton("Masculino");
+			buttonGroup.add(rdbtnMasculino);
 		}
 		return rdbtnMasculino;
 	}
 	private JRadioButton getRdbtnFemenino() {
 		if (rdbtnFemenino == null) {
 			rdbtnFemenino = new JRadioButton("Femenino");
+			buttonGroup.add(rdbtnFemenino);
 		}
 		return rdbtnFemenino;
 	}
