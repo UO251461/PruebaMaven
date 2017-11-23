@@ -134,7 +134,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
+
 					vc.setVisible(true);
+
 				}
 			});
 		}
@@ -162,19 +164,46 @@ public class Ventana_Inscripcion_Club extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					inscripciones = inscripcionClub.getInscripcionesClub();
 					boolean inscrito = false;
+
 					for(Inscripcion ins : inscripciones) {
 						//mostrarDatos(ins);
 						inscrito = registrar(ins);
+					}
+					
+					for (Inscripcion ins : inscripciones) {		
+							Corredor corredor = ins.getCorredor();
+							@SuppressWarnings("deprecation")
+							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
+							try {
+								inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(fecha, ins);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+
+					
+						
+							btnContinuar.setEnabled(true);
+						
+
 						if(inscrito)
 							contadorOK++;
 						else
 							contadorKO++;
 					}
+
 					txtProcesados.setText(String.valueOf(inscripciones.size())); 
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
+
+					
+					txtProcesados.setText(String.valueOf(inscripciones.size()));
+					txtProcesadosOk.setText(String.valueOf(contadorOK));
+					txtProcesadosKo.setText(String.valueOf(contadorKO));
+
+
 				}
-			});
+				});
 		}
 		return btnInscribir;
 	}
@@ -223,7 +252,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						inscripcionClub.leerFichero(textoInscripcion);
 						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
 						inscripciones = inscripcionClub.getInscripcionesClub();
+
 						btnInscribir.setEnabled(true);
+
 					}
 					
 				}
