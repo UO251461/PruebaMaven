@@ -7,9 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import logica.Carrera;
+import logica.Categoria;
+
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaConfigurarClasificacion extends JDialog {
 
@@ -21,34 +27,20 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JLabel lblMostrarClasificacionesDe;
 	private JLabel lblCategoria;
 	private JRadioButton rdbtnTodos;
-	private JRadioButton rdbtnGeneral;
-	private JRadioButton rdbtnSenior;
 	private JLabel lblSexo;
 	private JRadioButton rdbtnTodos_1;
 	private JRadioButton rdbtnMasculino;
 	private JRadioButton rdbtnFemenino;
 	private JPanel pnCategoria;
 	private JPanel pnSexo;
-	private JLabel label;
 	private JLabel lbNombre;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			VentanaConfigurarClasificacion dialog = new VentanaConfigurarClasificacion();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	private Carrera carrera;
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaConfigurarClasificacion() {
+	public VentanaConfigurarClasificacion(Carrera carrera) {
+		this.carrera=carrera;
 		setBounds(100, 100, 609, 383);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,6 +63,11 @@ public class VentanaConfigurarClasificacion extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Aceptar");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						mostrarVentanaClasificacion(carrera);
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -99,20 +96,9 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JRadioButton getRdbtnTodos() {
 		if (rdbtnTodos == null) {
 			rdbtnTodos = new JRadioButton("Todos");
+			rdbtnTodos.setSelected(true);
 		}
 		return rdbtnTodos;
-	}
-	private JRadioButton getRdbtnGeneral() {
-		if (rdbtnGeneral == null) {
-			rdbtnGeneral = new JRadioButton("General");
-		}
-		return rdbtnGeneral;
-	}
-	private JRadioButton getRdbtnSenior() {
-		if (rdbtnSenior == null) {
-			rdbtnSenior = new JRadioButton("Senior");
-		}
-		return rdbtnSenior;
 	}
 	private JLabel getLblSexo() {
 		if (lblSexo == null) {
@@ -124,6 +110,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JRadioButton getRdbtnTodos_1() {
 		if (rdbtnTodos_1 == null) {
 			rdbtnTodos_1 = new JRadioButton("Todos");
+			rdbtnTodos_1.setSelected(true);
 		}
 		return rdbtnTodos_1;
 	}
@@ -145,9 +132,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 			pnCategoria.setBounds(43, 148, 152, 114);
 			pnCategoria.setLayout(new GridLayout(0, 1, 0, 0));
 			pnCategoria.add(getRdbtnTodos());
-			pnCategoria.add(getRdbtnGeneral());
-			pnCategoria.add(getRdbtnSenior());
-			pnCategoria.add(getLabel());
+			generarCategorias();
 		}
 		return pnCategoria;
 	}
@@ -162,17 +147,28 @@ public class VentanaConfigurarClasificacion extends JDialog {
 		}
 		return pnSexo;
 	}
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-		}
-		return label;
-	}
 	private JLabel getLbNombre() {
 		if (lbNombre == null) {
 			lbNombre = new JLabel("");
 			lbNombre.setBounds(89, 31, 338, 14);
 		}
 		return lbNombre;
+	}
+	
+	
+	private void generarCategorias(){
+		int n=carrera.getCategorias().length;
+		Categoria[] cat= carrera.getCategorias();
+		for(int i=0;i<n;i++){
+			pnCategoria.add(new JRadioButton(cat[i].getCategoria()));
+		}
+	}
+	
+	
+	private void mostrarVentanaClasificacion(Carrera competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion.getIdcarrera());
+		vc.setLocationRelativeTo(this);
+		vc.setModal(true);
+		vc.setVisible(true);
 	}
 }

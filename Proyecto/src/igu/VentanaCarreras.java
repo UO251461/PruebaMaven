@@ -331,7 +331,7 @@ public class VentanaCarreras extends JDialog {
 			btnClasificacin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//mostrar la clasificacion
-					mostrarVentanaClasificacion(listCarreras.getSelectedValue().getIdcarrera());
+					mostrarVentanaConfiguracionClasificacion(listCarreras.getSelectedValue());
 				}
 			});
 			btnClasificacin.setVisible(organizador);
@@ -340,8 +340,8 @@ public class VentanaCarreras extends JDialog {
 		return btnClasificacin;
 	}
 	
-	private void mostrarVentanaClasificacion(String competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+	private void mostrarVentanaConfiguracionClasificacion(Carrera competicion){
+		VentanaConfigurarClasificacion vc = new VentanaConfigurarClasificacion(competicion);
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);
