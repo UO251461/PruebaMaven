@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import java.awt.GridLayout;
 
 public class VentanaConfigurarClasificacion extends JDialog {
 
@@ -15,6 +18,19 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private JLabel lblMostrarClasificacionesDe;
+	private JLabel lblCategoria;
+	private JRadioButton rdbtnTodos;
+	private JRadioButton rdbtnGeneral;
+	private JRadioButton rdbtnSenior;
+	private JLabel lblSexo;
+	private JRadioButton rdbtnTodos_1;
+	private JRadioButton rdbtnMasculino;
+	private JRadioButton rdbtnFemenino;
+	private JPanel pnCategoria;
+	private JPanel pnSexo;
+	private JLabel label;
+	private JLabel lbNombre;
 
 	/**
 	 * Launch the application.
@@ -33,27 +49,130 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaConfigurarClasificacion() {
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 609, 383);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
+		{
+			JLabel lblCarrera = new JLabel("Carrera:");
+			lblCarrera.setBounds(33, 31, 41, 14);
+			contentPanel.add(lblCarrera);
+		}
+		contentPanel.add(getLblMostrarClasificacionesDe());
+		contentPanel.add(getLblCategoria());
+		contentPanel.add(getLblSexo());
+		contentPanel.add(getPnCategoria());
+		contentPanel.add(getPnSexo());
+		contentPanel.add(getLbNombre());
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				JButton okButton = new JButton("Aceptar");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Cancelar");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
-
+	private JLabel getLblMostrarClasificacionesDe() {
+		if (lblMostrarClasificacionesDe == null) {
+			lblMostrarClasificacionesDe = new JLabel("Mostrar Clasificaciones de:");
+			lblMostrarClasificacionesDe.setBounds(33, 98, 152, 14);
+		}
+		return lblMostrarClasificacionesDe;
+	}
+	private JLabel getLblCategoria() {
+		if (lblCategoria == null) {
+			lblCategoria = new JLabel("Categoria:");
+			lblCategoria.setBounds(33, 123, 73, 14);
+		}
+		return lblCategoria;
+	}
+	private JRadioButton getRdbtnTodos() {
+		if (rdbtnTodos == null) {
+			rdbtnTodos = new JRadioButton("Todos");
+		}
+		return rdbtnTodos;
+	}
+	private JRadioButton getRdbtnGeneral() {
+		if (rdbtnGeneral == null) {
+			rdbtnGeneral = new JRadioButton("General");
+		}
+		return rdbtnGeneral;
+	}
+	private JRadioButton getRdbtnSenior() {
+		if (rdbtnSenior == null) {
+			rdbtnSenior = new JRadioButton("Senior");
+		}
+		return rdbtnSenior;
+	}
+	private JLabel getLblSexo() {
+		if (lblSexo == null) {
+			lblSexo = new JLabel("Sexo:");
+			lblSexo.setBounds(249, 123, 46, 14);
+		}
+		return lblSexo;
+	}
+	private JRadioButton getRdbtnTodos_1() {
+		if (rdbtnTodos_1 == null) {
+			rdbtnTodos_1 = new JRadioButton("Todos");
+		}
+		return rdbtnTodos_1;
+	}
+	private JRadioButton getRdbtnMasculino() {
+		if (rdbtnMasculino == null) {
+			rdbtnMasculino = new JRadioButton("Masculino");
+		}
+		return rdbtnMasculino;
+	}
+	private JRadioButton getRdbtnFemenino() {
+		if (rdbtnFemenino == null) {
+			rdbtnFemenino = new JRadioButton("Femenino");
+		}
+		return rdbtnFemenino;
+	}
+	private JPanel getPnCategoria() {
+		if (pnCategoria == null) {
+			pnCategoria = new JPanel();
+			pnCategoria.setBounds(43, 148, 152, 114);
+			pnCategoria.setLayout(new GridLayout(0, 1, 0, 0));
+			pnCategoria.add(getRdbtnTodos());
+			pnCategoria.add(getRdbtnGeneral());
+			pnCategoria.add(getRdbtnSenior());
+			pnCategoria.add(getLabel());
+		}
+		return pnCategoria;
+	}
+	private JPanel getPnSexo() {
+		if (pnSexo == null) {
+			pnSexo = new JPanel();
+			pnSexo.setBounds(259, 148, 135, 111);
+			pnSexo.setLayout(new GridLayout(0, 1, 0, 0));
+			pnSexo.add(getRdbtnTodos_1());
+			pnSexo.add(getRdbtnMasculino());
+			pnSexo.add(getRdbtnFemenino());
+		}
+		return pnSexo;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+		}
+		return label;
+	}
+	private JLabel getLbNombre() {
+		if (lbNombre == null) {
+			lbNombre = new JLabel("");
+			lbNombre.setBounds(89, 31, 338, 14);
+		}
+		return lbNombre;
+	}
 }
