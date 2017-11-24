@@ -121,9 +121,9 @@ public class Inscripcion {
 		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
 			int actual = new Date().getYear();			
 			int edad = actual - fechaNacimiento.getYear();
-			for(int i=0;i<carrera.getCategorias().length;i++){			
-				if(edad >= carrera.getCategorias()[i].getLimiteInferior() && edad < carrera.getCategorias()[i].getLimiteSuperior()){					
-					this.categoria = carrera.getCategorias()[i].getCategoria();
+			for(int i=0;i<carrera.getCategorias().size();i++){			
+				if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
+					this.categoria = carrera.getCategorias().get(i).getCategoria();
 				}
 			}
 			if(this.categoria == null)
