@@ -6,11 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.swing.JOptionPane;
 
 import logica.Carrera;
 import logica.Categoria;
@@ -58,7 +55,7 @@ public class BaseCarreras {
 			String consultaCarrera  ="select competicion.*,p.fecha_inicio,p.fecha_fin,p.precio,organizador.* from competicion,plazo_inscripcion p,organizador "
 					+ " where competicion.idcompeticion = p.idcompeticion and competicion.idorganizador = p.idorganizador and"
 					+ " competicion.idorganizador = p.idorganizador and current_date between p.fecha_inicio and p.fecha_fin order by fechacompeticion";
-			String consultaCategoria = "select c.nombre,c.limite_inferior,c.limite_superior from categoria c where c.IDCOMPETICION = ? and c.IDORGANIZADOR = ?";
+			String consultaCategoria = "select c.nombre,c.limite_inferior,c.limite_superior,c.sexo from categoria c where c.IDCOMPETICION = ? and c.IDORGANIZADOR = ?";
 			
 					
 			ps = con.prepareStatement(consultaCarrera);	
@@ -71,7 +68,7 @@ public class BaseCarreras {
 				ps.setString(2, rs1.getString("idorganizador"));
 				ResultSet rs2 = ps.executeQuery();
 				while(rs2.next()){
-					categorias.add(new Categoria(rs2.getInt("limite_inferior"),rs2.getInt("limite_superior"),rs2.getString("nombre")));
+					categorias.add(new Categoria(rs2.getInt("limite_inferior"),rs2.getInt("limite_superior"),rs2.getString("nombre"),rs2.getString("sexo")));
 				}
 				carreras.add(new Carrera(rs1.getString("nombre_competicion"), rs1.getDouble("precio"), rs1.getDate("fecha_fin"), rs1.getDate("fecha_inicio"), rs1.getDate("fechacompeticion"),
 						rs1.getDouble("distancia"), rs1.getString("tipo"), new Organizador(rs1.getString("nombreorganizador"),rs1.getString("idorganizador")),
@@ -99,8 +96,8 @@ public class BaseCarreras {
 					+ " VALUES(1,?,?,?,?,?,?,'SI')";
 			String consultaPlazo = "INSERT INTO PLAZO_INSCRIPCION (FECHA_INICIO,FECHA_FIN,PRECIO,IDORGANIZADOR,IDCOMPETICION) "
 					+ "VALUES(?,?,?,1,?)";
-			String consultaCategorias = "INSERT INTO CATEGORIA (NOMBRE,LIMITE_INFERIOR,LIMITE_SUPERIOR,IDORGANIZADOR,IDCOMPETICION) "
-					+ "VALUES(?,?,?,1,?)";
+			String consultaCategorias = "INSERT INTO CATEGORIA (NOMBRE,LIMITE_INFERIOR,LIMITE_SUPERIOR,IDORGANIZADOR,IDCOMPETICION,SEXO) "
+					+ "VALUES(?,?,?,1,?,?)";
 			String consultaIdCarerra = "SELECT SECUENCIAIDCOMPETICION.CURRVAL as idcarrera FROM DUAL";
 
 			ps = con.prepareStatement(consultaCarrera);
@@ -139,6 +136,7 @@ public class BaseCarreras {
 				ps.setInt(2, categorias.get(i).getLimiteInferior());
 				ps.setInt(3, categorias.get(i).getLimiteSuperior());
 				ps.setString(4, idCarrera);
+				ps.setString(5, categorias.get(i).getSexo());
 				ps.executeQuery();
 			}
 
