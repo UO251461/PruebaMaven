@@ -1,23 +1,19 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import logica.Carrera;
-import logica.Corredor;
 import logica.Inscripcion;
 import logica.InscripcionesClub;
-import oracle.sql.DATE;
+
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
-import java.awt.GridLayout;
+
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,11 +25,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.awt.event.ActionEvent;
 
 public class Ventana_Inscripcion_Club extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelBotones;
 	private JPanel panelPrincipal;
@@ -47,34 +47,36 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	private JTextField txtProcesadosOk;
 	private JLabel lblProcesadosIncorrectamente;
 	private JTextField txtProcesadosKo;
-	private JFileChooser jfInscripcion ;
-	private InscripcionesClub inscripcionClub ;
+	private JFileChooser jfInscripcion;
+	private InscripcionesClub inscripcionClub;
 	private JButton btnContinuar;
 	private ArrayList<Inscripcion> inscripciones;
 	private VentanaCarreras vc;
-	private int contadorOK=0;
-	private int contadorKO=0;
+	private int contadorOK = 0;
+	private int contadorKO = 0;
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JLabel lblPrecio;
 	private JTextField txtPrecio;
 	private JTextField txtLocalizacion;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Ventana_Inscripcion_Club frame = new Ventana_Inscripcion_Club(new VentanaCarreras(new VentanaPrincipal()),new Carrera("", 0.0, null, null, null, "", "", null, "", ""));
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	// /**
+	// * Launch the application.
+	// */
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// Ventana_Inscripcion_Club frame = new Ventana_Inscripcion_Club(new
+	// VentanaCarreras(new VentanaPrincipal()),new Carrera("", 0.0, null, null,
+	// null, "", "", null, "", ""));
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the frame.
@@ -97,7 +99,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	public VentanaCarreras getVc() {
 		return this.vc;
 	}
-	
+
 	private JPanel getPanelBotones() {
 		if (panelBotones == null) {
 			panelBotones = new JPanel();
@@ -108,6 +110,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return panelBotones;
 	}
+
 	private JPanel getPanelPrincipal() {
 		if (panelPrincipal == null) {
 			panelPrincipal = new JPanel();
@@ -128,6 +131,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return panelPrincipal;
 	}
+
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
@@ -142,20 +146,19 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return btnCancelar;
 	}
-	
+
 	private JFileChooser getJFInscripcion() {
-		if(jfInscripcion == null) {
+		if (jfInscripcion == null) {
 			jfInscripcion = new JFileChooser();
 			jfInscripcion.setMultiSelectionEnabled(false);
 			jfInscripcion.setFileFilter(new FileNameExtensionFilter("Archivos txt", "txt"));
-			
+
 			String userDir = System.getProperty("user.home");
-			jfInscripcion.setCurrentDirectory(new File(userDir+"/Desktop"));
+			jfInscripcion.setCurrentDirectory(new File(userDir + "/Desktop"));
 		}
 		return jfInscripcion;
 	}
-	
-	
+
 	private JButton getBtnInscribir() {
 		if (btnInscribir == null) {
 			btnInscribir = new JButton("Inscribir");
@@ -167,11 +170,11 @@ public class Ventana_Inscripcion_Club extends JFrame {
 
 					for(Inscripcion ins : inscripciones) {
 						//mostrarDatos(ins);
-						inscrito = registrar(ins);
-					}
-					
+
+						inscrito = registrar(ins);}					
+
 					for (Inscripcion ins : inscripciones) {		
-							Corredor corredor = ins.getCorredor();
+						
 							@SuppressWarnings("deprecation")
 							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
 							try {
@@ -182,15 +185,15 @@ public class Ventana_Inscripcion_Club extends JFrame {
 							}
 
 					
-						
+					}
 							btnContinuar.setEnabled(true);
-						
+
 
 						if(inscrito)
 							contadorOK++;
 						else
 							contadorKO++;
-					}
+					
 
 					txtProcesados.setText(String.valueOf(inscripciones.size())); 
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
@@ -201,34 +204,35 @@ public class Ventana_Inscripcion_Club extends JFrame {
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
 
-
 				}
-				});
+				
+			});
+
+
+
+
 		}
 		return btnInscribir;
 	}
 
-	private void mostrarDatos(Inscripcion ins) {
-		System.out.println(ins.getCorredor().getNombre() + " " + ins.getCorredor().getApellido() + " " + ins.getCorredor().getFechaNacimiento().getDate() + "/"+
-	ins.getCorredor().getFechaNacimiento().getMonth() +"/" + (ins.getCorredor().getFechaNacimiento().getYear()+1900)+ "  " + ins.getCorredor().getDni());
-	}
-	
-	private boolean registrar(Inscripcion inscripcion)  {
+
+
+	private boolean registrar(Inscripcion inscripcion) {
 
 		Boolean inscrito = false;
 		@SuppressWarnings("deprecation")
-		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "/" +(inscripcion.getCorredor().getFechaNacimiento().getMonth() +1)+ "/"+ (inscripcion.getCorredor().getFechaNacimiento().getYear() +1900);
-		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
-		if(inscripcion.getCategoria().equals("Sin categoria")){
+		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "/"
+				+ (inscripcion.getCorredor().getFechaNacimiento().getMonth() + 1) + "/"
+				+ (inscripcion.getCorredor().getFechaNacimiento().getYear() + 1900);
+		if (inscripcion.getCategoria().equals("Sin categoria")) {
 			return false;
-		}
-		else {
-		try {
-			inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} else {
+			try {
+				inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return inscrito;
 	}
@@ -241,13 +245,15 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblAadirArchivoDe;
 	}
+
 	private JButton getButton() {
 		if (button == null) {
 			button = new JButton("...");
 			button.addActionListener(new ActionListener() {
+				@SuppressWarnings("static-access")
 				public void actionPerformed(ActionEvent e) {
 					int respuesta = getJFInscripcion().showOpenDialog(null);
-					if(respuesta == getJFInscripcion().APPROVE_OPTION) {
+					if (respuesta == getJFInscripcion().APPROVE_OPTION) {
 						File textoInscripcion = jfInscripcion.getSelectedFile();
 						inscripcionClub.leerFichero(textoInscripcion);
 						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
@@ -256,13 +262,14 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						btnInscribir.setEnabled(true);
 
 					}
-					
+
 				}
 			});
 			button.setBounds(236, 88, 33, 23);
 		}
 		return button;
 	}
+
 	private JLabel getLblTotalProcesados() {
 		if (lblTotalProcesados == null) {
 			lblTotalProcesados = new JLabel("Total procesados:");
@@ -271,6 +278,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblTotalProcesados;
 	}
+
 	private JTextField getTxtProcesados() {
 		if (txtProcesados == null) {
 			txtProcesados = new JTextField();
@@ -283,6 +291,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesados;
 	}
+
 	private JLabel getLblProcesadosCorrectamente() {
 		if (lblProcesadosCorrectamente == null) {
 			lblProcesadosCorrectamente = new JLabel("Inscritos Correctamente:");
@@ -291,6 +300,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblProcesadosCorrectamente;
 	}
+
 	private JTextField getTxtProcesadosOk() {
 		if (txtProcesadosOk == null) {
 			txtProcesadosOk = new JTextField();
@@ -303,6 +313,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesadosOk;
 	}
+
 	private JLabel getLblProcesadosIncorrectamente() {
 		if (lblProcesadosIncorrectamente == null) {
 			lblProcesadosIncorrectamente = new JLabel("Inscritos Incorrectamente: ");
@@ -311,6 +322,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblProcesadosIncorrectamente;
 	}
+
 	private JTextField getTxtProcesadosKo() {
 		if (txtProcesadosKo == null) {
 			txtProcesadosKo = new JTextField();
@@ -323,19 +335,22 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesadosKo;
 	}
+
 	private JButton getBtnContinuar() {
 		if (btnContinuar == null) {
 			btnContinuar = new JButton("Continuar");
 			btnContinuar.setEnabled(false);
 			btnContinuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "Recuerde avisar a sus corredores de que paguen el precio de la inscripcion");
+					JOptionPane.showMessageDialog(null,
+							"Recuerde avisar a sus corredores de que paguen el precio de la inscripcion");
 					dispose();
 				}
 			});
 		}
 		return btnContinuar;
 	}
+
 	private JLabel getLblCarrera() {
 		if (lblCarrera == null) {
 			lblCarrera = new JLabel("Carrera:");
@@ -344,6 +359,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblCarrera;
 	}
+
 	private JTextField getTxtCarrera() {
 		if (txtCarrera == null) {
 			txtCarrera = new JTextField();
@@ -353,6 +369,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtCarrera;
 	}
+
 	private JLabel getLblPrecio() {
 		if (lblPrecio == null) {
 			lblPrecio = new JLabel("Precio: ");
@@ -361,6 +378,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblPrecio;
 	}
+
 	private JTextField getTxtPrecio() {
 		if (txtPrecio == null) {
 			txtPrecio = new JTextField();
@@ -372,6 +390,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtPrecio;
 	}
+
 	private JTextField getTxtLocalizacion() {
 		if (txtLocalizacion == null) {
 			txtLocalizacion = new JTextField();

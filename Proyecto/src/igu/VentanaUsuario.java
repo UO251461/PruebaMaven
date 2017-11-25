@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import database.Base;
+import logica.CancelacionInscripcion;
 import logica.Inscripcion;
 import logica.ModeloNoEditable;
 
@@ -79,6 +80,8 @@ public class VentanaUsuario extends JDialog {
 					//programar el doble click
 					if(tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("PRE-INSCRITO"))
 						btPagar.setEnabled(true);
+					else if(tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("INSCRITO"))
+						btnCancelarInscripcion.setEnabled(true);
 					else 
 						btPagar.setEnabled(false);
 					if(arg0.getClickCount()==2 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("INSCRITO")){
@@ -143,6 +146,11 @@ public class VentanaUsuario extends JDialog {
 		this.dispose();
 	}
 	
+	private void cancelacionInscripcion(Inscripcion inscripcion) {
+		CancelacionInscripcion ci = new CancelacionInscripcion(inscripcion, base);
+		ci.cancelaInscripcion();
+	}
+	
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -172,10 +180,22 @@ public class VentanaUsuario extends JDialog {
 		}
 		return panel_1;
 	}
+
+	
+	public Base getBase() {
+		return base;}
+
 	private JButton getBtnCancelarInscripcion() {
 		if (btnCancelarInscripcion == null) {
 			btnCancelarInscripcion = new JButton("Cancelar Inscripcion");
+			btnCancelarInscripcion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cancelacionInscripcion(datos.get(tablaInscripciones.getSelectedRow()));
+					btnCancelarInscripcion.setEnabled(false);
+				}
+			});
 		}
+		
 		return btnCancelarInscripcion;
 	}
 	private JButton getBtnCederDorsal() {
@@ -183,6 +203,7 @@ public class VentanaUsuario extends JDialog {
 			btnCederDorsal = new JButton("Ceder Dorsal");
 		}
 		return btnCederDorsal;
+
 	}
 }
 

@@ -44,28 +44,29 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JButton btnAtras;
-	private Base base ;
+	private Base base;
 	private Carrera carrera;
 	private JTable tabla;
 	private ModeloNoEditable modeloTabla;
 	private VentanaCarreras vc;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//
-//					VentanaCorredoresDeCompeticion frame = new VentanaCorredoresDeCompeticion("6");
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	// /**
+	// * Launch the application.
+	// */
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	//
+	// VentanaCorredoresDeCompeticion frame = new
+	// VentanaCorredoresDeCompeticion("6");
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the frame.
@@ -75,7 +76,7 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		this.carrera = competicion.getBase().getBaseCarrera().getCarreraSeleccionada();
 		base = competicion.getBase();
 		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera.getIdcarrera());
-		
+
 		setTitle("Corredores Competicion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 793, 516);
@@ -87,8 +88,9 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		contentPane.add(getPnlBotones(), BorderLayout.SOUTH);
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 
-		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera.getIdcarrera(), carrera.getOrganizador().getIdorganizador()));
-		
+		setTextCarrera(base.getBaseCarrera().getNombreCarrera(carrera.getIdcarrera(),
+				carrera.getOrganizador().getIdorganizador()));
+
 		actualizarTabla();
 	}
 
@@ -159,43 +161,44 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		return btnAtras;
 	}
 
-//	private void cargarModelo() {
-//		modeloCorredores.clear();
-//		base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);
-//		Inscripcion insc;
-//		for (int i = 0; i < base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
-//			insc = base.getBaseInscripciones().getInscripcionesCarrera().get(i);
-//			modeloCorredores.addElement(insc);
-//		}
-//	}
+	// private void cargarModelo() {
+	// modeloCorredores.clear();
+	// base.getBaseInscripciones().getInscripcionPorCompeticion(carrera);
+	// Inscripcion insc;
+	// for (int i = 0; i <
+	// base.getBaseInscripciones().getInscripcionesCarrera().size(); i++) {
+	// insc = base.getBaseInscripciones().getInscripcionesCarrera().get(i);
+	// modeloCorredores.addElement(insc);
+	// }
+	// }
 
 	private JTable getTable() {
-		if (tabla== null) {
-			tabla= new JTable();
-			String[] nombreColumnas = {"DNI","Nombre","Categoria","Fecha Inscripcion"};
-			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
-			//las crearemos en tiempo de ejecucion
+		if (tabla == null) {
+			tabla = new JTable();
+			String[] nombreColumnas = { "DNI", "Nombre", "Categoria", "Fecha Inscripcion" };
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0); // al pasarle bnombre de columnas creara el numero
+																	// necesario... filas 0 ya que
+			// las crearemos en tiempo de ejecucion
 			tabla.setModel(modeloTabla);
-			//Aplica el renderer que marca la fila seleccionada en rojo y negrita
-			//tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
-			///subo el alto de la fila
+			// Aplica el renderer que marca la fila seleccionada en rojo y negrita
+			// tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
+			/// subo el alto de la fila
 			tabla.setRowHeight(30);
-			//modifico el ancho de la columna 0
+			// modifico el ancho de la columna 0
 			tabla.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tabla.getTableHeader().setReorderingAllowed(false);
 			addFilas();
 		}
 		return tabla;
 	}
-	
-	
+
 	@SuppressWarnings("deprecation")
 	public void addFilas(){
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getInscripcionesCarrera();
 
-		Object[] nuevaFila = new Object[4];
 
-		//Object[] nuevaFila = new Object[5];
+		Object[] nuevaFila = new Object[5];
+
 
 		for(Inscripcion ins : datos) {
 			nuevaFila[0] = ins.getCorredor().getDni();
@@ -211,14 +214,14 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 		}
 		
 	}
-	
-	private  void actualizarTabla(){
-		//vacio el modelo de la tabla
+
+	private void actualizarTabla() {
+		// vacio el modelo de la tabla
 		modeloTabla.getDataVector().clear();
-		//lo vuelvo a rellenar
+		// lo vuelvo a rellenar
 		addFilas();
-		//necesario para repintar la tabla(especialmente cuando se queda vacia)
+		// necesario para repintar la tabla(especialmente cuando se queda vacia)
 		modeloTabla.fireTableDataChanged();
 	}
-	
+
 }

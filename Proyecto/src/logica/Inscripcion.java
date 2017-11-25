@@ -25,7 +25,6 @@ public class Inscripcion {
 		}
 		
 		
-		
 
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
@@ -142,5 +141,7 @@ public class Inscripcion {
 		public String getComentario(){
 			return comentario;
 		}
+		
+		
 }
 

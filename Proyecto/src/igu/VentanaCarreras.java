@@ -1,4 +1,3 @@
-
 package igu;
 
 import java.awt.BorderLayout;
@@ -347,4 +346,8 @@ public class VentanaCarreras extends JDialog {
 		vc.setModal(true);
 		vc.setVisible(true);
 	}
+
 }
+
+
+

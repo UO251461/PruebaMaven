@@ -145,42 +145,42 @@ public class VentanaPrincipal extends JFrame {
 		vu.setModal(true);
 		vu.setVisible(true);
 	}
-	private JButton getBtClasificacion() {
-		if (btClasificacion == null) {
-			btClasificacion = new JButton("Ver Clasificacion");
-			btClasificacion.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
-					if( competicion!=null && !competicion.isEmpty())
-						mostrarVentanaClasificacion(competicion);
-				}
-			});
-		}
-		return btClasificacion;
-	}
-	private void mostrarVentanaClasificacion(String competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion);
-		vc.setLocationRelativeTo(this);
-		vc.setModal(false);
-		vc.setVisible(true);
-	}
-	private JButton getBtnAsignarDorsal() {
-		if (btnAsignarDorsal == null) {
-			btnAsignarDorsal = new JButton("Asignar dorsal");
-			btnAsignarDorsal.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la competici�n");
-					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
-					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
-					if(isAsignada)					
-						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
-					else
-						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
-				}
-			});
-		}
-		return btnAsignarDorsal;
-	}
+//	private JButton getBtClasificacion() {
+//		if (btClasificacion == null) {
+//			btClasificacion = new JButton("Ver Clasificacion");
+//			btClasificacion.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
+//					if( competicion!=null && !competicion.isEmpty())
+//						mostrarVentanaClasificacion(competicion);
+//				}
+//			});
+//		}
+//		return btClasificacion;
+//	}
+//	private void mostrarVentanaClasificacion(String competicion){
+//		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+//		vc.setLocationRelativeTo(this);
+//		vc.setModal(false);
+//		vc.setVisible(true);
+//	}
+//	private JButton getBtnAsignarDorsal() {
+//		if (btnAsignarDorsal == null) {
+//			btnAsignarDorsal = new JButton("Asignar dorsal");
+//			btnAsignarDorsal.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					String competicion = JOptionPane.showInputDialog("Introduzca id de la competici�n");
+//					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
+//					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
+//					if(isAsignada)					
+//						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
+//					else
+//						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
+//				}
+//			});
+//		}
+//		return btnAsignarDorsal;
+//	}
 	private JButton getBtnCrearCarrera() {
 		if (btnCrearCarrera == null) {
 			btnCrearCarrera = new JButton("Crear Carrera");
