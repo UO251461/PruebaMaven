@@ -1,18 +1,23 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 package database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
 import javax.swing.JDialog;
 
 import igu.VentanaInformeIncidencias;
-import logica.*;
+import logica.Corredor;
+import logica.GestorExtractos;
+import logica.Incidencia;
+import logica.Inscripcion;
+import logica.Plazo;
 
 public class BaseInscripciones {
 	private final static String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
@@ -602,9 +607,124 @@ public class BaseInscripciones {
 			e.printStackTrace();
 		}
 	}
+	
+	public void cancelarInscripcion(Inscripcion inscripcion, float precio) throws SQLException {
+	
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("UPDATE inscripcion SET estado = ? and incidencia = ? and cantidad = ? where idcompeticion = ? and idorganizador = ? and dni = ?");
+			
+			pst.setString(1, "CANCELADA");
+			pst.setString(2, "CANCELADO_DEVOLVER_DINERO");
+			pst.setFloat(3, precio);
+			pst.setString(4, inscripcion.getCarrera().getIdcarrera());
+			pst.setString(5, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			pst.setString(6, inscripcion.getCorredor().getDni());
+			
+			ResultSet rst = pst.executeQuery();
+			
 
-<<<<<<< HEAD
+			rst.close();
+			pst.close();
+			con.close();
+	
+		
+		
+	}
+	
+	
+	public float cantidadInscripcion(Inscripcion inscripcion) throws SQLException {
+		
+			float cantidad = -1;
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("select cantidad from inscripcion where idcompeticion = ? and idorganizador = ? and dni = ?");
+			pst.setString(1, inscripcion.getCarrera().getIdcarrera());
+			pst.setString(2, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			pst.setString(3, inscripcion.getCorredor().getDni());
+			
+			
+			ResultSet rst = pst.executeQuery();
+			if (rst.next()) {
+				cantidad = rs.getFloat("cantidad");
+			}
+
+			rst.close();
+			pst.close();
+			con.close();
+			return cantidad;
+		
+	}
+	
+	public float porcentajeCancelacion(Inscripcion insc, Date date) throws SQLException {
+		float porcentaje = -1;
+		
+		Connection con = getConnection();
+		PreparedStatement pst = con.prepareStatement("select porcentaje from plazo_cancelacion pl where idcompeticion = ? and IDORGANIZADOR = ? and ? between fecha_inicio_can and fecha_final_can");
+		pst.setString(1, insc.getCarrera().getIdcarrera());
+		pst.setString(2, insc.getCarrera().getOrganizador().getIdorganizador());
+		pst.setDate(3, (java.sql.Date) date);
+		
+		ResultSet rst = pst.executeQuery();
+		if (rst.next()) {
+			porcentaje = rs.getFloat("porcentaje");
+		}
+
+		rst.close();
+		pst.close();
+		con.close();
+		
+		return porcentaje;
+	}
+	
+	public int precioInscripcion(Inscripcion inscripcion) throws SQLException {
+		int cantidad = -1;
+		Connection con = getConnection();
+		PreparedStatement pst = con.prepareStatement("select precio from inscripcion where idcompeticion = ? and idorganizador = ? and dni = ?");
+		pst.setString(1, inscripcion.getCarrera().getIdcarrera());
+		pst.setString(2, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+		pst.setString(3, inscripcion.getCorredor().getDni());
+		
+		
+		ResultSet rst = pst.executeQuery();
+		if (rst.next()) {
+			cantidad = rs.getInt("cantidad");
+		}
+
+		rst.close();
+		pst.close();
+		con.close();
+		return cantidad;
+	}
+	
+	public void aumentarPlazasDisponibles(Inscripcion inscripcion) throws SQLException {
+		Connection con = getConnection();
+		
+		PreparedStatement pst = con.prepareStatement("select plazas_disponibles from competicion where idcompeticion = ? and idorganizador = ?");
+		pst.setString(1, inscripcion.getCarrera().getIdcarrera());
+		pst.setString(2, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			
+		
+		ResultSet rst = pst.executeQuery();
+		int plazas = rst.getInt("plazas_disponibles");
+	
+		
+		PreparedStatement pst2 = con.prepareStatement("UPDATE competicion SET plazas_disponibles = ? where idcompeticion = ? and idorganizador = ? and dni = ?");
+		pst2.setInt(1, plazas+1);
+		pst2.setString(2, inscripcion.getCarrera().getIdcarrera());
+		pst2.setString(3, inscripcion.getCarrera().getOrganizador().getIdorganizador());
+		
+		
+		
+		ResultSet rst2 = pst.executeQuery();
+	
+
+		rst2.close();
+		pst2.close();
+		rst.close();
+		pst.close();
+		con.close();
+	}
 }
-=======
-}
->>>>>>> master
+
+
+
+

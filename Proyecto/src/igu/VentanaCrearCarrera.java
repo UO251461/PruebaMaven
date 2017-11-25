@@ -78,7 +78,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField textPrecio;
 	private JLabel lblLugar;
 	private JTextField textLugar;
-	private JButton btnAï¿½adirPlazoInscripcion;
+	private JButton btnAñadirPlazoInscripcion;
 	private JTable tablePlazos;
 	private JButton btnBorrarPlazoInscripcion;
 	private JLabel lblPlazos;
@@ -446,7 +446,7 @@ public class VentanaCrearCarrera extends JDialog {
 			panelPlazos.add(getLblFechaFinalInscripcion());
 			panelPlazos.add(getLblPrecio());
 			panelPlazos.add(getTextPrecio());
-			panelPlazos.add(getBtnAï¿½adirPlazoInscripcion());
+			panelPlazos.add(getBtnAñadirPlazoInscripcion());
 		}
 		return panelPlazos;
 	}
@@ -557,23 +557,23 @@ public class VentanaCrearCarrera extends JDialog {
 		return textLugar;
 	}
 
-	private JButton getBtnAï¿½adirPlazoInscripcion() {
-		if (btnAï¿½adirPlazoInscripcion == null) {
-			btnAï¿½adirPlazoInscripcion = new JButton("A\u00F1adir Plazo Inscripcion");
-			btnAï¿½adirPlazoInscripcion.setMnemonic('a');
-			btnAï¿½adirPlazoInscripcion.addActionListener(new ActionListener() {
+	private JButton getBtnAñadirPlazoInscripcion() {
+		if (btnAñadirPlazoInscripcion == null) {
+			btnAñadirPlazoInscripcion = new JButton("A\u00F1adir Plazo Inscripcion");
+			btnAñadirPlazoInscripcion.setMnemonic('a');
+			btnAñadirPlazoInscripcion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					aï¿½adePlazoTabla();
+					añadePlazoTabla();
 					if (tablePlazos.getRowCount() == numeroMaxPlazos) {
-						btnAï¿½adirPlazoInscripcion.setEnabled(false);
+						btnAñadirPlazoInscripcion.setEnabled(false);
 						JOptionPane.showMessageDialog(null,
 								"Ha llegado al limite de plazos de inscripcion, para aï¿½adir mas debe borrar alguno");
 					}
 				}
 			});
-			btnAï¿½adirPlazoInscripcion.setBounds(10, 124, 428, 52);
+			btnAñadirPlazoInscripcion.setBounds(10, 124, 428, 52);
 		}
-		return btnAï¿½adirPlazoInscripcion;
+		return btnAñadirPlazoInscripcion;
 	}
 
 	private JTable getTablePlazos() {
@@ -589,7 +589,7 @@ public class VentanaCrearCarrera extends JDialog {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void aï¿½adirFilas() {
+	public void añadirFilas() {
 		Object[] nuevaFila = new Object[4];
 		nuevaFila[0] = "Plazo " + (tablePlazos.getRowCount() + 1);
 
@@ -602,13 +602,13 @@ public class VentanaCrearCarrera extends JDialog {
 		modeloTabla.addRow(nuevaFila);
 	}
 
-	private void aï¿½adePlazoTabla() {
+	private void añadePlazoTabla() {
 		if (getDateComienzoInscripcion().getDate().before(getDateFinalInscripcion().getDate())
 				&& getDateComienzoInscripcion().getDate().after(new Date())
 				&& getDateComienzoInscripcion().getDate().compareTo(getDateFinalInscripcion().getDate()) != 0
 				&& getDateFinalInscripcion().getDate().before(getDateCompeticion().getDate())) {
 			if (Herramientas.esNumericoYNoVacio(getTextPrecio().getText()) && Double.parseDouble(getTextPrecio().getText()) >= 0) {
-				aï¿½adirFilas();
+				añadirFilas();
 			} else
 				JOptionPane.showMessageDialog(this,
 						"El precio del plazo es incorrecto, revise que no se encuentre vacio o haya introducido un numero o este sea negativo");
@@ -631,8 +631,8 @@ public class VentanaCrearCarrera extends JDialog {
 			btnBorrarPlazoInscripcion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					borrarPlazoTabla();
-					if (!btnAï¿½adirPlazoInscripcion.isEnabled() && tablePlazos.getRowCount() < numeroMaxPlazos)
-						btnAï¿½adirPlazoInscripcion.setEnabled(true);
+					if (!btnAñadirPlazoInscripcion.isEnabled() && tablePlazos.getRowCount() < numeroMaxPlazos)
+						btnAñadirPlazoInscripcion.setEnabled(true);
 				}
 			});
 			btnBorrarPlazoInscripcion.setBounds(10, 373, 454, 38);

@@ -2,21 +2,21 @@ package igu;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 
 import logica.Carrera;
 import logica.Categoria;
-
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ButtonGroup;
 
 public class VentanaConfigurarClasificacion extends JDialog {
 
@@ -162,10 +162,11 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	
 	
 	private void generarCategorias(){
-		int n=carrera.getCategorias().length;
-		Categoria[] cat= carrera.getCategorias();
+		int n=carrera.getCategorias().size();
+		ArrayList<Categoria>cat= carrera.getCategorias();
 		for(int i=0;i<n;i++){
-			pnCategoria.add(new JRadioButton(cat[i].getCategoria()));
+			pnCategoria.add(new JRadioButton(cat.get(i).getCategoria()));
+			
 		}
 	}
 	
