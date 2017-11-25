@@ -170,7 +170,13 @@ public class Ventana_Inscripcion_Club extends JFrame {
 
 					for(Inscripcion ins : inscripciones) {
 						//mostrarDatos(ins);
+<<<<<<< HEAD
 						inscrito = registrar(ins);}
+=======
+						inscrito = registrar(ins);
+					}
+					
+>>>>>>> master
 					for (Inscripcion ins : inscripciones) {		
 						
 							@SuppressWarnings("deprecation")
@@ -185,6 +191,10 @@ public class Ventana_Inscripcion_Club extends JFrame {
 					
 						
 							btnContinuar.setEnabled(true);
+<<<<<<< HEAD
+=======
+						
+>>>>>>> master
 
 						if(inscrito)
 							contadorOK++;
@@ -200,9 +210,16 @@ public class Ventana_Inscripcion_Club extends JFrame {
 					txtProcesados.setText(String.valueOf(inscripciones.size()));
 					txtProcesadosOk.setText(String.valueOf(contadorOK));
 					txtProcesadosKo.setText(String.valueOf(contadorKO));
+<<<<<<< HEAD
 				}
 				
 			});
+=======
+
+
+				}
+				});
+>>>>>>> master
 		}
 		return btnInscribir;
 	}

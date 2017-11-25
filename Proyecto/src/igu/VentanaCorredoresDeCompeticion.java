@@ -153,7 +153,10 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 
 					vc.setVisible(true);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 				}
 			});
 		}
@@ -194,9 +197,15 @@ public class VentanaCorredoresDeCompeticion extends JFrame {
 	public void addFilas(){
 		ArrayList<Inscripcion> datos = base.getBaseInscripciones().getInscripcionesCarrera();
 
+<<<<<<< HEAD
 	
 
 		Object[] nuevaFila = new Object[5];
+=======
+		Object[] nuevaFila = new Object[4];
+
+		//Object[] nuevaFila = new Object[5];
+>>>>>>> master
 
 		for(Inscripcion ins : datos) {
 			nuevaFila[0] = ins.getCorredor().getDni();

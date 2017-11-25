@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 package database;
 
 import java.sql.*;
@@ -599,4 +603,8 @@ public class BaseInscripciones {
 		}
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master

@@ -14,6 +14,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -79,6 +83,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPnBase());
 		
 	}
+	
+
 
 	private JLabel getLblAplicacion() {
 		if (lblAplicacion == null) {
@@ -139,7 +145,42 @@ public class VentanaPrincipal extends JFrame {
 		vu.setModal(true);
 		vu.setVisible(true);
 	}
-
+	private JButton getBtClasificacion() {
+		if (btClasificacion == null) {
+			btClasificacion = new JButton("Ver Clasificacion");
+			btClasificacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
+					if( competicion!=null && !competicion.isEmpty())
+						mostrarVentanaClasificacion(competicion);
+				}
+			});
+		}
+		return btClasificacion;
+	}
+	private void mostrarVentanaClasificacion(String competicion){
+		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+		vc.setLocationRelativeTo(this);
+		vc.setModal(false);
+		vc.setVisible(true);
+	}
+	private JButton getBtnAsignarDorsal() {
+		if (btnAsignarDorsal == null) {
+			btnAsignarDorsal = new JButton("Asignar dorsal");
+			btnAsignarDorsal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String competicion = JOptionPane.showInputDialog("Introduzca id de la competici�n");
+					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
+					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
+					if(isAsignada)					
+						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
+					else
+						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
+				}
+			});
+		}
+		return btnAsignarDorsal;
+	}
 	private JButton getBtnCrearCarrera() {
 		if (btnCrearCarrera == null) {
 			btnCrearCarrera = new JButton("Crear Carrera");
@@ -157,7 +198,7 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaCrearCarrera(){
 		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
 		vc.setLocationRelativeTo(this);
-		vc.setVisible(true);
+		vc.setVisible(true);	
 	}
 	private JPanel getPanelPrincipal() {
 		if (panelPrincipal == null) {
