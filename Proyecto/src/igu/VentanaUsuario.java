@@ -90,7 +90,7 @@ public class VentanaUsuario extends JDialog {
 					}
 				}
 			});
-			añadirFilas(); //aqui o antes de pasarle el modelo
+			aï¿½adirFilas(); //aqui o antes de pasarle el modelo
 			
 		}
 		
@@ -101,7 +101,7 @@ public class VentanaUsuario extends JDialog {
 	
 	
 	
-	public void añadirFilas(){
+	public void aï¿½adirFilas(){
 		Object[] nuevaFila = new Object[6];
 		datos = base.getBaseInscripciones().getDatosAtleta(atleta);
 		for(Inscripcion i:datos){
