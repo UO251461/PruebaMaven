@@ -182,6 +182,10 @@ public class VentanaUsuario extends JDialog {
 		}
 		return panel_1;
 	}
+	
+	public Base getBase() {
+		return base;
+	}
 }
 
 
