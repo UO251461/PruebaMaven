@@ -56,6 +56,7 @@ public class BaseCarreras {
 					+ " where competicion.idcompeticion = p.idcompeticion and competicion.idorganizador = p.idorganizador and"
 					+ " competicion.idorganizador = p.idorganizador and current_date between p.fecha_inicio and p.fecha_fin order by fechacompeticion";
 			String consultaCategoria = "select c.nombre,c.limite_inferior,c.limite_superior,c.sexo from categoria c where c.IDCOMPETICION = ? and c.IDORGANIZADOR = ?";
+			String consultaTiemposControl = "select tiempo_inicio,tiempo_final,tiempo1,tiempo2,tiempo3,tiempo4,tiempo5 from tiempos_control t where t.IDCOMPETICION = ? and t.IDORGANIZADOR = ?";
 			
 					
 			ps = con.prepareStatement(consultaCarrera);	
@@ -70,9 +71,23 @@ public class BaseCarreras {
 				while(rs2.next()){
 					categorias.add(new Categoria(rs2.getInt("limite_inferior"),rs2.getInt("limite_superior"),rs2.getString("nombre"),rs2.getString("sexo")));
 				}
+				ArrayList<Integer> tControl = new ArrayList<Integer>();
+				ps = con.prepareStatement(consultaTiemposControl);
+				ps.setString(1, rs1.getString("idcompeticion"));
+				ps.setString(2, rs1.getString("idorganizador"));
+				ResultSet rs3 = ps.executeQuery();
+				while(rs3.next()){
+					tControl.add(rs2.getInt("tiempo_inicio"));
+					tControl.add(rs2.getInt("tiempo_final"));
+					tControl.add(rs2.getInt("tiempo1"));
+					tControl.add(rs2.getInt("tiempo2"));
+					tControl.add(rs2.getInt("tiempo3"));
+					tControl.add(rs2.getInt("tiempo4"));
+					tControl.add(rs2.getInt("tiempo5"));
+				}
 				carreras.add(new Carrera(rs1.getString("nombre_competicion"), rs1.getDouble("precio"), rs1.getDate("fecha_fin"), rs1.getDate("fecha_inicio"), rs1.getDate("fechacompeticion"),
 						rs1.getDouble("distancia"), rs1.getString("tipo"), new Organizador(rs1.getString("nombreorganizador"),rs1.getString("idorganizador")),
-						rs1.getInt("plazas_disponibles"), rs1.getString("idcompeticion"), rs1.getString("lugar"), categorias));				
+						rs1.getInt("plazas_disponibles"), rs1.getString("idcompeticion"), rs1.getString("lugar"), categorias,tControl));				
 				rs2.close();
 			}
 			
@@ -89,7 +104,7 @@ public class BaseCarreras {
 	}
 
 	public void crearCarrera(String nombre, Date fechaCompeticion, double distancia, String tipo, int plazasDisponibles,
-			String lugar, ArrayList<Plazo> plazos, ArrayList<Categoria> categorias) {
+			String lugar, ArrayList<Plazo> plazos, ArrayList<Categoria> categorias,ArrayList<Integer> tControl) {
 		try {
 			con = getConnection();
 			String consultaCarrera = "INSERT INTO COMPETICION (IDORGANIZADOR,FECHACOMPETICION, NOMBRE_COMPETICION,DISTANCIA,TIPO,PLAZAS_DISPONIBLES,LUGAR,CEDER_DORSAL)"
@@ -99,6 +114,8 @@ public class BaseCarreras {
 			String consultaCategorias = "INSERT INTO CATEGORIA (NOMBRE,LIMITE_INFERIOR,LIMITE_SUPERIOR,IDORGANIZADOR,IDCOMPETICION,SEXO) "
 					+ "VALUES(?,?,?,1,?,?)";
 			String consultaIdCarerra = "SELECT SECUENCIAIDCOMPETICION.CURRVAL as idcarrera FROM DUAL";
+			String consultaTControl = "INSERT INTO TIEMPOS_CONTROL (IDORGANIZADOR,IDCOMPETICION,TIEMPO_INICIO,TIEMPO_FINAL,TIEMPO1,TIEMPO2,TIEMPO3,TIEMPO4,TIEMPO5) "
+					+ "VALUES(1,?,?,?,?,?,?,?,?)";
 
 			ps = con.prepareStatement(consultaCarrera);
 
@@ -139,6 +156,13 @@ public class BaseCarreras {
 				ps.setString(5, categorias.get(i).getSexo());
 				ps.executeQuery();
 			}
+			
+			ps = con.prepareStatement(consultaTControl);
+			ps.setString(1, idCarrera);
+			for(int i=0;i<tControl.size();i++){
+				ps.setInt(i+2, tControl.get(i));
+			}
+			ps.executeQuery();
 
 		} catch (SQLException e) {
 
