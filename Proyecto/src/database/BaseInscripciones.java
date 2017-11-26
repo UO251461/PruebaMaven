@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -422,15 +423,29 @@ public class BaseInscripciones {
 		return asignada;
 	}
 
+	/**
+	 * Devuelve un corredor si el dni pasado como paraametro se encuentra en la base de datos, en caso contrario
+	 * devuelve null.(Samuel)
+	 * @param dni
+	 * @return Corredor
+	 */
 	public Corredor estaRegistrado(String dni) {
 		try {
 			con = getConnection();
-			ps = con.prepareStatement("select DNI, NOMBRE, APELLIDO, SEXO from CORREDOR where dni = ?");
+			ps = con.prepareStatement("select DNI, FECHANACIMIENTO, NOMBRE, APELLIDO, SEXO from CORREDOR where dni = ?");
 			ps.setString(1, dni);
 			rs = ps.executeQuery();
-			if (rs.next())
-				return new Corredor(rs.getString("DNI"), 0, rs.getString("SEXO"), rs.getString("NOMBRE"),
+			if (rs.next()){
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date fechaConHora = null;
+				try{
+				fechaConHora = sdf.parse(rs.getDate("FECHANACIMIENTO").toString());
+				}catch(ParseException e){
+					e.printStackTrace();
+				}
+				return new Corredor(rs.getString("DNI"), fechaConHora, rs.getString("SEXO"), rs.getString("NOMBRE"),
 						rs.getString("APELLIDO"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
