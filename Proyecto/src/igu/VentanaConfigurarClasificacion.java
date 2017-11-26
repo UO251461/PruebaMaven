@@ -17,10 +17,8 @@ import javax.swing.JRadioButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
 public class VentanaConfigurarClasificacion extends JDialog {
