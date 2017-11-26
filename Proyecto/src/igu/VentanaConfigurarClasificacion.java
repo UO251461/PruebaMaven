@@ -17,6 +17,7 @@ import javax.swing.JRadioButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractButton;
@@ -56,7 +57,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblCarrera = new JLabel("Carrera:");
-			lblCarrera.setBounds(33, 31, 41, 14);
+			lblCarrera.setBounds(33, 31, 59, 14);
 			contentPanel.add(lblCarrera);
 		}
 		contentPanel.add(getLblMostrarClasificacionesDe());
@@ -167,8 +168,8 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	}
 	private JLabel getLbNombre() {
 		if (lbNombre == null) {
-			lbNombre = new JLabel("");
-			lbNombre.setBounds(89, 31, 338, 14);
+			lbNombre = new JLabel(carrera.getNombre());
+			lbNombre.setBounds(96, 31, 338, 14);
 		}
 		return lbNombre;
 	}
@@ -197,7 +198,13 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	}
 	
 	private void mostrarVentanaClasificacion(Carrera competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion, categorias);
+		VentanaClasificacion vc;
+		if(rdbtnTodos_1.isSelected())
+			vc = new VentanaClasificacion(competicion, categorias, 0);
+		else if(rdbtnMasculino.isSelected())
+			vc = new VentanaClasificacion(competicion, categorias, 1);
+		else
+			vc = new VentanaClasificacion(competicion, categorias, 2);
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);

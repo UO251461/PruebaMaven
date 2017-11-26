@@ -34,6 +34,7 @@ public class VentanaClasificacion extends JDialog {
 	private JLabel lblNombreCarrera;
 	private JButton btnGenerarFichero;
 	private ArrayList<String> categorias;
+	private int sexo;
 
 //	/**
 //	 * Launch the application.
@@ -54,13 +55,13 @@ public class VentanaClasificacion extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaClasificacion(Carrera carrera, ArrayList<String> categorias) {
+	public VentanaClasificacion(Carrera carrera, ArrayList<String> categorias, int sexo) {
 		setTitle("Clasificacion");
 		base=new Base();
 		base.inicializar();
 		this.carrera=carrera;
 		this.categorias=categorias;
-		
+		this.sexo=sexo;
 		setBounds(100, 100, 1042, 658);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -75,12 +76,7 @@ public class VentanaClasificacion extends JDialog {
 	public void añadirFilas(String categoria){
 		ArrayList<Inscripcion> datos;
 		Object[] nuevaFila = new Object[6];
-//		if(false)
-//			datos = base.getBaseInscripciones().generarClasificaciones(0, carrera);
-//		else if(false)
-//			datos = base.getBaseInscripciones().generarClasificaciones(1, carrera);
-//		else
-			datos = base.getBaseInscripciones().generarClasificaciones(2, carrera.getIdcarrera(), categoria);
+		datos = base.getBaseInscripciones().generarClasificaciones(sexo, carrera.getIdcarrera(), categoria);
 		int pos=1;
 		for(Inscripcion i:datos){
 			if(true){
