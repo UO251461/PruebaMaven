@@ -1,6 +1,7 @@
 package igu;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -17,6 +18,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
 public class VentanaConfigurarClasificacion extends JDialog {
@@ -38,12 +41,14 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private JLabel lbNombre;
 	private Carrera carrera;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private ArrayList<String> categorias;
 
 	/**
 	 * Create the dialog.
 	 */
 	public VentanaConfigurarClasificacion(Carrera carrera) {
 		this.carrera=carrera;
+		categorias=new ArrayList<String>();
 		setBounds(100, 100, 609, 383);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,7 +73,9 @@ public class VentanaConfigurarClasificacion extends JDialog {
 				JButton okButton = new JButton("Aceptar");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						añadirCategorias();
 						mostrarVentanaClasificacion(carrera);
+						dispose();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -180,9 +187,17 @@ public class VentanaConfigurarClasificacion extends JDialog {
 		}
 	}
 	
+	private void añadirCategorias(){
+		Component[] comp = pnCategoria.getComponents();
+		for(int i=0;i<comp.length;i++){
+			if(comp[i] instanceof JRadioButton && ((JRadioButton) comp[i]).isSelected()){
+				categorias.add(((JRadioButton) comp[i]).getText());
+			}
+		}
+	}
 	
 	private void mostrarVentanaClasificacion(Carrera competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion.getIdcarrera());
+		VentanaClasificacion vc = new VentanaClasificacion(competicion, categorias);
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);

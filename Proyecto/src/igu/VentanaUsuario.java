@@ -84,10 +84,6 @@ public class VentanaUsuario extends JDialog {
 						btnCancelarInscripcion.setEnabled(true);
 					else 
 						btPagar.setEnabled(false);
-					if(arg0.getClickCount()==2 && tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 1).equals("INSCRITO")){
-						//si se hace doble click, que muestre la clasificacion de esa carrera
-						mostrarVentanaClasificacion((String)tablaInscripciones.getValueAt(tablaInscripciones.getSelectedRow(), 0));
-					}
 				}
 			});
 			anadirFilas(); //aqui o antes de pasarle el modelo
@@ -130,13 +126,7 @@ public class VentanaUsuario extends JDialog {
 		}
 		return scrollPane;
 	}
-	
-	private void mostrarVentanaClasificacion(String competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion);
-		vc.setLocationRelativeTo(this);
-		vc.setModal(true);
-		vc.setVisible(true);
-	}
+
 	
 	private void mostrarVentanaPago(Inscripcion inscripcion){
 		VentanaMetodoPago vp = new VentanaMetodoPago(inscripcion);
