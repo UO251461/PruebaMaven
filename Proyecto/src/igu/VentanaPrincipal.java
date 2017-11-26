@@ -49,6 +49,9 @@ public class VentanaPrincipal extends JFrame {
 	private boolean organizador;
 	private JPanel panel_3;
 	private JButton btnCambiarA;
+	
+	private JButton btClasificacion;
+	private JButton btnAsignarDorsal;
 
 	/**
 	 * Launch the application.

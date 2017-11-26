@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
@@ -162,10 +163,10 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	
 	
 	private void generarCategorias(){
-		int n=carrera.getCategorias().length;
-		Categoria[] cat= carrera.getCategorias();
+		int n=carrera.getCategorias().size();
+		ArrayList<Categoria> cat= carrera.getCategorias();
 		for(int i=0;i<n;i++){
-			pnCategoria.add(new JRadioButton(cat[i].getCategoria()));
+			pnCategoria.add(new JRadioButton(cat.get(i).getCategoria()));
 		}
 	}
 	
