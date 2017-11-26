@@ -1,10 +1,24 @@
 package igu;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+
+import com.csvreader.CsvWriter;
 
 import database.Base;
 import logica.Carrera;
@@ -12,20 +26,12 @@ import logica.Categoria;
 import logica.Inscripcion;
 import logica.ModeloNoEditable;
 
-import javax.swing.JScrollPane;
-import javax.swing.JDialog;
-import java.awt.GridLayout;
-import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-
 public class VentanaClasificacion extends JDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ModeloNoEditable modeloTabla;
 	private JPanel contentPane;
 	private Base base;
 	private Carrera carrera;
@@ -73,7 +79,7 @@ public class VentanaClasificacion extends JDialog {
 		generarTablas();
 	}
 
-	public void añadirFilas(String categoria) {
+	public void añadirFilas(String categoria, ModeloNoEditable modeloTabla) {
 		ArrayList<Inscripcion> datos;
 		Object[] nuevaFila = new Object[6];
 		datos = base.getBaseInscripciones().generarClasificaciones(sexo, carrera.getIdcarrera(), categoria);
@@ -120,6 +126,18 @@ public class VentanaClasificacion extends JDialog {
 	private JButton getBtnGenerarFichero() {
 		if (btnGenerarFichero == null) {
 			btnGenerarFichero = new JButton("Generar Fichero");
+			btnGenerarFichero.setEnabled(true);
+			btnGenerarFichero.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String nombre = JOptionPane.showInputDialog("Introduzca nombre del fichero a generar");
+					if (nombre == null || nombre.isEmpty()) {
+						JOptionPane.showConfirmDialog(null, "Datos Incorrectos");
+					} else {
+						generarCSV(nombre);
+						btnGenerarFichero.setEnabled(false);
+					}
+				}
+			});
 		}
 		return btnGenerarFichero;
 	}
@@ -173,7 +191,7 @@ public class VentanaClasificacion extends JDialog {
 			// modifico el ancho de la columna 0
 			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			añadirFilas(categoria);
+			añadirFilas(categoria, modeloTabla);
 		} else {
 			tablaClasificacion = new JTable();
 			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo" };
@@ -191,7 +209,7 @@ public class VentanaClasificacion extends JDialog {
 			// modifico el ancho de la columna 0
 			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			añadirFilas(categoria);
+			añadirFilas(categoria, modeloTabla);
 		}
 		return tablaClasificacion;
 	}
@@ -201,5 +219,35 @@ public class VentanaClasificacion extends JDialog {
 		pnNombre.setLayout(new GridLayout(0, 1, 0, 0));
 		pnNombre.add(new JLabel(categoria));
 		return pnNombre;
+	}
+
+	private void generarCSV(String nombre) {
+		try {
+
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(nombre, true), ';');
+
+			csvOutput.write("Clasificacon");
+			csvOutput.write(carrera.getNombre());
+			csvOutput.endRecord();
+
+			Component[] paneles = panelCentral.getComponents();
+			for (Component panel : paneles) {
+				csvOutput.write(((JLabel) ((JPanel) ((JPanel) panel).getComponent(0)).getComponent(0)).getText());
+				csvOutput.endRecord();				JTable tabla = (JTable) ((JScrollPane) ((JPanel) panel).getComponent(1)).getViewport().getView();
+				for (int i = 0; i < tabla.getModel().getColumnCount(); i++)
+					csvOutput.write(tabla.getModel().getColumnName(i));
+				csvOutput.endRecord();
+				for (int i = 0; i < tabla.getModel().getRowCount(); i++) {
+					for (int j = 0; j < tabla.getModel().getColumnCount(); j++) {
+						csvOutput.write((String) tabla.getModel().getValueAt(i, j));
+					}
+					csvOutput.endRecord();
+				}
+			}
+			csvOutput.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
