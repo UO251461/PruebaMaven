@@ -6,10 +6,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Vector;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -99,6 +99,21 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextArea txtrSeRecuerdaAl;
 	
 	private boolean eventoProperty = true;
+	private JPanel panelTiemposControl;
+	private JLabel lblTiempoFinal;
+	private JTextField textTiempoFinal;
+	private JLabel lblTiempo;
+	private JTextField textTiempo1;
+	private JLabel lblTiempo_1;
+	private JTextField textTiempo2;
+	private JLabel lblTiempo3;
+	private JTextField textTiempo3;
+	private JLabel lblTiempo4;
+	private JTextField textTiempo4;
+	private JLabel lblTiempo5;
+	private JTextField textTiempo5;
+	
+	private ArrayList<Integer> tControl = new ArrayList<Integer>();
 
 	/**
 	 * Launch the application.
@@ -113,7 +128,7 @@ public class VentanaCrearCarrera extends JDialog {
 		setResizable(false);
 		this.vp = vp;
 		setTitle("Crear Carrera");
-		setBounds(100, 100, 1144, 646);
+		setBounds(100, 100, 1144, 689);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -132,6 +147,7 @@ public class VentanaCrearCarrera extends JDialog {
 		contentPane.add(getBtnComprobarInformacionDe());
 		contentPane.add(getPanelInfoGeneral());
 		contentPane.add(getTxtrSeRecuerdaAl());
+		contentPane.add(getPanelTiemposControl());
 	}
 
 	private JButton getBtnCrear() {
@@ -147,7 +163,7 @@ public class VentanaCrearCarrera extends JDialog {
 				}
 
 			});
-			btnCrear.setBounds(994, 582, 86, 23);
+			btnCrear.setBounds(994, 609, 86, 23);
 		}
 		return btnCrear;
 	}
@@ -155,57 +171,111 @@ public class VentanaCrearCarrera extends JDialog {
 	private void creaCarrera() {
 		vp.getBase().getBaseCarrera().crearCarrera(getTextNombreCarrera().getText(), getDateCompeticion().getDate(),
 				Double.parseDouble(getTextDistancia().getText()), getTextTipo().getText(),
-				Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(), plazos, categorias);
+				Integer.parseInt(getTextPlazas().getText()), getTextLugar().getText(), plazos, categorias,tControl);
 		JOptionPane.showMessageDialog(this, "Su carrera ha sido creada satisfactoriamente");
 	}
 
 	private boolean compruebaCampos() {
-		if (comprobarCategorias())
-			if (Herramientas.stringNoVacio(getTextNombreCarrera().getText()))
-				if (compruebaFechas())
-					if (Herramientas.esNumericoYNoVacio(getTextDistancia().getText())
-							&& Double.parseDouble(getTextDistancia().getText()) > 0)
-						if (Herramientas.stringNoVacio(getTextTipo().getText()))
-							if (Herramientas.esNumericoYNoVacio(getTextPlazas().getText())
-									&& Integer.parseInt(getTextPlazas().getText()) > 0)
-								if (Herramientas.stringNoVacio(getTextLugar().getText()))
-									return true;
+		if(compruebaTiemposControl())
+			if (comprobarCategorias())
+				if (Herramientas.stringNoVacio(getTextNombreCarrera().getText()))
+					if (compruebaFechas())
+						if (Herramientas.esNumericoYNoVacio(getTextDistancia().getText())
+								&& Double.parseDouble(getTextDistancia().getText()) > 0)
+							if (Herramientas.stringNoVacio(getTextTipo().getText()))
+								if (Herramientas.esNumericoYNoVacio(getTextPlazas().getText())
+										&& Integer.parseInt(getTextPlazas().getText()) > 0)
+									if (Herramientas.stringNoVacio(getTextLugar().getText()))
+										return true;
+									else {
+										JOptionPane.showMessageDialog(this,
+												"El lugar de la carrera NO ha sido introducido correctamente");
+										return false;
+									}
 								else {
 									JOptionPane.showMessageDialog(this,
-											"El lugar de la carrera NO ha sido introducido correctamente");
+											"El numero de plazas de la carrera NO ha sido introducido correctamente");
 									return false;
 								}
 							else {
 								JOptionPane.showMessageDialog(this,
-										"El numero de plazas de la carrera NO ha sido introducido correctamente");
+										"El tipo de la carrera NO ha sido introducido correctamente");
 								return false;
 							}
 						else {
 							JOptionPane.showMessageDialog(this,
-									"El tipo de la carrera NO ha sido introducido correctamente");
+									"La distancia de la carrera NO ha sido introducido correctamente");
 							return false;
 						}
 					else {
 						JOptionPane.showMessageDialog(this,
-								"La distancia de la carrera NO ha sido introducido correctamente");
+								"Las fechas no son concoordantes entre ellas, no se ha de solapar ningun plazo de inscripcion "
+										+ "y todos deben ser antes de la fecha de competicion. Ademas la fecha inicial de inscripcion debe ser "
+										+ "antes que la fecha final de inscripcion de cada plazo.");
 						return false;
 					}
 				else {
-					JOptionPane.showMessageDialog(this,
-							"Las fechas no son concoordantes entre ellas, no se ha de solapar ningun plazo de inscripcion "
-									+ "y todos deben ser antes de la fecha de competicion. Ademas la fecha inicial de inscripcion debe ser "
-									+ "antes que la fecha final de inscripcion de cada plazo.");
+					JOptionPane.showMessageDialog(this, "El nombre de la carrera NO ha sido introducido correctamente");
 					return false;
 				}
-			else {
-				JOptionPane.showMessageDialog(this, "El nombre de la carrera NO ha sido introducido correctamente");
+			else {			
 				return false;
 			}
-		else {
-			JOptionPane.showMessageDialog(this,
-					"Categorias introducidas ERRONEAMENTE (se solapan categorias o algunos de sus nombres coinciden)");
+		else
+			return false;
+	}
+	
+	private boolean compruebaTiemposControl(){
+		if(creaTiemposControl()){
+			if(tControl.get(0) != 0){
+				JOptionPane.showMessageDialog(this, "El tiempo de control de la salida es distinto a 0.");
+				return false;
+			}				
+			else
+				for(int i=0;i<tControl.size();i++){
+					if(i!= tControl.size()-1){
+						if(tControl.get(i)> tControl.get(i+1)){
+							JOptionPane.showMessageDialog(this, "El tiempo de control con valor " + tControl.get(i) +" y el tiempo de control con valor " + tControl.get(i+1) + " no estan ordenados, reviselos.");
+							return false;
+						}
+							
+					}
+					else{
+						if(tControl.get(i)<tControl.get(i-1)){
+							JOptionPane.showMessageDialog(this, "El tiempo de control final no es correcto, reviselo");
+							return false;
+						}
+							
+					}							
+				}
+		}
+		else
+			return false;		
+		return true;
+	}
+	
+	private boolean creaTiemposControl(){
+		this.tControl.clear();
+		tControl.add(0);		
+		if(Herramientas.esNumericoYNoVacio(getTextTiempo1().getText()))
+			tControl.add(Integer.parseInt(getTextTiempo1().getText()));		
+		if(Herramientas.esNumericoYNoVacio(getTextTiempo2().getText()))
+			tControl.add(Integer.parseInt(getTextTiempo2().getText()));	
+		if(Herramientas.esNumericoYNoVacio(getTextTiempo3().getText()))
+			tControl.add(Integer.parseInt(getTextTiempo3().getText()));	
+		if(Herramientas.esNumericoYNoVacio(getTextTiempo4().getText()))
+			tControl.add(Integer.parseInt(getTextTiempo4().getText()));	
+		if(Herramientas.esNumericoYNoVacio(getTextTiempo5().getText()))
+			tControl.add(Integer.parseInt(getTextTiempo5().getText()));	
+		if(Herramientas.esNumericoYNoVacio(getTextTiempoFinal().getText())){
+			tControl.add(Integer.parseInt(getTextTiempoFinal().getText()));			
+			return true;	
+		}
+		else{
+			JOptionPane.showMessageDialog(this, "El tiempo de control final ha de ser un numero, por favor reviselo");
 			return false;
 		}
+					
 	}
 
 	@SuppressWarnings("unchecked")
@@ -295,7 +365,7 @@ public class VentanaCrearCarrera extends JDialog {
 					dispose();
 				}
 			});
-			btnAtras.setBounds(870, 582, 96, 23);
+			btnAtras.setBounds(872, 609, 96, 23);
 		}
 		return btnAtras;
 	}
@@ -303,7 +373,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblNombreCompeticion() {
 		if (lblNombreCompeticion == null) {
 			lblNombreCompeticion = new JLabel("Nombre Competicion:");
-			lblNombreCompeticion.setBounds(10, 26, 133, 14);
+			lblNombreCompeticion.setBounds(10, 26, 188, 14);
 			lblNombreCompeticion.setDisplayedMnemonic('n');
 			lblNombreCompeticion.setLabelFor(getTextNombreCarrera());
 		}
@@ -313,7 +383,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextNombreCarrera() {
 		if (textNombreCarrera == null) {
 			textNombreCarrera = new JTextField();
-			textNombreCarrera.setBounds(128, 23, 194, 20);
+			textNombreCarrera.setBounds(221, 23, 194, 20);
 			textNombreCarrera.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent arg0) {
@@ -331,7 +401,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
 			lblTipo = new JLabel("Tipo:");
-			lblTipo.setBounds(332, 26, 67, 14);
+			lblTipo.setBounds(10, 110, 67, 14);
 			lblTipo.setLabelFor(getTextTipo());
 			lblTipo.setDisplayedMnemonic('t');
 		}
@@ -341,7 +411,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTipo() {
 		if (textTipo == null) {
 			textTipo = new JTextField();
-			textTipo.setBounds(372, 23, 124, 20);
+			textTipo.setBounds(74, 107, 124, 20);
 			textTipo.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
@@ -359,7 +429,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblDistancia() {
 		if (lblDistancia == null) {
 			lblDistancia = new JLabel("Distancia(en km):");
-			lblDistancia.setBounds(518, 24, 124, 19);
+			lblDistancia.setBounds(10, 142, 124, 19);
 			lblDistancia.setLabelFor(getTextDistancia());
 			lblDistancia.setDisplayedMnemonic('d');
 		}
@@ -369,7 +439,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextDistancia() {
 		if (textDistancia == null) {
 			textDistancia = new JTextField();
-			textDistancia.setBounds(620, 23, 115, 20);
+			textDistancia.setBounds(128, 141, 115, 20);
 			textDistancia.setColumns(10);
 		}
 		return textDistancia;
@@ -378,7 +448,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JDateChooser getDateCompeticion() {
 		if (fechaCompeticion == null) {
 			fechaCompeticion = new JDateChooser();
-			fechaCompeticion.setBounds(599, 66, 124, 20);			
+			fechaCompeticion.setBounds(302, 80, 124, 20);			
 			fechaCompeticion.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if(eventoProperty){
@@ -408,7 +478,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblFechaCompeticion() {
 		if (lblFechaCompeticion == null) {
 			lblFechaCompeticion = new JLabel("Fecha Competicion:");
-			lblFechaCompeticion.setBounds(465, 66, 133, 20);
+			lblFechaCompeticion.setBounds(186, 80, 133, 20);
 			lblFechaCompeticion.setDisplayedMnemonic('f');
 			lblFechaCompeticion.setLabelFor(getDateCompeticion());
 		}
@@ -418,7 +488,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblNumeroDePlazas() {
 		if (lblNumeroDePlazas == null) {
 			lblNumeroDePlazas = new JLabel("Numero de plazas:");
-			lblNumeroDePlazas.setBounds(10, 66, 115, 20);
+			lblNumeroDePlazas.setBounds(10, 51, 124, 20);
 			lblNumeroDePlazas.setLabelFor(getTextPlazas());
 			lblNumeroDePlazas.setDisplayedMnemonic('n');
 		}
@@ -428,7 +498,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextPlazas() {
 		if (textPlazas == null) {
 			textPlazas = new JTextField();
-			textPlazas.setBounds(128, 66, 124, 20);
+			textPlazas.setBounds(151, 49, 124, 20);
 			textPlazas.setColumns(10);
 		}
 		return textPlazas;
@@ -438,7 +508,7 @@ public class VentanaCrearCarrera extends JDialog {
 		if (panelPlazos == null) {
 			panelPlazos = new JPanel();
 			panelPlazos.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panelPlazos.setBounds(10, 422, 454, 184);
+			panelPlazos.setBounds(10, 448, 454, 184);
 			panelPlazos.setLayout(null);
 			panelPlazos.add(getLblFechaComienzoInscripcion());
 			panelPlazos.add(getDateComienzoInscripcion());
@@ -534,7 +604,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JLabel getLblLugar() {
 		if (lblLugar == null) {
 			lblLugar = new JLabel("Lugar:");
-			lblLugar.setBounds(276, 68, 96, 17);
+			lblLugar.setBounds(10, 82, 96, 17);
 		}
 		return lblLugar;
 	}
@@ -542,7 +612,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextLugar() {
 		if (textLugar == null) {
 			textLugar = new JTextField();
-			textLugar.setBounds(321, 66, 124, 20);
+			textLugar.setBounds(52, 80, 124, 20);
 			textLugar.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
@@ -635,24 +705,24 @@ public class VentanaCrearCarrera extends JDialog {
 						btnAnadirPlazoInscripcion.setEnabled(true);
 				}
 			});
-			btnBorrarPlazoInscripcion.setBounds(10, 373, 454, 38);
+			btnBorrarPlazoInscripcion.setBounds(10, 399, 454, 38);
 		}
 		return btnBorrarPlazoInscripcion;
 	}
 
 	private JLabel getLblPlazos() {
 		if (lblPlazos == null) {
-			lblPlazos = new JLabel("PLAZOS");
+			lblPlazos = new JLabel("PLAZOS INSCRIPCION");
 			lblPlazos.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblPlazos.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlazos.setBounds(10, 134, 454, 29);
+			lblPlazos.setBounds(10, 188, 454, 29);
 		}
 		return lblPlazos;
 	}
 	private JScrollPane getScrollPlazos() {
 		if (scrollPlazos == null) {
 			scrollPlazos = new JScrollPane();
-			scrollPlazos.setBounds(10, 174, 454, 172);
+			scrollPlazos.setBounds(10, 216, 454, 172);
 			scrollPlazos.setViewportView(getTablePlazos());
 		}
 		return scrollPlazos;
@@ -662,14 +732,14 @@ public class VentanaCrearCarrera extends JDialog {
 			lblCategoriasFemeninas = new JLabel("CATEGORIAS FEMENINAS");
 			lblCategoriasFemeninas.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblCategoriasFemeninas.setHorizontalAlignment(SwingConstants.CENTER);
-			lblCategoriasFemeninas.setBounds(491, 229, 589, 31);
+			lblCategoriasFemeninas.setBounds(484, 268, 596, 31);
 		}
 		return lblCategoriasFemeninas;
 	}
 	private JScrollPane getScrollFemenino() {
 		if (scrollFemenino == null) {
 			scrollFemenino = new JScrollPane();
-			scrollFemenino.setBounds(491, 258, 596, 102);
+			scrollFemenino.setBounds(484, 305, 596, 102);
 			scrollFemenino.setViewportView(getTableFemenino());
 		}
 		return scrollFemenino;
@@ -690,14 +760,14 @@ public class VentanaCrearCarrera extends JDialog {
 			lblCategoriasMasculinas = new JLabel("CATEGORIAS MASCULINAS");
 			lblCategoriasMasculinas.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblCategoriasMasculinas.setHorizontalAlignment(SwingConstants.CENTER);
-			lblCategoriasMasculinas.setBounds(491, 359, 596, 38);
+			lblCategoriasMasculinas.setBounds(484, 399, 596, 38);
 		}
 		return lblCategoriasMasculinas;
 	}
 	private JScrollPane getScrollMasculino() {
 		if (scrollMasculino == null) {
 			scrollMasculino = new JScrollPane();
-			scrollMasculino.setBounds(484, 389, 596, 102);
+			scrollMasculino.setBounds(484, 438, 596, 102);
 			scrollMasculino.setViewportView(getTableMasculino());
 		}
 		return scrollMasculino;
@@ -722,7 +792,7 @@ public class VentanaCrearCarrera extends JDialog {
 					restablecerTabla(modeloCategoriasMasc);					
 				}
 			});
-			btnRestablecerCategoriasPor.setBounds(484, 502, 596, 29);
+			btnRestablecerCategoriasPor.setBounds(491, 540, 596, 29);
 		}
 		return btnRestablecerCategoriasPor;
 	}
@@ -906,7 +976,7 @@ public class VentanaCrearCarrera extends JDialog {
 						JOptionPane.showMessageDialog(null, "Sus categorias estan configuradas correctamente");
 				}
 			});
-			btnComprobarInformacionDe.setBounds(484, 542, 596, 29);
+			btnComprobarInformacionDe.setBounds(491, 569, 596, 29);
 		}
 		return btnComprobarInformacionDe;
 	}
@@ -914,7 +984,7 @@ public class VentanaCrearCarrera extends JDialog {
 		if (panelInfoGeneral == null) {
 			panelInfoGeneral = new JPanel();
 			panelInfoGeneral.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Informacion general de la carrera", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelInfoGeneral.setBounds(32, 26, 1048, 97);
+			panelInfoGeneral.setBounds(10, 11, 439, 172);
 			panelInfoGeneral.setLayout(null);
 			panelInfoGeneral.add(getLblNombreCompeticion());
 			panelInfoGeneral.add(getTextNombreCarrera());
@@ -961,11 +1031,122 @@ public class VentanaCrearCarrera extends JDialog {
 			txtrSeRecuerdaAl = new JTextArea();
 			txtrSeRecuerdaAl.setWrapStyleWord(true);
 			txtrSeRecuerdaAl.setLineWrap(true);
-			txtrSeRecuerdaAl.setText("Se recuerda al usuario que las normas para introducir categorias son: \n-La primera categoria de masculino y femenino debe comenzar con 18 aï¿½os.\n"
-			+ "-La ultima categoria tanto de masculino como de femenino debe acabar en 200 aï¿½os\n-No se permitira que haya huecos de edades entre categorias para la correcta inscripcion "
+			txtrSeRecuerdaAl.setText("Se recuerda al usuario que las normas para introducir categorias son: \n-La primera categoria de masculino y femenino debe comenzar con 18 años.\n"
+			+ "-La ultima categoria tanto de masculino como de femenino debe acabar en 200 anos\n-No se permitira que haya huecos de edades entre categorias para la correcta inscripcion "
 					+ "de cualquier usuario de cualquier edad");
-			txtrSeRecuerdaAl.setBounds(491, 134, 596, 97);
+			txtrSeRecuerdaAl.setBounds(484, 158, 596, 112);
 		}
 		return txtrSeRecuerdaAl;
+	}
+	private JPanel getPanelTiemposControl() {
+		if (panelTiemposControl == null) {
+			panelTiemposControl = new JPanel();
+			panelTiemposControl.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Tiempos de control", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelTiemposControl.setBounds(484, 15, 596, 132);
+			panelTiemposControl.setLayout(null);
+			panelTiemposControl.add(getLblTiempoFinal());
+			panelTiemposControl.add(getTextTiempoFinal());
+			panelTiemposControl.add(getLblTiempo());
+			panelTiemposControl.add(getTextTiempo1());
+			panelTiemposControl.add(getLblTiempo_1());
+			panelTiemposControl.add(getTextTiempo2());
+			panelTiemposControl.add(getLblTiempo3());
+			panelTiemposControl.add(getTextTiempo3());
+			panelTiemposControl.add(getLblTiempo4());
+			panelTiemposControl.add(getLblTiempo5());
+			panelTiemposControl.add(getTextTiempo5());
+			panelTiemposControl.add(getTextTiempo4());
+		}
+		return panelTiemposControl;
+	}
+	private JLabel getLblTiempoFinal() {
+		if (lblTiempoFinal == null) {
+			lblTiempoFinal = new JLabel("Tiempo Final:");
+			lblTiempoFinal.setBounds(10, 22, 122, 28);
+		}
+		return lblTiempoFinal;
+	}
+	private JTextField getTextTiempoFinal() {
+		if (textTiempoFinal == null) {
+			textTiempoFinal = new JTextField();
+			textTiempoFinal.setBounds(102, 26, 130, 24);
+			textTiempoFinal.setColumns(10);
+		}
+		return textTiempoFinal;
+	}
+	private JLabel getLblTiempo() {
+		if (lblTiempo == null) {
+			lblTiempo = new JLabel("Tiempo 1:");
+			lblTiempo.setBounds(322, 24, 77, 24);
+		}
+		return lblTiempo;
+	}
+	private JTextField getTextTiempo1() {
+		if (textTiempo1 == null) {
+			textTiempo1 = new JTextField();
+			textTiempo1.setBounds(383, 22, 130, 24);
+			textTiempo1.setColumns(10);
+		}
+		return textTiempo1;
+	}
+	private JLabel getLblTiempo_1() {
+		if (lblTiempo_1 == null) {
+			lblTiempo_1 = new JLabel("Tiempo 2:");
+			lblTiempo_1.setBounds(10, 59, 77, 24);
+		}
+		return lblTiempo_1;
+	}
+	private JTextField getTextTiempo2() {
+		if (textTiempo2 == null) {
+			textTiempo2 = new JTextField();
+			textTiempo2.setBounds(102, 61, 130, 20);
+			textTiempo2.setColumns(10);
+		}
+		return textTiempo2;
+	}
+	private JLabel getLblTiempo3() {
+		if (lblTiempo3 == null) {
+			lblTiempo3 = new JLabel("Tiempo 3:");
+			lblTiempo3.setBounds(322, 59, 77, 28);
+		}
+		return lblTiempo3;
+	}
+	private JTextField getTextTiempo3() {
+		if (textTiempo3 == null) {
+			textTiempo3 = new JTextField();
+			textTiempo3.setColumns(10);
+			textTiempo3.setBounds(383, 59, 130, 24);
+		}
+		return textTiempo3;
+	}
+	private JLabel getLblTiempo4() {
+		if (lblTiempo4 == null) {
+			lblTiempo4 = new JLabel("Tiempo 4:");
+			lblTiempo4.setBounds(10, 94, 77, 24);
+		}
+		return lblTiempo4;
+	}
+	private JTextField getTextTiempo4() {
+		if (textTiempo4 == null) {
+			textTiempo4 = new JTextField();
+			textTiempo4.setBounds(102, 92, 130, 24);
+			textTiempo4.setColumns(10);
+		}
+		return textTiempo4;
+	}
+	private JLabel getLblTiempo5() {
+		if (lblTiempo5 == null) {
+			lblTiempo5 = new JLabel("Tiempo 5:");
+			lblTiempo5.setBounds(322, 96, 77, 24);
+		}
+		return lblTiempo5;
+	}
+	private JTextField getTextTiempo5() {
+		if (textTiempo5 == null) {
+			textTiempo5 = new JTextField();
+			textTiempo5.setColumns(10);
+			textTiempo5.setBounds(383, 98, 130, 20);
+		}
+		return textTiempo5;
 	}
 }
