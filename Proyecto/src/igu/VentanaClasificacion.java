@@ -80,7 +80,7 @@ public class VentanaClasificacion extends JDialog {
 //		else if(false)
 //			datos = base.getBaseInscripciones().generarClasificaciones(1, carrera);
 //		else
-			datos = base.getBaseInscripciones().generarClasificaciones(2, carrera.getIdcarrera());
+			datos = base.getBaseInscripciones().generarClasificaciones(2, carrera.getIdcarrera(), categoria);
 		int pos=1;
 		for(Inscripcion i:datos){
 			if(true){
