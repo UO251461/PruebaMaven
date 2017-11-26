@@ -17,7 +17,6 @@ import logica.Corredor;
 import logica.GestorExtractos;
 import logica.Incidencia;
 import logica.Inscripcion;
-import logica.Plazo;
 
 public class BaseInscripciones {
 	private final static String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
@@ -306,16 +305,24 @@ public class BaseInscripciones {
 	/**
 	 * Método que genera las clasificaciones absolutas y por sexo.
 	 */
-	public ArrayList<Inscripcion> generarClasificaciones(int n, String competicion) {
+	public ArrayList<Inscripcion> generarClasificaciones(int n, String competicion, String categoria) {
 		ArrayList<Inscripcion> clasificacion = new ArrayList<Inscripcion>();
 		try {
 			Connection con = getConnection();
 			// se crean las clasificaciones absolutas
 			if (n == 0) {
-
-				PreparedStatement ps = con.prepareStatement(
-						"SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni  ORDER BY TIEMPO");
-				ps.setString(1, competicion);
+				PreparedStatement ps;
+				if(categoria.equals("Generales")){
+					 ps= con.prepareStatement(
+							"SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni ORDER BY TIEMPO");
+					 ps.setString(1, competicion);
+				}
+				else{
+					ps = con.prepareStatement(
+						"SELECT i.*, c.SEXO FROM INSCRIPCION i, CORREDOR c WHERE DORSAL>0 AND IDCOMPETICION=? AND i.dni=c.dni AND CATEGORIA=? ORDER BY TIEMPO");
+					ps.setString(1, competicion);
+					ps.setString(2, categoria);
+				}
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
@@ -325,10 +332,18 @@ public class BaseInscripciones {
 				rs.close();
 				ps.close();
 			} else if (n == 1) {
+				PreparedStatement ps;
+				if(categoria.equals("Generales")){
 				// se crean las clasificaciones masculinas
-				PreparedStatement ps = con.prepareStatement(
+					ps = con.prepareStatement(
 						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
-				ps.setString(1, competicion);
+					ps.setString(1, competicion);
+				}else{
+					ps = con.prepareStatement(
+							"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='HOMBRE') AND IDCOMPETICION=? AND DORSAL>0 AND CATEGORIA=? ORDER BY TIEMPO");
+					ps.setString(1, competicion);
+					ps.setString(2, categoria);
+				}
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
@@ -338,10 +353,19 @@ public class BaseInscripciones {
 				rs.close();
 				ps.close();
 			} else if (n == 2) {
+				PreparedStatement ps;
+				if(categoria.equals("Generales")){
 				// se crean las clasificaciones femeninas
-				PreparedStatement ps = con.prepareStatement(
+					ps = con.prepareStatement(
 						"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') AND IDCOMPETICION=? AND DORSAL>0 ORDER BY TIEMPO");
-				ps.setString(1, competicion);
+					ps.setString(1, competicion);
+				}else{
+					ps = con.prepareStatement(
+							"select * FROM INSCRIPCION WHERE DNI IN(SELECT DNI FROM CORREDOR WHERE SEXO='MUJER') AND IDCOMPETICION=? AND DORSAL>0 AND CATEGORIA=? ORDER BY TIEMPO");
+					ps.setString(1, competicion);
+					ps.setString(2, categoria);
+				}
+				
 				ResultSet rs = ps.executeQuery();
 				while (rs.next()) {
 					clasificacion.add(new Inscripcion(rs.getString("IDCOMPETICION"), rs.getString("IDORGANIZADOR"),
