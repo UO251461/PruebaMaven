@@ -2,8 +2,6 @@ package igu;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -14,20 +12,13 @@ import logica.Inscripcion;
 import logica.ModeloNoEditable;
 
 import javax.swing.JScrollPane;
+import javax.swing.JDialog;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JTable;
 import javax.swing.JLabel;
-import javax.swing.JDialog;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class VentanaClasificacion extends JDialog {
 
@@ -37,20 +28,16 @@ public class VentanaClasificacion extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private ModeloNoEditable modeloTabla;
 	private JPanel contentPane;
-	private JPanel panel;
-	private JScrollPane scrollPane;
-	private JTable tablaClasificacion;
-	private JLabel lbCategoria;
-	private JRadioButton rbAbsoluto;
-	private JRadioButton rbMasculino;
-	private JRadioButton rbFemenino;
 	private Base base;
 	private String competicion;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JPanel panel_1;
-	private JComboBox<String> comboBox;
-	private JPanel panel_2;
-	private String[] categorias={"Generales","Menor de edad","Senior","Veterano A","Veterano B"};
+	private JScrollPane scrollPane;
+	private JPanel panelCentral;
+	private JPanel panelTabla;
+	private JPanel pnNombre;
+	private JScrollPane scroll;
+	private JTable tablaClasificacion;
+	private JLabel lblNombreCategoria;
+	private JLabel lblNombreCarrera;
 
 	/**
 	 * Launch the application.
@@ -81,110 +68,22 @@ public class VentanaClasificacion extends JDialog {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(getPanel(), BorderLayout.NORTH);
-		contentPane.add(getScrollPane(), BorderLayout.CENTER);
-	}
-
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setLayout(new GridLayout(0, 2, 0, 0));
-			panel.add(getPanel_2());
-			panel.add(getPanel_1());
-		}
-		return panel;
-	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setViewportView(getTablaClasificacion());
-		}
-		return scrollPane;
-	}
-	private JTable getTablaClasificacion() {
-		if (tablaClasificacion == null) {
-			tablaClasificacion = new JTable();
-			String[] nombreColumnas = {"Posicion","DNI","Dorsal","Tiempo","Sexo","Categoria"};
-			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
-			//las crearemos en tiempo de ejecucion
-			tablaClasificacion.setModel(modeloTabla);
-			//Aplica el renderer que marca la fila seleccionada en rojo y negrita
-			//tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
-			///subo el alto de la fila
-			tablaClasificacion.setRowHeight(30);
-			//modifico el ancho de la columna 0
-			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
-			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			tablaClasificacion.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					//programar el doble click
-					if(arg0.getClickCount()==2){
-						//si se hace doble click, que muestre la clasificacion de esa carrera
-					}
-				}
-			});
-			añadirFilas(); //aqui o antes de pasarle el modelo
-		}
-		return tablaClasificacion;
-	}
-	private JLabel getLbCategoria() {
-		if (lbCategoria == null) {
-			lbCategoria = new JLabel("Categorias:");
-			lbCategoria.setHorizontalAlignment(SwingConstants.RIGHT);
-		}
-		return lbCategoria;
-	}
-	private JRadioButton getRbAbsoluto() {
-		if (rbAbsoluto == null) {
-			rbAbsoluto = new JRadioButton("Absoluto");
-			rbAbsoluto.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbAbsoluto);
-			rbAbsoluto.setSelected(true);
-		}
-		return rbAbsoluto;
-	}
-	private JRadioButton getRbMasculino() {
-		if (rbMasculino == null) {
-			rbMasculino = new JRadioButton("Masculino");
-			rbMasculino.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbMasculino);
-		}
-		return rbMasculino;
-	}
-	private JRadioButton getRbFemenino() {
-		if (rbFemenino == null) {
-			rbFemenino = new JRadioButton("Femenino");
-			rbFemenino.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbFemenino);
-		}
-		return rbFemenino;
+		contentPane.add(getScrollPane_1(), BorderLayout.CENTER);
+		contentPane.add(getLblNombreCarrera(), BorderLayout.NORTH);
 	}
 	
 	public void añadirFilas(){
 		ArrayList<Inscripcion> datos;
 		Object[] nuevaFila = new Object[6];
-		if(rbAbsoluto.isSelected())
+		if(false)
 			datos = base.getBaseInscripciones().generarClasificaciones(0, competicion);
-		else if(rbMasculino.isSelected())
+		else if(false)
 			datos = base.getBaseInscripciones().generarClasificaciones(1, competicion);
 		else
 			datos = base.getBaseInscripciones().generarClasificaciones(2, competicion);
 		int pos=1;
 		for(Inscripcion i:datos){
-			if(comboBox.getSelectedIndex()==0 || i.getCategoria().equals(categorias[comboBox.getSelectedIndex()])){
+			if(true){
 			nuevaFila[0]=pos++;
 			nuevaFila[1]= i.getCorredor().getDni();
 			nuevaFila[2]= i.getDorsal();
@@ -208,36 +107,74 @@ public class VentanaClasificacion extends JDialog {
 		//necesario para repintar la tabla(especialmente cuando se queda vacia)
 		modeloTabla.fireTableDataChanged();
 	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.add(getRbAbsoluto());
-			panel_1.add(getRbMasculino());
-			panel_1.add(getRbFemenino());
+	private JScrollPane getScrollPane_1() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setViewportView(getPanel_3());
 		}
-		return panel_1;
+		return scrollPane;
 	}
-	private JComboBox<String> getComboBox() {
-		if (comboBox == null) {
-			comboBox = new JComboBox<String>();
-			comboBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent arg0) {
-					actualizarTabla();
-				}
-			});		
+	private JPanel getPanel_3() {
+		if (panelCentral == null) {
+			panelCentral = new JPanel();
+			panelCentral.setLayout(new GridLayout(0, 1, 0, 0));
+			panelCentral.add(getPanel_1_1());
+		}
+		return panelCentral;
+	}
+	private JPanel getPanel_1_1() {
+		if (panelTabla == null) {
+			panelTabla = new JPanel();
+			panelTabla.setLayout(new BorderLayout(0, 0));
+			panelTabla.add(getPanel_4(), BorderLayout.NORTH);
+			panelTabla.add(getScrollPane_1_1());
+		}
+		return panelTabla;
+	}
+	private JPanel getPanel_4() {
+		if (pnNombre == null) {
+			pnNombre = new JPanel();
+			pnNombre.setLayout(new GridLayout(0, 1, 0, 0));
+			pnNombre.add(getLblNombreCategoria());
+		}
+		return pnNombre;
+	}
+	private JScrollPane getScrollPane_1_1() {
+		if (scroll == null) {
+			scroll = new JScrollPane();
+			scroll.setViewportView(getTable());
 			
-			comboBox.setModel(new DefaultComboBoxModel<String>(categorias));
-			comboBox.setSelectedIndex(0);
 		}
-		return comboBox;
+		return scroll;
 	}
-	private JPanel getPanel_2() {
-		if (panel_2 == null) {
-			panel_2 = new JPanel();
-			panel_2.setLayout(new GridLayout(0, 2, 0, 0));
-			panel_2.add(getLbCategoria());
-			panel_2.add(getComboBox());
+	private JTable getTable() {
+		if (tablaClasificacion == null) {
+			tablaClasificacion = new JTable();
+			String[] nombreColumnas = {"Posicion","dni","Dorsal", "Tiempo","Sexo","Categoria"};
+			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
+			//las crearemos en tiempo de ejecucion
+			tablaClasificacion.setModel(modeloTabla);
+			//Aplica el renderer que marca la fila seleccionada en rojo y negrita
+			//tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
+			///subo el alto de la fila
+			tablaClasificacion.setRowHeight(30);
+			//modifico el ancho de la columna 0
+			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
+			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
+			añadirFilas();
 		}
-		return panel_2;
+		return tablaClasificacion;
+	}
+	private JLabel getLblNombreCategoria() {
+		if (lblNombreCategoria == null) {
+			lblNombreCategoria = new JLabel("Nombre Categoria");
+		}
+		return lblNombreCategoria;
+	}
+	private JLabel getLblNombreCarrera() {
+		if (lblNombreCarrera == null) {
+			lblNombreCarrera = new JLabel("Nombre Carrera");
+		}
+		return lblNombreCarrera;
 	}
 }
