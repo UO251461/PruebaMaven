@@ -1069,6 +1069,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempoFinal() {
 		if (textTiempoFinal == null) {
 			textTiempoFinal = new JTextField();
+			textTiempoFinal.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempoFinal.getText()) && !textTiempoFinal.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempoFinal.setBounds(102, 26, 130, 24);
 			textTiempoFinal.setColumns(10);
 		}
@@ -1084,6 +1091,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempo1() {
 		if (textTiempo1 == null) {
 			textTiempo1 = new JTextField();
+			textTiempo1.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempo1.getText()) && !textTiempo1.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempo1.setBounds(383, 22, 130, 24);
 			textTiempo1.setColumns(10);
 		}
@@ -1099,6 +1113,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempo2() {
 		if (textTiempo2 == null) {
 			textTiempo2 = new JTextField();
+			textTiempo2.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempo2.getText()) && !textTiempo2.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempo2.setBounds(102, 61, 130, 20);
 			textTiempo2.setColumns(10);
 		}
@@ -1114,6 +1135,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempo3() {
 		if (textTiempo3 == null) {
 			textTiempo3 = new JTextField();
+			textTiempo3.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempo3.getText()) && !textTiempo3.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempo3.setColumns(10);
 			textTiempo3.setBounds(383, 59, 130, 24);
 		}
@@ -1129,6 +1157,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempo4() {
 		if (textTiempo4 == null) {
 			textTiempo4 = new JTextField();
+			textTiempo4.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempo4.getText()) && !textTiempo4.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempo4.setBounds(102, 92, 130, 24);
 			textTiempo4.setColumns(10);
 		}
@@ -1144,6 +1179,13 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField getTextTiempo5() {
 		if (textTiempo5 == null) {
 			textTiempo5 = new JTextField();
+			textTiempo5.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if(!Herramientas.esNumericoYNoVacio(textTiempo5.getText()) && !textTiempo5.getText().isEmpty())
+						JOptionPane.showMessageDialog(null, "Compruebe que ha introducido un numero en este campo");
+				}
+			});
 			textTiempo5.setColumns(10);
 			textTiempo5.setBounds(383, 98, 130, 20);
 		}
