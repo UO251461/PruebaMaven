@@ -1,33 +1,30 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import database.Base;
-import logica.Inscripcion;
-import logica.ModeloNoEditable;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.JDialog;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.border.EmptyBorder;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.SwingConstants;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+import com.csvreader.CsvWriter;
+
+import database.Base;
+import logica.Carrera;
+import logica.Categoria;
+import logica.Inscripcion;
+import logica.ModeloNoEditable;
 
 public class VentanaClasificacion extends JDialog {
 
@@ -35,209 +32,222 @@ public class VentanaClasificacion extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ModeloNoEditable modeloTabla;
 	private JPanel contentPane;
-	private JPanel panel;
-	private JScrollPane scrollPane;
-	private JTable tablaClasificacion;
-	private JLabel lbCategoria;
-	private JRadioButton rbAbsoluto;
-	private JRadioButton rbMasculino;
-	private JRadioButton rbFemenino;
 	private Base base;
-	private String competicion;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JPanel panel_1;
-	private JComboBox<String> comboBox;
-	private JPanel panel_2;
-	private String[] categorias={"Generales","Menor de edad","Senior","Veterano A","Veterano B"};
+	private Carrera carrera;
+	private JScrollPane scrollPane;
+	private JPanel panelCentral;
+	private JLabel lblNombreCarrera;
+	private JButton btnGenerarFichero;
+	private ArrayList<String> categorias;
+	private int sexo;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaClasificacion frame = new VentanaClasificacion("6");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	// /**
+	// * Launch the application.
+	// */
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// VentanaClasificacion frame = new VentanaClasificacion("6");
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaClasificacion(String competicion) {
+	public VentanaClasificacion(Carrera carrera, ArrayList<String> categorias, int sexo) {
 		setTitle("Clasificacion");
-		base=new Base();
+		base = new Base();
 		base.inicializar();
-		this.competicion=competicion;
-		setBounds(100, 100, 691, 448);
+		this.carrera = carrera;
+		this.categorias = categorias;
+		this.sexo = sexo;
+		setBounds(100, 100, 1042, 658);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(getPanel(), BorderLayout.NORTH);
-		contentPane.add(getScrollPane(), BorderLayout.CENTER);
+		contentPane.add(getScrollPane_1(), BorderLayout.CENTER);
+		contentPane.add(getLblNombreCarrera(), BorderLayout.NORTH);
+		contentPane.add(getBtnGenerarFichero(), BorderLayout.SOUTH);
+		generarTablas();
 	}
 
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setLayout(new GridLayout(0, 2, 0, 0));
-			panel.add(getPanel_2());
-			panel.add(getPanel_1());
-		}
-		return panel;
-	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setViewportView(getTablaClasificacion());
-		}
-		return scrollPane;
-	}
-	private JTable getTablaClasificacion() {
-		if (tablaClasificacion == null) {
-			tablaClasificacion = new JTable();
-			String[] nombreColumnas = {"Posicion","DNI","Dorsal","Tiempo","Sexo","Categoria"};
-			modeloTabla = new ModeloNoEditable(nombreColumnas,0); //al pasarle bnombre de columnas creara el numero necesario... filas 0 ya que
-			//las crearemos en tiempo de ejecucion
-			tablaClasificacion.setModel(modeloTabla);
-			//Aplica el renderer que marca la fila seleccionada en rojo y negrita
-			//tablaInscripciones.setDefaultRenderer(Object.class, new RendererSubstance());
-			///subo el alto de la fila
-			tablaClasificacion.setRowHeight(30);
-			//modifico el ancho de la columna 0
-			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
-			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			tablaClasificacion.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					//programar el doble click
-					if(arg0.getClickCount()==2){
-						//si se hace doble click, que muestre la clasificacion de esa carrera
-					}
-				}
-			});
-			añadirFilas(); //aqui o antes de pasarle el modelo
-		}
-		return tablaClasificacion;
-	}
-	private JLabel getLbCategoria() {
-		if (lbCategoria == null) {
-			lbCategoria = new JLabel("Categorias:");
-			lbCategoria.setHorizontalAlignment(SwingConstants.RIGHT);
-		}
-		return lbCategoria;
-	}
-	private JRadioButton getRbAbsoluto() {
-		if (rbAbsoluto == null) {
-			rbAbsoluto = new JRadioButton("Absoluto");
-			rbAbsoluto.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbAbsoluto);
-			rbAbsoluto.setSelected(true);
-		}
-		return rbAbsoluto;
-	}
-	private JRadioButton getRbMasculino() {
-		if (rbMasculino == null) {
-			rbMasculino = new JRadioButton("Masculino");
-			rbMasculino.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbMasculino);
-		}
-		return rbMasculino;
-	}
-	private JRadioButton getRbFemenino() {
-		if (rbFemenino == null) {
-			rbFemenino = new JRadioButton("Femenino");
-			rbFemenino.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					actualizarTabla();
-				}
-			});
-			buttonGroup.add(rbFemenino);
-		}
-		return rbFemenino;
-	}
-	
-	public void añadirFilas(){
+	public void añadirFilas(String categoria, ModeloNoEditable modeloTabla) {
 		ArrayList<Inscripcion> datos;
 		Object[] nuevaFila = new Object[6];
-		if(rbAbsoluto.isSelected())
-			datos = base.getBaseInscripciones().generarClasificaciones(0, competicion);
-		else if(rbMasculino.isSelected())
-			datos = base.getBaseInscripciones().generarClasificaciones(1, competicion);
-		else
-			datos = base.getBaseInscripciones().generarClasificaciones(2, competicion);
-		int pos=1;
-		for(Inscripcion i:datos){
-			if(comboBox.getSelectedIndex()==0 || i.getCategoria().equals(categorias[comboBox.getSelectedIndex()])){
-			nuevaFila[0]=pos++;
-			nuevaFila[1]= i.getCorredor().getDni();
-			nuevaFila[2]= i.getDorsal();
-			if(i.getTiempo()==0)
-				nuevaFila[3]="---";
-			else
-				nuevaFila[3]=i.getTiempo();
-			nuevaFila[4]=i.getCorredor().getSexo();
-			nuevaFila[5]=i.getCategoria();
-			modeloTabla.addRow(nuevaFila);
+		datos = base.getBaseInscripciones().generarClasificaciones(sexo, carrera.getIdcarrera(), categoria);
+		int pos = 1;
+		for (Inscripcion i : datos) {
+			if (true) {
+				nuevaFila[0] = pos++;
+				nuevaFila[1] = i.getCorredor().getDni();
+				nuevaFila[2] = i.getDorsal();
+				if (i.getTiempo() == 0)
+					nuevaFila[3] = "---";
+				else
+					nuevaFila[3] = i.getTiempo();
+				nuevaFila[4] = i.getCorredor().getSexo();
+				nuevaFila[5] = i.getCategoria();
+				modeloTabla.addRow(nuevaFila);
 			}
 		}
 	}
-	
-	
-	private  void actualizarTabla(){
-		//vacio el modelo de la tabla
-		modeloTabla.getDataVector().clear();
-		//lo vuelvo a rellenar
-		añadirFilas();
-		//necesario para repintar la tabla(especialmente cuando se queda vacia)
-		modeloTabla.fireTableDataChanged();
-	}
-	private JPanel getPanel_1() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.add(getRbAbsoluto());
-			panel_1.add(getRbMasculino());
-			panel_1.add(getRbFemenino());
+
+	private JScrollPane getScrollPane_1() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setViewportView(getPanel_3());
 		}
-		return panel_1;
+		return scrollPane;
 	}
-	private JComboBox<String> getComboBox() {
-		if (comboBox == null) {
-			comboBox = new JComboBox<String>();
-			comboBox.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent arg0) {
-					actualizarTabla();
+
+	private JPanel getPanel_3() {
+		if (panelCentral == null) {
+			panelCentral = new JPanel();
+			panelCentral.setLayout(new GridLayout(0, 1, 0, 0));
+		}
+		return panelCentral;
+	}
+
+	private JLabel getLblNombreCarrera() {
+		if (lblNombreCarrera == null) {
+			lblNombreCarrera = new JLabel(carrera.getNombre());
+		}
+		return lblNombreCarrera;
+	}
+
+	private JButton getBtnGenerarFichero() {
+		if (btnGenerarFichero == null) {
+			btnGenerarFichero = new JButton("Generar Fichero");
+			btnGenerarFichero.setEnabled(true);
+			btnGenerarFichero.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					String nombre = JOptionPane.showInputDialog("Introduzca nombre del fichero a generar");
+					if (nombre == null || nombre.isEmpty()) {
+						JOptionPane.showConfirmDialog(null, "Datos Incorrectos");
+					} else {
+						generarCSV(nombre);
+						btnGenerarFichero.setEnabled(false);
+					}
 				}
-			});		
-			
-			comboBox.setModel(new DefaultComboBoxModel<String>(categorias));
-			comboBox.setSelectedIndex(0);
+			});
 		}
-		return comboBox;
+		return btnGenerarFichero;
 	}
-	private JPanel getPanel_2() {
-		if (panel_2 == null) {
-			panel_2 = new JPanel();
-			panel_2.setLayout(new GridLayout(0, 2, 0, 0));
-			panel_2.add(getLbCategoria());
-			panel_2.add(getComboBox());
+
+	private void generarTablas() {
+		panelCentral.removeAll();
+		if (categorias.contains("Todos")) {
+			categorias = new ArrayList<String>();
+			categorias.add("Generales");
+			ArrayList<Categoria> cat = carrera.getCategorias();
+			for (Categoria c : cat)
+				if (!categorias.contains(c.getCategoria()))
+					categorias.add(c.getCategoria());
 		}
-		return panel_2;
+		for (String categoria : categorias) {
+			panelCentral.add(crearPanelTabla(categoria));
+		}
+	}
+
+	private JPanel crearPanelTabla(String categoria) {
+		JPanel pnTabla = new JPanel();
+		pnTabla.setLayout(new BorderLayout(0, 0));
+		pnTabla.add(crearPanelTitulo(categoria), BorderLayout.NORTH);
+		pnTabla.add(crearScroll(categoria), BorderLayout.CENTER);
+		return pnTabla;
+	}
+
+	private JScrollPane crearScroll(String categoria) {
+		JScrollPane scroll = new JScrollPane();
+		scroll.setViewportView(crearTabla(categoria));
+		return scroll;
+	}
+
+	private JTable crearTabla(String categoria) {
+		JTable tablaClasificacion;
+		ModeloNoEditable modeloTabla;
+		if (categoria.equals("Generales")) {
+			tablaClasificacion = new JTable();
+			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo", "Categoria" };
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
+			// al pasarle bnombre de columnas creara el numero necesario...
+			// filas 0 ya que
+			// las crearemos en tiempo de ejecucion
+			tablaClasificacion.setModel(modeloTabla);
+			// Aplica el renderer que marca la fila seleccionada en rojo y
+			// negrita
+			// tablaInscripciones.setDefaultRenderer(Object.class, new
+			// RendererSubstance());
+			/// subo el alto de la fila
+			tablaClasificacion.setRowHeight(30);
+			// modifico el ancho de la columna 0
+			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
+			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
+			añadirFilas(categoria, modeloTabla);
+		} else {
+			tablaClasificacion = new JTable();
+			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo" };
+			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
+			// al pasarle bnombre de columnas creara el numero necesario...
+			// filas 0 ya que
+			// las crearemos en tiempo de ejecucion
+			tablaClasificacion.setModel(modeloTabla);
+			// Aplica el renderer que marca la fila seleccionada en rojo y
+			// negrita
+			// tablaInscripciones.setDefaultRenderer(Object.class, new
+			// RendererSubstance());
+			/// subo el alto de la fila
+			tablaClasificacion.setRowHeight(30);
+			// modifico el ancho de la columna 0
+			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
+			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
+			añadirFilas(categoria, modeloTabla);
+		}
+		return tablaClasificacion;
+	}
+
+	private JPanel crearPanelTitulo(String categoria) {
+		JPanel pnNombre = new JPanel();
+		pnNombre.setLayout(new GridLayout(0, 1, 0, 0));
+		pnNombre.add(new JLabel(categoria));
+		return pnNombre;
+	}
+
+	private void generarCSV(String nombre) {
+		try {
+
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(nombre, true), ';');
+
+			csvOutput.write("Clasificacon");
+			csvOutput.write(carrera.getNombre());
+			csvOutput.endRecord();
+
+			Component[] paneles = panelCentral.getComponents();
+			for (Component panel : paneles) {
+				csvOutput.write(((JLabel) ((JPanel) ((JPanel) panel).getComponent(0)).getComponent(0)).getText());
+				csvOutput.endRecord();				JTable tabla = (JTable) ((JScrollPane) ((JPanel) panel).getComponent(1)).getViewport().getView();
+				for (int i = 0; i < tabla.getModel().getColumnCount(); i++)
+					csvOutput.write(tabla.getModel().getColumnName(i));
+				csvOutput.endRecord();
+				for (int i = 0; i < tabla.getModel().getRowCount(); i++) {
+					for (int j = 0; j < tabla.getModel().getColumnCount(); j++) {
+						csvOutput.write((String) tabla.getModel().getValueAt(i, j));
+					}
+					csvOutput.endRecord();
+				}
+			}
+			csvOutput.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
