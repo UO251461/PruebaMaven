@@ -123,7 +123,7 @@ public class BaseInscripciones {
 			rs = ps.executeQuery();
 
 		} catch (SQLException sql) {
-
+			sql.printStackTrace();
 		} finally {
 			inscrito = inscribirCompeticion(inscripcion);
 			cerrarConexion();
@@ -207,14 +207,15 @@ public class BaseInscripciones {
 			// CONSULTA ADAPTADA PARA A�ADIRLE LA CATEGORIA
 			con = getConnection();
 			ps = con.prepareStatement(
-					"INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA) VALUES(?,?,?,'PRE-INSCRITO',?,?)");
+					"INSERT INTO INSCRIPCION(IDCOMPETICION,IDORGANIZADOR,DNI,ESTADO,FECHA,CATEGORIA,PRECIO) VALUES(?,?,?,'PRE-INSCRITO',?,?,?)");
 			Date fecha = new Date();
 			ps.setString(1, inscripcion.getCarrera().getIdcarrera());
 			ps.setString(2, inscripcion.getCarrera().getOrganizador().getIdorganizador());
 			ps.setString(3, inscripcion.getCorredor().getDni());
 			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
 			ps.setString(5, inscripcion.getCategoria());
-
+			float precio = getPrecioCarrera(inscripcion.getCarrera().getIdcarrera(), inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			ps.setFloat(6, precio);
 			inscripcion.setFecha(fecha);
 
 			rs = ps.executeQuery();
@@ -228,7 +229,7 @@ public class BaseInscripciones {
 			// inscripcion.setPrecio(inscripcion.getPrecio());
 
 		} catch (SQLException se) {
-
+			se.printStackTrace();
 		}
 		cerrarConexion();
 		return inscrito;

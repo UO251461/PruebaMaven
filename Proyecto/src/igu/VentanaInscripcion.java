@@ -103,12 +103,12 @@ public class VentanaInscripcion extends JDialog {
 				@Override
 				public void focusLost(FocusEvent arg0) {
 					Corredor corr= null;
-						if(campoDniNoVacio()){
-							if(comprobarDniValido()){
-								ponerLetraMayuscula();
-								corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
-							}
+					if(campoDniNoVacio()){
+						if(comprobarDniValido()){
+							ponerLetraMayuscula();
+							corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
 						}
+					}
 					if(corr!=null){
 						completarCampos(corr);
 					}
@@ -142,7 +142,6 @@ public class VentanaInscripcion extends JDialog {
 		else
 			rdbtnMujer.setSelected(true);
 	
-		;
 		fecha.setDate(corr.getFechaNacimiento());
 		
 		desactivarCampos();
