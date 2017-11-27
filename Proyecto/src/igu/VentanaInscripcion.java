@@ -209,7 +209,7 @@ public class VentanaInscripcion extends JDialog {
 			btnPreinscribir.setMnemonic('r');
 			btnPreinscribir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(campoDniNoVacio() && campoNombreNoVacio() && validarFecha()){
+					if(campoDniNoVacio() && campoNombreNoVacio()&& campoApellidosNoVacio() && validarFecha()){
 						if(comprobarDniValido()){
 							try{			
 								ponerLetraMayuscula();
@@ -435,6 +435,11 @@ public class VentanaInscripcion extends JDialog {
 
 	private boolean campoNombreNoVacio() {
 		if(getTxtNombre().getText().equals(""))
+			return false;
+		return true;
+	}
+	private boolean campoApellidosNoVacio() {
+		if(getTxtApellidos().getText().equals(""))
 			return false;
 		return true;
 	}

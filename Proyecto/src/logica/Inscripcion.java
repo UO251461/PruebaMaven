@@ -27,7 +27,8 @@ public class Inscripcion {
 			this.corredor = corredor;
 			this.fecha = new Date();
 			this.comentario="";
-			asignarCategoria(corredor.getFechaNacimiento(), carrera);
+			if(corredor!=null)
+				asignarCategoria(corredor.getFechaNacimiento(), carrera);
 		}
 
 		
@@ -137,16 +138,18 @@ public class Inscripcion {
 		}
 
 		@SuppressWarnings("deprecation")
-		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
-			int actual = new Date().getYear();			
-			int edad = actual - fechaNacimiento.getYear();
-			for(int i=0;i<carrera.getCategorias().size();i++){			
-				if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
-					this.categoria = carrera.getCategorias().get(i).getCategoria();
+		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){		
+			if(fechaNacimiento!=null && carrera!= null){
+				int actual = new Date().getYear();			
+				int edad = actual - fechaNacimiento.getYear();
+				for(int i=0;i<carrera.getCategorias().size();i++){			
+					if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
+						this.categoria = carrera.getCategorias().get(i).getCategoria();
+					}
 				}
+				if(this.categoria == null)
+					this.categoria = "Sin categoria";
 			}
-			if(this.categoria == null)
-				this.categoria = "Sin categoria";
 		}
 		
 		@Override

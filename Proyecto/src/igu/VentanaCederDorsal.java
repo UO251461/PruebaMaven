@@ -10,20 +10,27 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import com.toedter.calendar.JDateChooser;
 
+import logica.Carrera;
 import logica.Corredor;
+import logica.Inscripcion;
 
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaCederDorsal extends JDialog {
 
@@ -34,10 +41,6 @@ public class VentanaCederDorsal extends JDialog {
 	private JPanel panel1;
 	private JLabel lnDni;
 	private JTextField txtDni;
-	private JLabel lbNombre;
-	private JTextField txtNombre;
-	private JLabel lbApellidos;
-	private JTextField txtApellidos;
 	private JLabel lbEstado;
 	private JLabel lb_Dorsal;
 	private JTextField txtEstado;
@@ -58,11 +61,13 @@ public class VentanaCederDorsal extends JDialog {
 	private JLabel lbCorredor2;
 	private JLabel lblNombreLargoDe;
 	private JLabel label_2;
-	
+	protected String sexoSelected = "HOMBRE";
 	
 	
 	private VentanaCarreras vc;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JButton btnCancelar;
+	private JButton btnCeder;
 
 	/**
 	 * Launch the application.
@@ -94,6 +99,8 @@ public class VentanaCederDorsal extends JDialog {
 		getContentPane().add(getLbCorredor2());
 		getContentPane().add(getLblNombreLargoDe());
 		getContentPane().add(getLabel_2());
+		getContentPane().add(getBtnCancelar());
+		getContentPane().add(getBtnCeder());
 	}
 	private JPanel getPanel1() {
 		if (panel1 == null) {
@@ -103,10 +110,6 @@ public class VentanaCederDorsal extends JDialog {
 			panel1.setBounds(53, 130, 306, 265);
 			panel1.add(getLnDni());
 			panel1.add(getTxtDni());
-			panel1.add(getLbNombre());
-			panel1.add(getTxtNombre());
-			panel1.add(getLbApellidos());
-			panel1.add(getTxtApellidos());
 			panel1.add(getLbEstado());
 			panel1.add(getLb_Dorsal());
 			panel1.add(getTxtEstado());
@@ -118,41 +121,54 @@ public class VentanaCederDorsal extends JDialog {
 		if (lnDni == null) {
 			lnDni = new JLabel("DNI :");
 			lnDni.setDisplayedMnemonic('d');
-			lnDni.setBounds(40, 25, 72, 23);
+			lnDni.setBounds(40, 49, 72, 23);
 		}
 		return lnDni;
 	}
-	private JTextField getTxtDni() {
+	public JTextField getTxtDni() {
 		if (txtDni == null) {
 			txtDni = new JTextField();
 			txtDni.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent arg0) {
-					Corredor corr= null;
+					Inscripcion inscrip= null;
 					if(campoDniNoVacio(txtDni)){
 						if(comprobarDniValido(txtDni)){
 							ponerLetraMayuscula(txtDni);
-							corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+							
+							Corredor corredor = new Corredor(txtDni.getText(), null, null, null, null);
+							Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
+							Inscripcion inscripcion = new Inscripcion(carreraSel, corredor);
+							inscrip=vc.getBase().getBaseInscripciones().estaInscrito(inscripcion);
 						}
 					}
 					
 					
-					if(corr!=null){
-						completarCampos(corr);
+					if(inscrip!=null){
+						completarCampos(inscrip);
+					}
+					else{
+						borrarCampos();
 					}
 					
 				}
+
+				
 			});
 			txtDni.setColumns(10);
-			txtDni.setBounds(122, 25, 148, 23);
+			txtDni.setBounds(122, 49, 148, 23);
 		}
 		return txtDni;
 	}
-	
-private void completarCampos(Corredor corr){
+	private void borrarCampos() {
+		txtDorsal.setText("");
+		txtEstado.setText("");
 		
-		txtNombre.setText(corr.getNombre());
-		txtApellidos.setText(corr.getApellido());
+	}
+	private void completarCampos(Inscripcion inscripcion){
+		
+		txtDorsal.setText(inscripcion.getDorsal()+"");
+		txtEstado.setText(inscripcion.getEstado());
 		
 	}
 	private void ponerLetraMayuscula(JTextField txtDni) {
@@ -191,54 +207,18 @@ private void completarCampos(Corredor corr){
 		
 		return true;
 	}
-	private JLabel getLbNombre() {
-		if (lbNombre == null) {
-			lbNombre = new JLabel("Nombre :");
-			lbNombre.setDisplayedMnemonic('n');
-			lbNombre.setBounds(40, 73, 72, 23);
-		}
-		return lbNombre;
-	}
-	private JTextField getTxtNombre() {
-		if (txtNombre == null) {
-			txtNombre = new JTextField();
-			txtNombre.setEditable(false);
-			txtNombre.setText("");
-			txtNombre.setColumns(10);
-			txtNombre.setBounds(122, 73, 148, 23);
-		}
-		return txtNombre;
-	}
-	private JLabel getLbApellidos() {
-		if (lbApellidos == null) {
-			lbApellidos = new JLabel("Apellidos");
-			lbApellidos.setDisplayedMnemonic('a');
-			lbApellidos.setBounds(40, 121, 72, 23);
-		}
-		return lbApellidos;
-	}
-	private JTextField getTxtApellidos() {
-		if (txtApellidos == null) {
-			txtApellidos = new JTextField();
-			txtApellidos.setEditable(false);
-			txtApellidos.setText("");
-			txtApellidos.setColumns(10);
-			txtApellidos.setBounds(122, 121, 148, 23);
-		}
-		return txtApellidos;
-	}
 	private JLabel getLbEstado() {
 		if (lbEstado == null) {
 			lbEstado = new JLabel("Estado :");
-			lbEstado.setBounds(40, 217, 72, 23);
+			lbEstado.setBounds(40, 193, 72, 23);
 		}
 		return lbEstado;
 	}
-	private JLabel getLb_Dorsal() {
+	public JLabel getLb_Dorsal() {
 		if (lb_Dorsal == null) {
 			lb_Dorsal = new JLabel("Dorsal :");
 			lb_Dorsal.setDisplayedMnemonic('f');
-			lb_Dorsal.setBounds(40, 169, 72, 23);
+			lb_Dorsal.setBounds(40, 121, 72, 23);
 		}
 		return lb_Dorsal;
 	}
@@ -248,17 +228,17 @@ private void completarCampos(Corredor corr){
 			txtEstado.setText("");
 			txtEstado.setEditable(false);
 			txtEstado.setColumns(10);
-			txtEstado.setBounds(122, 169, 148, 23);
+			txtEstado.setBounds(122, 193, 148, 23);
 		}
 		return txtEstado;
 	}
-	private JTextField getTxtDorsal() {
+	public JTextField getTxtDorsal() {
 		if (txtDorsal == null) {
 			txtDorsal = new JTextField();
 			txtDorsal.setText("");
 			txtDorsal.setEditable(false);
 			txtDorsal.setColumns(10);
-			txtDorsal.setBounds(122, 217, 148, 23);
+			txtDorsal.setBounds(122, 121, 148, 23);
 		}
 		return txtDorsal;
 	}
@@ -290,7 +270,7 @@ private void completarCampos(Corredor corr){
 		}
 		return lbDni2;
 	}
-	private JTextField getTxtDni2() {
+	public JTextField getTxtDni2() {
 		if (txtDni2 == null) {
 			txtDni2 = new JTextField();
 			txtDni2.addFocusListener(new FocusAdapter() {
@@ -358,7 +338,7 @@ private void completarCampos(Corredor corr){
 		}
 		return lbNombre2;
 	}
-	private JTextField getTxtNombre2() {
+	public JTextField getTxtNombre2() {
 		if (txtNombre2 == null) {
 			txtNombre2 = new JTextField();
 			txtNombre2.setText("");
@@ -375,7 +355,7 @@ private void completarCampos(Corredor corr){
 		}
 		return lbApellidos2;
 	}
-	private JTextField getTxtApellidos2() {
+	public JTextField getTxtApellidos2() {
 		if (txtApellidos2 == null) {
 			txtApellidos2 = new JTextField();
 			txtApellidos2.setText("");
@@ -397,6 +377,12 @@ private void completarCampos(Corredor corr){
 			fecha2 = new JDateChooser();
 			fecha2.setRequestFocusEnabled(false);
 			fecha2.setDateFormatString("dd/MM/yyyy");
+			SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+			try {
+				fecha2.setDate(sf.parse("01-01-1990"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 			fecha2.setBounds(151, 220, 119, 23);
 		}
 		return fecha2;
@@ -404,6 +390,11 @@ private void completarCampos(Corredor corr){
 	private JRadioButton getRdbtnHombre2() {
 		if (rdbtnHombre2 == null) {
 			rdbtnHombre2 = new JRadioButton("HOMBRE");
+			rdbtnHombre2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sexoSelected = "HOMBRE";
+				}
+			});
 			buttonGroup.add(rdbtnHombre2);
 			rdbtnHombre2.setSelected(true);
 			rdbtnHombre2.setMnemonic('h');
@@ -414,6 +405,11 @@ private void completarCampos(Corredor corr){
 	private JRadioButton getRdbtnMujer2() {
 		if (rdbtnMujer2 == null) {
 			rdbtnMujer2 = new JRadioButton("MUJER");
+			rdbtnMujer2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sexoSelected = "MUJER";
+				}
+			});
 			buttonGroup.add(rdbtnMujer2);
 			rdbtnMujer2.setMnemonic('m');
 			rdbtnMujer2.setBounds(208, 173, 84, 23);
@@ -445,17 +441,12 @@ private void completarCampos(Corredor corr){
 		}
 		return lbCorredor2;
 	}
-	private JLabel getLblNombreLargoDe() {
+	public JLabel getLblNombreLargoDe() {
 		if (lblNombreLargoDe == null) {
 			lblNombreLargoDe = new JLabel();
 			lblNombreLargoDe.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNombreLargoDe.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			lblNombreLargoDe.setBounds(95, 27, 708, 31);
-			System.out.println(vc);
-			System.out.println(vc.getBase());
-			System.out.println(vc.getBase().getBaseCarrera());
-			System.out.println(vc.getBase().getBaseCarrera().getCarreraSeleccionada());
-			System.out.println(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());
 			lblNombreLargoDe.setText(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());
 		}
 		return lblNombreLargoDe;
@@ -471,6 +462,114 @@ private void completarCampos(Corredor corr){
 		}
 		return label_2;
 	}
+	private JButton getBtnCancelar() {
+		if (btnCancelar == null) {
+			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
+			btnCancelar.setBounds(299, 423, 140, 41);
+		}
+		return btnCancelar;
+	}
+	private JButton getBtnCeder() {
+		if (btnCeder == null) {
+			btnCeder = new JButton("Ceder");
+			btnCeder.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(!esCamposVacios()){
+						if(correctoDni1()){
+							if(correctoDni2()){
+								if(txtEstado.getText().equals("INSCRITO")){
+									int resp = mensajeOpcion();
+									if(resp == 0)
+										ceder();									
+								}else errorNoInscrito();
+								
+							}else errorDni2();						
+						}else errorDni1();						
+					}
+					else errorVacio();
+				}
+
+				
+
+				
+
+				
+				
+			});
+			btnCeder.setBounds(510, 423, 140, 41);
+		}
+		return btnCeder;
+	}
+	private void ceder() {
+		
+		Corredor corredor = new Corredor(txtDni2.getText(), fecha2.getDate(), sexoSelected, txtNombre2.getText(), txtApellidos2.getText());
+		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
+		Inscripcion inscripcion = new Inscripcion(carreraSel, corredor);	
+		inscripcion.setDorsal(Integer.valueOf(txtDorsal.getText()));
+		if(inscripcion.getCategoria().equals("Sin categoria"))
+			JOptionPane.showMessageDialog(this, "El dorsal no puede ser cedido a un menor de edad.");
+		else{
+			vc.getBase().getBaseInscripciones().cederDorsal(txtDni.getText(), inscripcion );
+		
+			VentanaMensajeCederDorsal vcD = new VentanaMensajeCederDorsal(this);
+			vcD.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			vcD.setVisible(true);
+		}
+	}
+	
+	private boolean correctoDni1() {
+		Corredor corredor = new Corredor(txtDni.getText(), null, null, null, null);
+		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
+		Inscripcion inscripcion = new Inscripcion(carreraSel, corredor);	
+		if(vc.getBase().getBaseInscripciones().estaInscrito(inscripcion) != null)
+			return true;
+		return false;
+	}
+	private boolean correctoDni2() {
+		char[] dniArray = txtDni2.getText().toCharArray();
+		if(dniArray.length!=9)
+			return false;
+		
+		//comprobacion de numeros
+		for(int i=0 ; i<dniArray.length-1; i++)
+			if(dniArray[i] <48 || dniArray[i] >57)
+				return false;
+			
+		
+		//comprobacion de letra	
+		if((dniArray[8] <65 || dniArray[8] >90) && (dniArray[8] <97 || dniArray[8] >122))
+			return false;
+		return true;
+	}
+
+	
+	private boolean esCamposVacios() {
+		return (txtDni.getText().equals("") || txtDni2.getText().equals("") || txtNombre2.getText().equals("") ||txtApellidos2.getText().equals("") || fecha2.getDate()==null);
+	}
+
 	
 
+	private void errorNoInscrito() {
+		JOptionPane.showMessageDialog(this, "Únicamente pueden ceder sus dorsales los corredores cuyo estado sea INSCRITO.");
+	}
+
+	private void errorDni1() {
+		JOptionPane.showMessageDialog(this, "El primer corredor no está inscrito en esta carrera.");		
+	}
+	private void errorDni2() {
+		JOptionPane.showMessageDialog(this, "El DNI del segundo corredor no es válido.");	
+		
+	}
+	private void errorVacio() {
+		JOptionPane.showMessageDialog(this, "Es obligatorio rellenar correctamente todos los campos");
+	}
+	
+	private int mensajeOpcion() {
+		return JOptionPane.showConfirmDialog(this, "¿Esta seguro de ceder tu dorsal?", "Alerta!", JOptionPane.YES_NO_OPTION);
+	}
 }
