@@ -171,7 +171,9 @@ public class VentanaCarreras extends JDialog {
 					btnInscripcionesClub.setEnabled(true);
 					btnMostrarEstadoInscripciones.setEnabled(true);
 					btnGestionarExtractos.setEnabled(true);
-					btnAsginarDorsales.setEnabled(true);}
+					btnAsginarDorsales.setEnabled(true);
+					btnClasificacin.setEnabled(true);
+					}
 				}
 			});
 
