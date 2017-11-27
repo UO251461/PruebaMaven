@@ -23,11 +23,11 @@ public class CancelacionInscripcion {
 		float porcentaje = -1;
 		int precio_inscripcion = -1;
 		SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
-		Date hoy = new Date();
-		df.format(hoy);
+		Date fecha = new Date();
+		df.format(fecha);
 		try {
 			cantidad_abonada = base.getBaseInscripciones().cantidadInscripcion(inscripcion);
-			porcentaje = base.getBaseInscripciones().porcentajeCancelacion(inscripcion, hoy);
+			porcentaje = base.getBaseInscripciones().porcentajeCancelacion(inscripcion, fecha);
 			precio_inscripcion = base.getBaseInscripciones().precioInscripcion(inscripcion);
 			float precio = cantidad_abonada + porcentaje * precio_inscripcion;
 			base.getBaseInscripciones().cancelarInscripcion(inscripcion, precio);

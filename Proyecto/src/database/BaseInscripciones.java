@@ -666,9 +666,9 @@ public class BaseInscripciones {
 			
 			
 			ResultSet rst = pst.executeQuery();
-			if (rst.next()) {
-				cantidad = rs.getFloat("cantidad");
-			}
+			
+			while(rst.next())
+				cantidad = rst.getFloat("cantidad");
 
 			rst.close();
 			pst.close();
@@ -681,14 +681,15 @@ public class BaseInscripciones {
 		float porcentaje = -1;
 		
 		Connection con = getConnection();
+		
 		PreparedStatement pst = con.prepareStatement("select porcentaje from plazo_cancelacion pl where idcompeticion = ? and IDORGANIZADOR = ? and ? between fecha_inicio_can and fecha_final_can");
 		pst.setString(1, insc.getCarrera().getIdcarrera());
 		pst.setString(2, insc.getCarrera().getOrganizador().getIdorganizador());
-		pst.setDate(3, (java.sql.Date) date);
+		pst.setDate(3, new java.sql.Date(date.getTime()));
 		
 		ResultSet rst = pst.executeQuery();
 		if (rst.next()) {
-			porcentaje = rs.getFloat("porcentaje");
+			porcentaje = rst.getFloat("porcentaje");
 		}
 
 		rst.close();
@@ -709,7 +710,7 @@ public class BaseInscripciones {
 		
 		ResultSet rst = pst.executeQuery();
 		if (rst.next()) {
-			cantidad = rs.getInt("cantidad");
+			cantidad = rst.getInt("cantidad");
 		}
 
 		rst.close();
