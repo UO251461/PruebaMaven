@@ -16,11 +16,11 @@ public class Carrera {
 	private String idcarrera;
 	private ArrayList<Categoria> categorias = new ArrayList<Categoria>();
 	private String lugar;	
-	private ArrayList<Integer> tiemposControl;
+	private ArrayList<Integer> tiemposControl = new ArrayList<Integer>();
 	
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,ArrayList<Categoria> cat,ArrayList<Integer> tc) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,ArrayList<Categoria> cat,ArrayList<Integer> tControl) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -34,7 +34,7 @@ public class Carrera {
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
 		this.categorias = cat;
-		this.tiemposControl = tc;
+		this.tiemposControl = tControl;
 	}	
 	
 	public ArrayList<Categoria> getCategorias(){
@@ -139,6 +139,11 @@ public class Carrera {
 	public void setCategorias(ArrayList<Categoria> categorias) {
 		this.categorias = categorias;
 	}	
+	
+	public ArrayList<Integer> getTiemposControl() {
+		return tiemposControl;
+	}
+	
 	
 	public ArrayList<Integer> getTiemposControl() {
 		return tiemposControl;

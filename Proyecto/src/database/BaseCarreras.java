@@ -57,7 +57,6 @@ public class BaseCarreras {
 					+ " competicion.idorganizador = p.idorganizador and current_date between p.fecha_inicio and p.fecha_fin order by fechacompeticion";
 			String consultaCategoria = "select c.nombre,c.limite_inferior,c.limite_superior,c.sexo from categoria c where c.IDCOMPETICION = ? and c.IDORGANIZADOR = ?";
 			String consultaTiemposControl = "select tiempo_inicio,tiempo_final,tiempo1,tiempo2,tiempo3,tiempo4,tiempo5 from tiempos_control t where t.IDCOMPETICION = ? and t.IDORGANIZADOR = ?";
-			
 					
 			ps = con.prepareStatement(consultaCarrera);	
 			
@@ -77,13 +76,16 @@ public class BaseCarreras {
 				ps.setString(2, rs1.getString("idorganizador"));
 				ResultSet rs3 = ps.executeQuery();
 				while(rs3.next()){
-					tControl.add(rs2.getInt("tiempo_inicio"));
-					tControl.add(rs2.getInt("tiempo_final"));
-					tControl.add(rs2.getInt("tiempo1"));
-					tControl.add(rs2.getInt("tiempo2"));
-					tControl.add(rs2.getInt("tiempo3"));
-					tControl.add(rs2.getInt("tiempo4"));
-					tControl.add(rs2.getInt("tiempo5"));
+					tControl.add(rs3.getInt("tiempo_inicio"));
+					tControl.add(rs3.getInt("tiempo_final"));
+					//Se meten los 5 tiempos de control al array
+					for(int i=1;i<6;i++){
+						int n1 = rs3.getInt("tiempo" + i);
+						if(n1 !=-1)
+							tControl.add(n1);
+					}
+				
+						
 				}
 				carreras.add(new Carrera(rs1.getString("nombre_competicion"), rs1.getDouble("precio"), rs1.getDate("fecha_fin"), rs1.getDate("fecha_inicio"), rs1.getDate("fechacompeticion"),
 						rs1.getDouble("distancia"), rs1.getString("tipo"), new Organizador(rs1.getString("nombreorganizador"),rs1.getString("idorganizador")),
@@ -114,7 +116,8 @@ public class BaseCarreras {
 			String consultaCategorias = "INSERT INTO CATEGORIA (NOMBRE,LIMITE_INFERIOR,LIMITE_SUPERIOR,IDORGANIZADOR,IDCOMPETICION,SEXO) "
 					+ "VALUES(?,?,?,1,?,?)";
 			String consultaIdCarerra = "SELECT SECUENCIAIDCOMPETICION.CURRVAL as idcarrera FROM DUAL";
-			String consultaTControl = "INSERT INTO TIEMPOS_CONTROL (IDORGANIZADOR,IDCOMPETICION,TIEMPO_INICIO,TIEMPO_FINAL,TIEMPO1,TIEMPO2,TIEMPO3,TIEMPO4,TIEMPO5) "
+			
+			String consultaTiemposControl = "INSERT INTO TIEMPOS_CONTROL (IDORGANIZADOR,IDCOMPETICION,TIEMPO_INICIO,TIEMPO1,TIEMPO2,TIEMPO3,TIEMPO4,TIEMPO5,TIEMPO_FINAL) "
 					+ "VALUES(1,?,?,?,?,?,?,?,?)";
 
 			ps = con.prepareStatement(consultaCarrera);
@@ -156,8 +159,7 @@ public class BaseCarreras {
 				ps.setString(5, categorias.get(i).getSexo());
 				ps.executeQuery();
 			}
-			
-			ps = con.prepareStatement(consultaTControl);
+			ps = con.prepareStatement(consultaTiemposControl);
 			ps.setString(1, idCarrera);
 			for(int i=0;i<tControl.size();i++){
 				ps.setInt(i+2, tControl.get(i));
