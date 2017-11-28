@@ -87,8 +87,7 @@ public class VentanaClasificacion extends JDialog {
 		for (Inscripcion i : datos) {
 			if (true) {
 				nuevaFila[0] = pos++;
-				nuevaFila[1] = i.getCorredor().getDni();
-				nuevaFila[2] = i.getDorsal();
+				nuevaFila[1] = i.getDorsal();
 				if (i.getTiempo() == 0)
 					nuevaFila[3] = "---";
 				else
@@ -176,16 +175,17 @@ public class VentanaClasificacion extends JDialog {
 		ModeloNoEditable modeloTabla;
 		if (categoria.equals("Generales")) {
 			tablaClasificacion = new JTable();
-			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo", "Categoria" };
+			int n= base.getBaseInscripciones().getNumeroTiempos(carrera);
+			String[] nombreColumnas = new String[n+6];
+			nombreColumnas[0]="Posicion";nombreColumnas[1]="Dorsal";
+			for(int i=0;i<n;i++)
+				nombreColumnas[2+i]="Tiempo "+i;
+			nombreColumnas[n+2]="Tiempo Final";nombreColumnas[n+3]="Diferencia";nombreColumnas[n+4]="Sexo";nombreColumnas[n+5]="Categoria";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
 			// las crearemos en tiempo de ejecucion
 			tablaClasificacion.setModel(modeloTabla);
-			// Aplica el renderer que marca la fila seleccionada en rojo y
-			// negrita
-			// tablaInscripciones.setDefaultRenderer(Object.class, new
-			// RendererSubstance());
 			/// subo el alto de la fila
 			tablaClasificacion.setRowHeight(30);
 			// modifico el ancho de la columna 0
@@ -194,16 +194,17 @@ public class VentanaClasificacion extends JDialog {
 			añadirFilas(categoria, modeloTabla);
 		} else {
 			tablaClasificacion = new JTable();
-			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo" };
+			int n= base.getBaseInscripciones().getNumeroTiempos(carrera);
+			String[] nombreColumnas = new String[n+6];
+			nombreColumnas[0]="Posicion";nombreColumnas[1]="Dorsal";
+			for(int i=0;i<n;i++)
+				nombreColumnas[2+i]="Tiempo "+i;
+			nombreColumnas[n+2]="Tiempo Final";nombreColumnas[n+3]="Diferencia";nombreColumnas[n+4]="Sexo";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
 			// las crearemos en tiempo de ejecucion
 			tablaClasificacion.setModel(modeloTabla);
-			// Aplica el renderer que marca la fila seleccionada en rojo y
-			// negrita
-			// tablaInscripciones.setDefaultRenderer(Object.class, new
-			// RendererSubstance());
 			/// subo el alto de la fila
 			tablaClasificacion.setRowHeight(30);
 			// modifico el ancho de la columna 0

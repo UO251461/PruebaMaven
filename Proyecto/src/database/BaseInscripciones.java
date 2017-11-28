@@ -841,6 +841,34 @@ public class BaseInscripciones {
 		}
 		return inscrito;
 	}
+
+	public int getNumeroTiempos(Carrera carrera) {
+		int n=0;
+		try {
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement("select t_1, t_2, t_3, t_4, t_5"
+					+ " from REGISTRO_TIEMPO_CORREDOR "
+					+ "where IDCOMPETICION=? and IDORGANIZADOR=? order by T_FIN");
+			ps.setString(1, carrera.getIdcarrera());
+			ps.setString(2, carrera.getOrganizador().getIdorganizador());
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()){
+				for(int i=0;i<rs.getFetchSize();i++){
+					if(rs.getDouble(i)!=-1){
+						n++;
+					}
+				}
+			}
+			rs.close();
+			ps.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
 }
 
 
