@@ -23,7 +23,8 @@ public class Corredor {
 		this.dni = dni;
 		this.fechaNacimiento = fecha;
 		Date fechaHoy = new Date();
-		this.edad = fechaHoy.getYear() - fecha.getYear();
+		if(fecha!=null)
+			this.edad = fechaHoy.getYear() - fecha.getYear();
 		this.sexo = sexo;
 		this.nombre = nombre;
 		this.apellido = apellido;
