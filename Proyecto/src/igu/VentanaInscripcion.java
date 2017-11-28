@@ -372,6 +372,7 @@ public class VentanaInscripcion extends JDialog {
 		String date = (new SimpleDateFormat("dd/MM/yyyy").format(fecha.getDate())); //Conversion de la fecha de nacimiento
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 		
+		
 		Corredor corredor = new Corredor(txtDni.getText(), fecha.getDate(), sexoSelected, txtNombre.getText(), txtApellidos.getText());
 		
 		inscripcion = new Inscripcion(carreraSel, corredor); 
@@ -383,9 +384,9 @@ public class VentanaInscripcion extends JDialog {
 			
 			
 			
-			Corredor corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+			boolean estainscrito=vc.getBase().getBaseInscripciones().estaInscrito(inscripcion);
 			// SI EL CORREDOR ESTA REGISTRADO corr SERÁ UN OBJETO, en caso contrario null
-			if(corr == null){
+			if(!estainscrito){
 				getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
 				JOptionPane.showMessageDialog(this, "¡Felicidades! Está Pre-inscrito");
 			}
