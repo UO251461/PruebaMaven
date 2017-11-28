@@ -3,28 +3,49 @@ package logica;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JOptionPane;
 
+import database.Base;
+import igu.Ventana_Inscripcion_Club;
+import oracle.sql.DATE;
+
 public class InscripcionesClub {
 
-	ArrayList<Inscripcion> inscripciones;
-
-	public InscripcionesClub(File fichero) {
-		inscripciones = leerFichero(fichero);
+	private ArrayList<Inscripcion> inscripciones;
+	private Ventana_Inscripcion_Club vi;
+	
+	public InscripcionesClub(Ventana_Inscripcion_Club vi) {
+		inscripciones = new ArrayList<Inscripcion>();
+		this.vi = vi;
+		
 	}
 
-	private ArrayList<Inscripcion> leerFichero(File fichero) {
+	public void leerFichero(File fichero) {
 		BufferedReader br = null;
-		ArrayList<Inscripcion> ins = new ArrayList<Inscripcion>();
+		Inscripcion inscripcion;
 		try {
 
 			br = new BufferedReader(new FileReader(fichero));
 			String line = br.readLine();
 			while (line != null) {
 				String[] fields = line.split(",");
-				//ins.add(new Inscripcion(fields[0],field[1],field[2],field[3],"PRE-INSCRITO")) //creo una inscripcion y la agrego
+				Carrera carrera = vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada();
+				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+				Date fecha = formato.parse(fields[4]);
+
+				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3].toUpperCase(),fields[0],fields[1]),null,"");
+
+				Date fechaHoy = new Date();
+				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3],fields[0],fields[1]),fechaHoy,"");
+
+				inscripcion.asignarCategoria(fecha, carrera);
+				inscripciones.add(inscripcion);
 				line = br.readLine();
 			}
 
@@ -33,7 +54,7 @@ public class InscripcionesClub {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al cargar el fichero");
 		}
 		
-		return ins;
+		
 
 	}
 	

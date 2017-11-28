@@ -1,5 +1,7 @@
 package logica;
 
+import java.util.Date;
+
 public class Corredor {
 
 	private String dni;
@@ -7,6 +9,7 @@ public class Corredor {
 	private String sexo;
 	private String nombre;
 	private String apellido;
+	private Date fechaNacimiento;
 
 	public Corredor(String dni, int edad, String sexo, String nombre, String apellido) {
 		this.dni = dni;
@@ -15,9 +18,24 @@ public class Corredor {
 		this.nombre = nombre;
 		this.apellido = apellido;
 	}
+	
+	public Corredor(String dni, Date fecha, String sexo, String nombre, String apellido) {
+		this.dni = dni;
+		this.fechaNacimiento = fecha;
+		Date fechaHoy = new Date();
+		if(fecha!=null)
+			this.edad = fechaHoy.getYear() - fecha.getYear();
+		this.sexo = sexo;
+		this.nombre = nombre;
+		this.apellido = apellido;
+	}
 
 	public String getDni() {
 		return dni;
+	}
+	
+	public Date getFechaNacimiento() {
+		return this.fechaNacimiento;
 	}
 
 	public void setDni(String dni) {

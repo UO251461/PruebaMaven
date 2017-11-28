@@ -54,12 +54,8 @@ public class VentanaMetodoPago extends JDialog {
 	private VentanaInscripcion vi;
 	private Inscripcion inscripcion;
 	private Base base;
-	private JLabel lblApellido1;
-	private JLabel lblApellido2;
 	private JLabel lblFechaCaducidad;
 	private JLabel lblCSV;
-	private JTextField textApellido1;
-	private JTextField textApellido2;
 	private JTextField textFechaCaducidad;
 	private JTextField textCSV;
 
@@ -73,7 +69,7 @@ public class VentanaMetodoPago extends JDialog {
 			this.vi = pre;
 			inscripcion = pre.getInscripcion();
 			base = pre.getBase();
-			setBounds(300, 300, 605, 140);
+			setBounds(300, 300, 605, 142);
 			getContentPane().setLayout(new BorderLayout());
 			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 			getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -92,23 +88,47 @@ public class VentanaMetodoPago extends JDialog {
 		}
 	}
 	
+	
+	public VentanaMetodoPago(Inscripcion ins) {
+		setTitle("Metodo de Pago");
+		try {
+			
+			inscripcion = ins;
+			base=new Base();
+			base.inicializar();
+			setBounds(300, 300, 605, 140);
+			getContentPane().setLayout(new BorderLayout());
+			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+			getContentPane().add(contentPanel, BorderLayout.CENTER);
+			contentPanel.setLayout(null);
+			
+			contentPanel.add(getRdbtnTarjeta());
+			contentPanel.add(getRdbtnTransferencia());
+			
+			contentPanel.add(getPanel());
+			getContentPane().add(getPaneok(), BorderLayout.SOUTH);
+			//setLocationRelativeTo(pre);
+			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panel.setBounds(59, 75, 457, 322);
+			panel.setBounds(59, 75, 457, 189);
 			panel.setLayout(null);
 			panel.add(getLblTipoDeTarjeta());
 			panel.add(getLblNumeroDeTarjeta());
 			panel.add(getComboBox());
 			panel.add(getLblTarjera());
 			panel.add(getTxtNumTarjeta());
-			panel.add(getLblApellido1());
-			panel.add(getLblApellido2());
 			panel.add(getLblFechaCaducidad());
 			panel.add(getLblCSV());
-			panel.add(getTextApellido1());
-			panel.add(getTextApellido2());
 			panel.add(getTextFechaCaducidad());
 			panel.add(getTextCSV());
 			panel.setVisible(false);
@@ -257,7 +277,7 @@ public class VentanaMetodoPago extends JDialog {
 			btnContinuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(getRdbtnTarjeta().isSelected()){
-						if(validarNum()){
+						if(validar()){
 							continuarTarjeta();
 						} else
 							error();
@@ -273,6 +293,7 @@ public class VentanaMetodoPago extends JDialog {
 	
 	private void continuarTarjeta() {
 		base.getBaseInscripciones().cambiarEstado("INSCRITO", inscripcion);
+		JOptionPane.showMessageDialog(this, "Felicidades, se ha tramitado su pago y usted esta inscrito en la carrera " + vi.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());
 		dispose();
 	}
 
@@ -281,12 +302,13 @@ public class VentanaMetodoPago extends JDialog {
 	}
 
 	private void error() {
-		JOptionPane.showMessageDialog(this, "Número de tarjeta no válido");
+		JOptionPane.showMessageDialog(this, "Número de tarjeta, csv o fecha de caducidad no válido");
 	}
-	private boolean validarNum() {
-		if(getTxtNumTarjeta().getText().equals(""))
-			return false;
-		else return true;
+	private boolean validar() {
+		if(!getTextCSV().getText().isEmpty() && !getTextFechaCaducidad().getText().isEmpty()
+				&& !getTxtNumTarjeta().getText().isEmpty())
+			return true;
+		return false;
 	}
 
 	public Inscripcion getInscripcion() {
@@ -296,33 +318,13 @@ public class VentanaMetodoPago extends JDialog {
 	public Base getBase() {
 		return base;
 	}
-	private JLabel getLblApellido1() {
-		if (lblApellido1 == null) {
-			lblApellido1 = new JLabel("Primer Apellido:");
-			lblApellido1.setLabelFor(getTextApellido1());
-			lblApellido1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblApellido1.setDisplayedMnemonic('a');
-			lblApellido1.setBounds(21, 104, 149, 26);
-		}
-		return lblApellido1;
-	}
-	private JLabel getLblApellido2() {
-		if (lblApellido2 == null) {
-			lblApellido2 = new JLabel("Segundo apellido:");
-			lblApellido2.setLabelFor(getTextApellido2());
-			lblApellido2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblApellido2.setDisplayedMnemonic('e');
-			lblApellido2.setBounds(21, 147, 149, 26);
-		}
-		return lblApellido2;
-	}
 	private JLabel getLblFechaCaducidad() {
 		if (lblFechaCaducidad == null) {
 			lblFechaCaducidad = new JLabel("Fecha caducidad:");
 			lblFechaCaducidad.setLabelFor(getTextFechaCaducidad());
 			lblFechaCaducidad.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			lblFechaCaducidad.setDisplayedMnemonic('f');
-			lblFechaCaducidad.setBounds(21, 194, 149, 26);
+			lblFechaCaducidad.setBounds(21, 100, 149, 26);
 		}
 		return lblFechaCaducidad;
 	}
@@ -332,34 +334,16 @@ public class VentanaMetodoPago extends JDialog {
 			lblCSV.setLabelFor(getTextCSV());
 			lblCSV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			lblCSV.setDisplayedMnemonic('c');
-			lblCSV.setBounds(21, 234, 149, 26);
+			lblCSV.setBounds(21, 145, 149, 26);
 		}
 		return lblCSV;
-	}
-	private JTextField getTextApellido1() {
-		if (textApellido1 == null) {
-			textApellido1 = new JTextField();
-			textApellido1.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			textApellido1.setColumns(10);
-			textApellido1.setBounds(180, 103, 204, 30);
-		}
-		return textApellido1;
-	}
-	private JTextField getTextApellido2() {
-		if (textApellido2 == null) {
-			textApellido2 = new JTextField();
-			textApellido2.setFont(new Font("Tahoma", Font.PLAIN, 15));
-			textApellido2.setColumns(10);
-			textApellido2.setBounds(180, 143, 204, 30);
-		}
-		return textApellido2;
 	}
 	private JTextField getTextFechaCaducidad() {
 		if (textFechaCaducidad == null) {
 			textFechaCaducidad = new JTextField();
 			textFechaCaducidad.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			textFechaCaducidad.setColumns(10);
-			textFechaCaducidad.setBounds(180, 189, 204, 30);
+			textFechaCaducidad.setBounds(180, 103, 204, 30);
 		}
 		return textFechaCaducidad;
 	}
@@ -368,7 +352,7 @@ public class VentanaMetodoPago extends JDialog {
 			textCSV = new JTextField();
 			textCSV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			textCSV.setColumns(10);
-			textCSV.setBounds(180, 230, 204, 30);
+			textCSV.setBounds(180, 144, 204, 30);
 		}
 		return textCSV;
 	}

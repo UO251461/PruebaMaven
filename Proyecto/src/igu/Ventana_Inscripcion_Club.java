@@ -1,21 +1,19 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import logica.Carrera;
 import logica.Inscripcion;
 import logica.InscripcionesClub;
+
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
-import java.awt.GridLayout;
+
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,10 +25,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import java.awt.event.ActionEvent;
 
 public class Ventana_Inscripcion_Club extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelBotones;
 	private JPanel panelPrincipal;
@@ -44,39 +47,43 @@ public class Ventana_Inscripcion_Club extends JFrame {
 	private JTextField txtProcesadosOk;
 	private JLabel lblProcesadosIncorrectamente;
 	private JTextField txtProcesadosKo;
-	private JFileChooser jfInscripcion = null;
-	private InscripcionesClub inscripcionClub = null;
+	private JFileChooser jfInscripcion;
+	private InscripcionesClub inscripcionClub;
 	private JButton btnContinuar;
 	private ArrayList<Inscripcion> inscripciones;
 	private VentanaCarreras vc;
-	private int contadorOK=0;
-	private int contadorKO=0;
+	private int contadorOK = 0;
+	private int contadorKO = 0;
 	private JLabel lblCarrera;
 	private JTextField txtCarrera;
 	private JLabel lblPrecio;
 	private JTextField txtPrecio;
+	private JTextField txtLocalizacion;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Ventana_Inscripcion_Club frame = new Ventana_Inscripcion_Club(new VentanaCarreras(new VentanaPrincipal()),new Carrera("", 0.0, null, null, null, "", "", null, "", ""));
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	// /**
+	// * Launch the application.
+	// */
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// Ventana_Inscripcion_Club frame = new Ventana_Inscripcion_Club(new
+	// VentanaCarreras(new VentanaPrincipal()),new Carrera("", 0.0, null, null,
+	// null, "", "", null, "", ""));
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 
 	/**
 	 * Create the frame.
 	 */
-	public Ventana_Inscripcion_Club(VentanaCarreras vc, Carrera carrera) {
+	public Ventana_Inscripcion_Club(VentanaCarreras vc) {
 		this.vc = vc;
+		this.inscripcionClub = new InscripcionesClub(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 673, 376);
 		contentPane = new JPanel();
@@ -85,9 +92,12 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getPanelBotones(), BorderLayout.SOUTH);
 		contentPane.add(getPanelPrincipal(), BorderLayout.CENTER);
-		txtCarrera.setText(carrera.getNombre());
-		txtPrecio.setText(String.valueOf(carrera.getPrecio()));
-		
+		txtCarrera.setText(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());
+		txtPrecio.setText(String.valueOf(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getPrecio()));
+	}
+
+	public VentanaCarreras getVc() {
+		return this.vc;
 	}
 
 	private JPanel getPanelBotones() {
@@ -100,6 +110,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return panelBotones;
 	}
+
 	private JPanel getPanelPrincipal() {
 		if (panelPrincipal == null) {
 			panelPrincipal = new JPanel();
@@ -116,54 +127,116 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			panelPrincipal.add(getTxtCarrera());
 			panelPrincipal.add(getLblPrecio());
 			panelPrincipal.add(getTxtPrecio());
+			panelPrincipal.add(getTxtLocalizacion());
 		}
 		return panelPrincipal;
 	}
+
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
-		}
-		return btnCancelar;
-	}
-	
-	private JFileChooser getJFInscripcion() {
-		if(jfInscripcion == null) {
-			jfInscripcion = new JFileChooser();
-			jfInscripcion.setMultiSelectionEnabled(false);
-			jfInscripcion.setFileFilter(new FileNameExtensionFilter("Archivos txt", "txt"));
-			
-			String userDir = System.getProperty("user.home");
-			jfInscripcion.setCurrentDirectory(new File(userDir+"/Desktop"));
-		}
-		return jfInscripcion;
-	}
-	
-	private JButton getBtnInscribir() {
-		if (btnInscribir == null) {
-			btnInscribir = new JButton("Inscribir");
-			btnInscribir.addActionListener(new ActionListener() {
+			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					inscripciones = inscripcionClub.getInscripcionesClub();
-					for(Inscripcion ins : inscripciones) {
-						try {
-						
-						vc.getBase().getBaseInscripciones().registrarCorredor(ins.getCorredor().getDni(), ins.getCorredor().getNombre(), ins.getCorredor().getApellido(),
-								ins.getCorredor().getEdad(), ins.getCorredor().getSexo(), ins);
-						contadorOK++;}
-						catch(SQLException se) {
-							JOptionPane.showMessageDialog(null, se.getMessage());
-							contadorKO++;
-						} 
-						}
-					txtProcesados.setText(String.valueOf(inscripciones.size())); 
-					txtProcesadosOk.setText(String.valueOf(contadorOK));
-					txtProcesadosKo.setText(String.valueOf(contadorKO));
-					
+					dispose();
+
+					vc.setVisible(true);
+
 				}
 			});
 		}
+		return btnCancelar;
+	}
+
+	private JFileChooser getJFInscripcion() {
+		if (jfInscripcion == null) {
+			jfInscripcion = new JFileChooser();
+			jfInscripcion.setMultiSelectionEnabled(false);
+			jfInscripcion.setFileFilter(new FileNameExtensionFilter("Archivos txt", "txt"));
+
+			String userDir = System.getProperty("user.home");
+			jfInscripcion.setCurrentDirectory(new File(userDir + "/Desktop"));
+		}
+		return jfInscripcion;
+	}
+
+	private JButton getBtnInscribir() {
+		if (btnInscribir == null) {
+			btnInscribir = new JButton("Inscribir");
+			btnInscribir.setEnabled(false);
+			btnInscribir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inscripciones = inscripcionClub.getInscripcionesClub();
+					boolean inscrito = false;
+
+					for(Inscripcion ins : inscripciones) {
+						//mostrarDatos(ins);
+
+						inscrito = registrar(ins);}					
+
+					for (Inscripcion ins : inscripciones) {		
+						
+							@SuppressWarnings("deprecation")
+							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
+							try {
+								inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(fecha, ins);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+
+					
+					}
+							btnContinuar.setEnabled(true);
+
+
+						if(inscrito)
+							contadorOK++;
+						else
+							contadorKO++;
+					
+
+					txtProcesados.setText(String.valueOf(inscripciones.size())); 
+					txtProcesadosOk.setText(String.valueOf(contadorOK));
+					txtProcesadosKo.setText(String.valueOf(contadorKO));
+
+					
+					txtProcesados.setText(String.valueOf(inscripciones.size()));
+					txtProcesadosOk.setText(String.valueOf(contadorOK));
+					txtProcesadosKo.setText(String.valueOf(contadorKO));
+
+				}
+				
+			});
+
+
+
+
+		}
 		return btnInscribir;
 	}
+
+
+
+	private boolean registrar(Inscripcion inscripcion) {
+
+		Boolean inscrito = false;
+		@SuppressWarnings("deprecation")
+		String date = inscripcion.getCorredor().getFechaNacimiento().getDate() + "/"
+				+ (inscripcion.getCorredor().getFechaNacimiento().getMonth() + 1) + "/"
+				+ (inscripcion.getCorredor().getFechaNacimiento().getYear() + 1900);
+		if (inscripcion.getCategoria().equals("Sin categoria")) {
+			return false;
+		} else {
+			try {
+				inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return inscrito;
+	}
+
 	private JLabel getLblAadirArchivoDe() {
 		if (lblAadirArchivoDe == null) {
 			lblAadirArchivoDe = new JLabel("A\u00F1adir archivo de corredores: ");
@@ -172,23 +245,31 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblAadirArchivoDe;
 	}
+
 	private JButton getButton() {
 		if (button == null) {
 			button = new JButton("...");
 			button.addActionListener(new ActionListener() {
+				@SuppressWarnings("static-access")
 				public void actionPerformed(ActionEvent e) {
 					int respuesta = getJFInscripcion().showOpenDialog(null);
-					if(respuesta == getJFInscripcion().APPROVE_OPTION) {
+					if (respuesta == getJFInscripcion().APPROVE_OPTION) {
 						File textoInscripcion = jfInscripcion.getSelectedFile();
-						inscripcionClub = new InscripcionesClub(textoInscripcion);
+						inscripcionClub.leerFichero(textoInscripcion);
+						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
+						inscripciones = inscripcionClub.getInscripcionesClub();
+
+						btnInscribir.setEnabled(true);
+
 					}
-					
+
 				}
 			});
 			button.setBounds(236, 88, 33, 23);
 		}
 		return button;
 	}
+
 	private JLabel getLblTotalProcesados() {
 		if (lblTotalProcesados == null) {
 			lblTotalProcesados = new JLabel("Total procesados:");
@@ -197,6 +278,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblTotalProcesados;
 	}
+
 	private JTextField getTxtProcesados() {
 		if (txtProcesados == null) {
 			txtProcesados = new JTextField();
@@ -209,6 +291,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesados;
 	}
+
 	private JLabel getLblProcesadosCorrectamente() {
 		if (lblProcesadosCorrectamente == null) {
 			lblProcesadosCorrectamente = new JLabel("Inscritos Correctamente:");
@@ -217,6 +300,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblProcesadosCorrectamente;
 	}
+
 	private JTextField getTxtProcesadosOk() {
 		if (txtProcesadosOk == null) {
 			txtProcesadosOk = new JTextField();
@@ -229,6 +313,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesadosOk;
 	}
+
 	private JLabel getLblProcesadosIncorrectamente() {
 		if (lblProcesadosIncorrectamente == null) {
 			lblProcesadosIncorrectamente = new JLabel("Inscritos Incorrectamente: ");
@@ -237,6 +322,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblProcesadosIncorrectamente;
 	}
+
 	private JTextField getTxtProcesadosKo() {
 		if (txtProcesadosKo == null) {
 			txtProcesadosKo = new JTextField();
@@ -249,18 +335,22 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtProcesadosKo;
 	}
+
 	private JButton getBtnContinuar() {
 		if (btnContinuar == null) {
 			btnContinuar = new JButton("Continuar");
+			btnContinuar.setEnabled(false);
 			btnContinuar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "Recuerde avisar a sus corredores de que paguen el precio de la inscripcion");
+					JOptionPane.showMessageDialog(null,
+							"Recuerde avisar a sus corredores de que paguen el precio de la inscripcion");
 					dispose();
 				}
 			});
 		}
 		return btnContinuar;
 	}
+
 	private JLabel getLblCarrera() {
 		if (lblCarrera == null) {
 			lblCarrera = new JLabel("Carrera:");
@@ -269,6 +359,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblCarrera;
 	}
+
 	private JTextField getTxtCarrera() {
 		if (txtCarrera == null) {
 			txtCarrera = new JTextField();
@@ -278,6 +369,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return txtCarrera;
 	}
+
 	private JLabel getLblPrecio() {
 		if (lblPrecio == null) {
 			lblPrecio = new JLabel("Precio: ");
@@ -286,6 +378,7 @@ public class Ventana_Inscripcion_Club extends JFrame {
 		}
 		return lblPrecio;
 	}
+
 	private JTextField getTxtPrecio() {
 		if (txtPrecio == null) {
 			txtPrecio = new JTextField();
@@ -296,5 +389,15 @@ public class Ventana_Inscripcion_Club extends JFrame {
 			txtPrecio.setColumns(10);
 		}
 		return txtPrecio;
+	}
+
+	private JTextField getTxtLocalizacion() {
+		if (txtLocalizacion == null) {
+			txtLocalizacion = new JTextField();
+			txtLocalizacion.setEditable(false);
+			txtLocalizacion.setBounds(279, 89, 283, 20);
+			txtLocalizacion.setColumns(10);
+		}
+		return txtLocalizacion;
 	}
 }

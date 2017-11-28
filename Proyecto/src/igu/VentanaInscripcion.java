@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JRadioButton;
@@ -26,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.Font;
@@ -35,7 +37,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 
-public class VentanaInscripcion extends JFrame {
+public class VentanaInscripcion extends JDialog {
 
 	/**
 	 * 
@@ -70,10 +72,10 @@ public class VentanaInscripcion extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaInscripcion(VentanaCarreras vc) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.vc = vc;
 		setTitle("Registrarse");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 566, 599);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,22 +102,57 @@ public class VentanaInscripcion extends JFrame {
 			txtDni.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent arg0) {
-					Corredor corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+					Corredor corr= null;
+					if(campoDniNoVacio()){
+						if(comprobarDniValido()){
+							ponerLetraMayuscula();
+							corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+						}
+					}
 					if(corr!=null){
-						txtNombre.setText(corr.getNombre());
-						txtApellidos.setText(corr.getApellido());
-						if(corr.getSexo()!= null && corr.getSexo().equals("HOMBRE"))
-							rdbtnHombre.setSelected(true);
-						else
-							rdbtnMujer.setSelected(true);
-						//FALTA SELECCIONAR FECHA NACIMIENTO
+						completarCampos(corr);
+					}
+					else{
+						activarCampos();
 					}
 				}
+
+				
 			});
 			txtDni.setBounds(172, 35, 209, 23);
 			txtDni.setColumns(10);
 		}
 		return txtDni;
+	}
+	
+	private void activarCampos() {
+		txtNombre.setEditable(true);
+		txtApellidos.setEditable(true);
+		rdbtnHombre.setEnabled(true);
+		rdbtnMujer.setEnabled(true);
+		fecha.setEnabled(true);
+		
+	}
+	private void completarCampos(Corredor corr){
+		
+		txtNombre.setText(corr.getNombre());
+		txtApellidos.setText(corr.getApellido());
+		if(corr.getSexo()!= null && corr.getSexo().equals("HOMBRE"))
+			rdbtnHombre.setSelected(true);
+		else
+			rdbtnMujer.setSelected(true);
+	
+		fecha.setDate(corr.getFechaNacimiento());
+		
+		desactivarCampos();
+	}
+	
+	private void desactivarCampos(){
+		txtNombre.setEditable(false);
+		txtApellidos.setEditable(false);
+		rdbtnHombre.setEnabled(false);
+		rdbtnMujer.setEnabled(false);
+		fecha.setEnabled(false);
 	}
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
@@ -172,15 +209,20 @@ public class VentanaInscripcion extends JFrame {
 			btnPreinscribir.setMnemonic('r');
 			btnPreinscribir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(validarCampos()){
-						try{							
-							registrar();							
-						}catch(SQLException sql){
-							errorSQL(sql);
+					if(campoDniNoVacio() && campoNombreNoVacio()&& campoApellidosNoVacio() && validarFecha()){
+						if(comprobarDniValido()){
+							try{			
+								ponerLetraMayuscula();
+								registrar();							
+							}catch(SQLException sql){
+								errorSQL(sql);
+							}
 						}
+						else
+							errorDni();
 					}
 					else
-						error();
+						errorCampos();
 						
 						
 				}
@@ -190,6 +232,23 @@ public class VentanaInscripcion extends JFrame {
 		return btnPreinscribir;
 	}
 	
+	private void ponerLetraMayuscula() {
+		char[] dniUpper = txtDni.getText().toCharArray();
+		if(dniUpper[8] >97 && dniUpper[8] <122){
+			
+			txtDni.setText(txtDni.getText().replace(dniUpper[8], (char) (dniUpper[8]-32)));
+		}
+		
+	}
+	private void errorCampos() {
+		JOptionPane.showMessageDialog(this, "Es obligatorio rellenar todos los campos");
+		
+	}
+	
+	private void errorDni() {
+		JOptionPane.showMessageDialog(this, "DNI no válido.");
+		
+	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -283,16 +342,7 @@ public class VentanaInscripcion extends JFrame {
 	//METODOS FUNCIONALES
 	
 	
-	/**
-	 * Muestra un mejsaje pasado por parametro, crea una ventana "elegir campo" y cierra la ventana actual
-	 * @param str, el texto a mostrar
-	 */
-	private void continuar(){
-		
-		JOptionPane.showMessageDialog(this, "¡Felicidades! Está Pre-inscrito");
-		
-		new VentanaJustificante(this);
-	}
+
 	
 	/**
 	 * Procesa los errores SQL
@@ -319,57 +369,77 @@ public class VentanaInscripcion extends JFrame {
 	 * @throws SQLException, si el usuario con dni ya está registrado lanza una excepción
 	 */
 	protected void registrar() throws SQLException {
-		String date = fecha.getDate().getDate()+ "/" + (fecha.getDate().getMonth()+1) +"/"+(fecha.getDate().getYear()+1900); //Conversion de la fecha de nacimiento a lo guarro
+		String date = (new SimpleDateFormat("dd/MM/yyyy").format(fecha.getDate())); //Conversion de la fecha de nacimiento
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 		
-		inscripcion = new Inscripcion(carreraSel.getIdcarrera(), carreraSel.getOrganizador().getIdorganizador() ,txtDni.getText(), carreraSel.getPrecio()); //CAMBIAR EL NOMBRE Y APELLIDO SI EL USUARIO YA ESTA REGISTRADO, LO HACE LA BBDD
-		inscripcion.asignarCategoria(fecha.getDate(),carreraSel);//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
-		//SE COMPRUEBA QUE NO SEA MENOR DE EDAD
-		if(inscripcion.getCategoria().equals("Menor de edad"))
-			JOptionPane.showMessageDialog(this, "Usted es menor de edad y no puede inscribirse en la carrera");
+		Corredor corredor = new Corredor(txtDni.getText(), fecha.getDate(), sexoSelected, txtNombre.getText(), txtApellidos.getText());
+		
+		inscripcion = new Inscripcion(carreraSel, corredor); 
+		//inscripcion.asignarCategoria(fecha.getDate(),carreraSel);//AQUI ES DONDE SE LE ASIGNA LA CATEGORIA A LA INSCRIPCION DEL CORREDOR
+		//SE COMPRUEBA QUE NO TENGA CATEGORIA
+		if(inscripcion.getCategoria().equals("Sin categoria"))
+			JOptionPane.showMessageDialog(this, "Usted es menor de edad o no tiene una categoria asignada y no puede inscribirse en la carrera");
 		else{
-			Corredor c = inscripcion.getCorredor();
-			c.setDni(txtDni.getText());
-			c.setNombre(txtNombre.getText());
-			c.setApellido(txtApellidos.getText());
-			c.setSexo(sexoSelected);
-			getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
-			continuar();
+			
+			
+			
+			Corredor corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+			// SI EL CORREDOR ESTA REGISTRADO corr SERÁ UN OBJETO, en caso contrario null
+			if(corr == null){
+				getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
+				JOptionPane.showMessageDialog(this, "¡Felicidades! Está Pre-inscrito");
+			}
+			else
+				JOptionPane.showMessageDialog(this, "Usted ya está Pre-inscrito, por favor proceda a elegir un método de pago.");			
+			new VentanaJustificante(this);
+			
 		}		
 	}
 
-	/**
-	 * Trata los errores de los campos vacios(Samuel)
-	 */
-	protected void error() {		
-		JOptionPane.showMessageDialog(this, "Es obligatorio rellenar todos los campos");		
-	}
 
-/**
- * Comprueba que los campos dni, nombre y fecha sean correctos
- * @return boolean
- */
-	protected boolean validarCampos() {
-		if(validarDni() && validarNombre() && validarFecha()){
-			return true;
-		}
-		return false;
-	}
 
-	private boolean validarDni() {
+
+
+	private boolean campoDniNoVacio() {
 		if(getTxtDni().getText().equals(""))			
 			return false;
+
 		return true;
 	}
 
+	private boolean comprobarDniValido() {
+		char[] dniArray = txtDni.getText().toCharArray();
+		if(dniArray.length!=9)
+			return false;
+		
+		//comprobacion de numeros
+		for(int i=0 ; i<dniArray.length-1; i++)
+			if(dniArray[i] <48 || dniArray[i] >57)
+				return false;
+			
+		
+		//comprobacion de letra	
+		if((dniArray[8] <65 || dniArray[8] >90) && (dniArray[8] <97 || dniArray[8] >122))
+			return false;
+		
+		int num = 0;
+	
+		
+		return true;
+	}
 	private boolean validarFecha() {
 		if(getDateChooser().getDate() == null)
 			return false;
 		return true;
 	}
 
-	private boolean validarNombre() {
+	private boolean campoNombreNoVacio() {
 		if(getTxtNombre().getText().equals(""))
+			return false;
+		return true;
+	}
+	private boolean campoApellidosNoVacio() {
+		if(getTxtApellidos().getText().equals(""))
 			return false;
 		return true;
 	}
@@ -401,8 +471,8 @@ public class VentanaInscripcion extends JFrame {
 			txtTitulo.setFocusable(false);
 			txtTitulo.setEditable(false);
 			txtTitulo.setFont(new Font("Arial Black", Font.BOLD, 16));
-			//txtTitulo.setText(vc.getInscripcion.getCompeticion().gerNombreCompeticion(););			
-			txtTitulo.setText("CARERRA PRUEBA CON UN TITULO LARGOOOOOOOOOOOOOOOO LAAAAAARGGGGGGGGGGO");
+			txtTitulo.setText(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());			
+			//txtTitulo.setText("CARERRA PRUEBA CON UN TITULO LARGOOOOOOOOOOOOOOOO LAAAAAARGGGGGGGGGGO");
 			txtTitulo.setBounds(75, 24, 426, 81);
 		}
 		return txtTitulo;

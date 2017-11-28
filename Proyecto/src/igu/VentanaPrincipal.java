@@ -14,7 +14,14 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
+import java.awt.GridLayout;
+import java.awt.Font;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -29,6 +36,20 @@ public class VentanaPrincipal extends JFrame {
 	private Base base;
 	private JPanel panel;
 	private JButton btnUsuario;
+	private JButton btnCrearCarrera;
+	private JPanel panelPrincipal;
+	private JPanel panelInicial;
+	private JButton btOrganizador;
+	private JButton btCorredor;
+	private JLabel lblNewLabel;
+	private JPanel panel_1;
+	private JPanel panel_2;
+	private JLabel lblAcceso;
+	private JPanel pnBase;
+	private boolean organizador;
+	private JPanel panel_3;
+	private JButton btnCambiarA;
+	
 	private JButton btClasificacion;
 	private JButton btnAsignarDorsal;
 
@@ -52,21 +73,26 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		organizador=false;
 		base = new Base();
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 674, 396);
 		contentPane = new JPanel();
+		setLocationRelativeTo(this);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(getLblAplicacion(), BorderLayout.NORTH);
-		contentPane.add(getPanel(), BorderLayout.SOUTH);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.add(getPnBase());
+		
 	}
+	
+
 
 	private JLabel getLblAplicacion() {
 		if (lblAplicacion == null) {
-			lblAplicacion = new JLabel("Aplicacion");
+			lblAplicacion = new JLabel("Bienvenido");
+			lblAplicacion.setFont(new Font("Impact", Font.BOLD, 66));
 			lblAplicacion.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblAplicacion;
@@ -85,10 +111,9 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void mostrarCarreras(){
-		VentanaCarreras vcarrera = new VentanaCarreras(this);
+		VentanaCarreras vcarrera = new VentanaCarreras(this, organizador);
 		vcarrera.setLocationRelativeTo(null);		;
 		vcarrera.setVisible(true);
-		this.setVisible(false);
 	}
 	
 	public Base getBase(){
@@ -97,10 +122,9 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
+			panel.add(getBtnCrearCarrera());
 			panel.add(getBtnUsuario());
 			panel.add(getBtnMostrarCarreras());
-			panel.add(getBtClasificacion());
-			panel.add(getBtnAsignarDorsal());
 		}
 		return panel;
 	}
@@ -121,43 +145,190 @@ public class VentanaPrincipal extends JFrame {
 	private void mostrarVentanaUsuario(String dni){
 		VentanaUsuario vu = new VentanaUsuario(dni);
 		vu.setLocationRelativeTo(this);
-		//vu.setModal(true);
+		vu.setModal(true);
 		vu.setVisible(true);
 	}
-	private JButton getBtClasificacion() {
-		if (btClasificacion == null) {
-			btClasificacion = new JButton("Ver Clasificacion");
-			btClasificacion.addActionListener(new ActionListener() {
+//	private JButton getBtClasificacion() {
+//		if (btClasificacion == null) {
+//			btClasificacion = new JButton("Ver Clasificacion");
+//			btClasificacion.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
+//					if( competicion!=null && !competicion.isEmpty())
+//						mostrarVentanaClasificacion(competicion);
+//				}
+//			});
+//		}
+//		return btClasificacion;
+//	}
+//	private void mostrarVentanaClasificacion(String competicion){
+//		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+//		vc.setLocationRelativeTo(this);
+//		vc.setModal(false);
+//		vc.setVisible(true);
+//	}
+//	private JButton getBtnAsignarDorsal() {
+//		if (btnAsignarDorsal == null) {
+//			btnAsignarDorsal = new JButton("Asignar dorsal");
+//			btnAsignarDorsal.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					String competicion = JOptionPane.showInputDialog("Introduzca id de la competiciï¿½n");
+//					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
+//					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
+//					if(isAsignada)					
+//						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
+//					else
+//						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
+//				}
+//			});
+//		}
+//		return btnAsignarDorsal;
+//	}
+	private JButton getBtnCrearCarrera() {
+		if (btnCrearCarrera == null) {
+			btnCrearCarrera = new JButton("Crear Carrera");
+			btnCrearCarrera.setVisible(false);
+			btnCrearCarrera.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la Competicion");
-					if( competicion!=null && !competicion.isEmpty())
-						mostrarVentanaClasificacion(competicion);
+					mostrarVentanaCrearCarrera();
 				}
 			});
 		}
-		return btClasificacion;
+		return btnCrearCarrera;
 	}
-	private void mostrarVentanaClasificacion(String competicion){
-		VentanaClasificacion vc = new VentanaClasificacion(competicion);
+
+
+	private void mostrarVentanaCrearCarrera(){
+		VentanaCrearCarrera vc = new VentanaCrearCarrera(this);
 		vc.setLocationRelativeTo(this);
-		vc.setModal(true);
-		vc.setVisible(true);
+		vc.setVisible(true);	
 	}
-	private JButton getBtnAsignarDorsal() {
-		if (btnAsignarDorsal == null) {
-			btnAsignarDorsal = new JButton("Asignar dorsal");
-			btnAsignarDorsal.addActionListener(new ActionListener() {
+	private JPanel getPanelPrincipal() {
+		if (panelPrincipal == null) {
+			panelPrincipal = new JPanel();
+			panelPrincipal.setLayout(new BorderLayout(0, 0));
+			panelPrincipal.add(getLblAplicacion());
+			panelPrincipal.add(getPanel(), BorderLayout.SOUTH);
+			panelPrincipal.add(getPanel_3(), BorderLayout.NORTH);
+		}
+		return panelPrincipal;
+	}
+	private JPanel getPanelInicial() {
+		if (panelInicial == null) {
+			panelInicial = new JPanel();
+			panelInicial.setLayout(new BorderLayout(0, 0));
+			panelInicial.add(getPanel_2(), BorderLayout.CENTER);
+			panelInicial.add(getPanel_1(), BorderLayout.SOUTH);
+		}
+		return panelInicial;
+	}
+	private JButton getBtOrganizador() {
+		if (btOrganizador == null) {
+			btOrganizador = new JButton("Organizador");
+			btOrganizador.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String competicion = JOptionPane.showInputDialog("Introduzca id de la competición");
-					String organizador = JOptionPane.showInputDialog("Introduzca id del organizador");
-					boolean isAsignada = base.getBaseInscripciones().asignarDorsal(competicion, organizador);
-					if(isAsignada)					
-						JOptionPane.showMessageDialog(null, "Dorsales asignadas");
-					else
-						JOptionPane.showMessageDialog(null, "No se han podido asignar las dorsales");
+					accesoOrganizador();
+					((CardLayout)pnBase.getLayout()).show(pnBase, "panelPrincipal");
 				}
 			});
 		}
-		return btnAsignarDorsal;
+		return btOrganizador;
+	}
+	private JButton getBtCorredor() {
+		if (btCorredor == null) {
+			btCorredor = new JButton("Corredor");
+			btCorredor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					((CardLayout)pnBase.getLayout()).show(pnBase, "panelPrincipal");
+				}
+			});
+		}
+		return btCorredor;
+	}
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("Bienvenido");
+			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
+		}
+		return lblNewLabel;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setLayout(new GridLayout(0, 2, 0, 0));
+			panel_1.add(getBtOrganizador());
+			panel_1.add(getBtCorredor());
+		}
+		return panel_1;
+	}
+	private JPanel getPanel_2() {
+		if (panel_2 == null) {
+			panel_2 = new JPanel();
+			panel_2.setLayout(new GridLayout(2, 1, 0, 0));
+			panel_2.add(getLblNewLabel());
+			panel_2.add(getLblAcceso());
+		}
+		return panel_2;
+	}
+	private JLabel getLblAcceso() {
+		if (lblAcceso == null) {
+			lblAcceso = new JLabel("\u00BFC\u00F3mo desea acceder?");
+			lblAcceso.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblAcceso;
+	}
+	private JPanel getPnBase() {
+		if (pnBase == null) {
+			pnBase = new JPanel();
+			pnBase.setLayout(new CardLayout(0, 0));
+			pnBase.add(getPanelInicial(), "panelInicial");
+			pnBase.add(getPanelPrincipal(), "panelPrincipal");
+			((CardLayout)pnBase.getLayout()).show(pnBase, "panelInicial");
+		}
+		return pnBase;
+	}
+	
+	
+	private void accesoOrganizador(){
+		organizador=true;
+		btnCrearCarrera.setVisible(true);
+		
+		btnUsuario.setVisible(false);
+	}
+	private JPanel getPanel_3() {
+		if (panel_3 == null) {
+			panel_3 = new JPanel();
+			panel_3.add(getBtnCambiarA());
+		}
+		return panel_3;
+	}
+	private JButton getBtnCambiarA() {
+		if (btnCambiarA == null) {
+			btnCambiarA = new JButton();
+			if(organizador)
+				btnCambiarA.setText("Cambiar a corredor");
+			else
+				btnCambiarA.setText("Cambiar a organizador");
+			btnCambiarA.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(organizador){
+						btnCambiarA.setText("Cambiar a organizador");
+						accesoCorredor();
+						
+					}else{
+						btnCambiarA.setText("Cambiar a corredor");
+						accesoOrganizador();
+					}
+				}
+			});
+		}
+		return btnCambiarA;
+	}
+	
+	private void accesoCorredor(){
+		organizador=false;
+		btnCrearCarrera.setVisible(false);
+		btnUsuario.setVisible(true);
 	}
 }

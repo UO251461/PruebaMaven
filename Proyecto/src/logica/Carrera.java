@@ -1,6 +1,7 @@
 package logica;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Carrera {
 	private String nombre;
@@ -13,12 +14,13 @@ public class Carrera {
 	private Organizador organizador;
 	private int plazasDisponibles;
 	private String idcarrera;
-	private Categoria[] categorias;
-	private String lugar;
+	private ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+	private String lugar;	
+	private ArrayList<Integer> tiemposControl;
 	
 
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
-			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar) {
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,ArrayList<Categoria> cat,ArrayList<Integer> tc) {
 
 		this.nombre = nombre;
 		this.precio = precio;
@@ -31,41 +33,11 @@ public class Carrera {
 		this.plazasDisponibles = plazasDisponibles;
 		this.idcarrera = idcarrera;	
 		this.lugar= lugar;
-		rellenarCategorias(crearLimiteInferior(),crearLimiteSuperior(),crearStringCategoria());
-	}
-	
-	//Como los limites y las categorias son generales los inicializo aqui, aunque se deberian pasar en el constructor
-	// para hacer bien el rellenar categorias
-	private int[] crearLimiteInferior(){
-		int[] limiteInferior = {0,18,35,40};		
-		return limiteInferior;
-	}
-	
-	private int[] crearLimiteSuperior(){
-		int[] limiteSuperior = {18,35,40,200};		
-		return limiteSuperior;
-	}
-	
-	private String[] crearStringCategoria(){
-		String[] categorias = {"Menor de edad","Senior","Veterano A","Veterano B"};		
-		return categorias;
+		this.categorias = cat;
+		this.tiemposControl = tc;
 	}	
 	
-	private void rellenarCategorias(int[]limitesInferiores,int[]limitesSuperiores,String[]categ){		
-		
-		//Obtenemos los datos de las categorias y son correctos
-		if(limitesInferiores.length == limitesSuperiores.length && limitesSuperiores.length == categ.length){
-			//inicializar array de categorias si todo es correcto
-			this.categorias = new Categoria[limitesSuperiores.length];
-			for(int i=0;i<categ.length;i++){
-				if(limitesInferiores[i] < limitesSuperiores[i]){
-					this.categorias[i] = new Categoria(limitesInferiores[i],limitesSuperiores[i],categ[i]);
-				}				
-			}
-		}
-	}
-	
-	public Categoria[] getCategorias(){
+	public ArrayList<Categoria> getCategorias(){
 		return categorias;
 	}
 
@@ -162,10 +134,29 @@ public class Carrera {
 
 	public void setLugar(String lugar) {
 		this.lugar = lugar;
-	}
-	
-	
-	
-	
+	}	
 
+	public void setCategorias(ArrayList<Categoria> categorias) {
+		this.categorias = categorias;
+	}	
+	
+	public ArrayList<Integer> getTiemposControl() {
+		return tiemposControl;
+	}
+
+	public void setTiemposControl(ArrayList<Integer> tiemposControl) {
+		this.tiemposControl = tiemposControl;
+	}
+
+	public String infoCarrera(){
+		String[] fech1 = String.valueOf(this.fechaFinalizaInscripcion).split("-");
+		String info = "Nombre: " +nombre +  ".\n" + 
+				"Precio: " + precio + " euros.\n" + 
+				"Fecha Finalizacion del plazo de inscripcion actual: " + fech1[2] + "/" + fech1[1] + "/" + fech1[0] + ".\n" + 
+				"Distancia: " + distancia + "km.\n" + 
+				"Tipo: " + tipo + "\n" + 
+				"Plazas disponibles: " + plazasDisponibles + ".\n" +
+				"Lugar: " + lugar+".";
+		return info;
+	}
 }

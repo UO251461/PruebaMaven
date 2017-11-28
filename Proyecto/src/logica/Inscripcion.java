@@ -13,39 +13,74 @@ public class Inscripcion {
 		private double tiempo;
 		private Corredor corredor;//CORREDOR TIENE ID, DNI, Sexo
 		
+		private String comentario;
+		
+		
+		/**
+		 * Este va a ser el Dios único y omnipotente constructor, 
+		 * los demás son lacayos y deberían ser borrados
+		 * @param carrera
+		 * @param corredor
+		 */
+		public Inscripcion(Carrera carrera, Corredor corredor) {
+			this.carrera = carrera;
+			this.corredor = corredor;
+			this.fecha = new Date();
+			this.comentario="";
+			if(corredor!=null)
+				asignarCategoria(corredor.getFechaNacimiento(), carrera);
+		}
+
+		
+		
+		//--------------------------------BORRAR Y CORREGIR ERRORES----------------------------------------------------//
+
+		
+		
+		
+		
+		public Inscripcion(Carrera carrera, Corredor corredor, Date fecha, String categoria) {
+			this.carrera = carrera;
+			this.corredor = corredor;
+			this.fecha = fecha;
+			this.categoria = categoria;
+			this.comentario="";
+		}
+		
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null, null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.categoria = categoria;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria,String nombre) {
-			corredor = new Corredor(dni, 0, "", "", "");
+			corredor = new Corredor(dni, 0, "", nombre, "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null, null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.categoria = categoria;
 		}
 		
-		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo) {
+		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String comentario) {
 			corredor = new Corredor(dni, 0, "", "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null, null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
 			this.tiempo=tiempo;
+			this.comentario=comentario;
 		}
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, int dorsal, double tiempo, String categoria, String sexo) {
 			corredor = new Corredor(dni, 0, sexo, "", "");
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo");
+			carrera = new Carrera("", 0, null, null, null, 0, "", organizador, 0, idCompeticion,"Oviedo",null, null);
 			this.estado = pagado;
 			this.fecha = fecha;
 			this.dorsal=dorsal;
@@ -56,7 +91,7 @@ public class Inscripcion {
 		
 		public Inscripcion(String idCarrera, String idOrganizador, String dni, double pre) {
 			Organizador organizador = new Organizador("", idOrganizador);
-			carrera = new Carrera("", pre, null, null, null, 0, "", organizador, 0, idCarrera,"Oviedo");
+			carrera = new Carrera("", pre, null, null, null, 0, "", organizador, 0, idCarrera,"Oviedo",null, null);
 			corredor = new Corredor(dni, 0, "", "", "");
 		}
 
@@ -103,13 +138,17 @@ public class Inscripcion {
 		}
 
 		@SuppressWarnings("deprecation")
-		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
-			int actual = new Date().getYear();			
-			int edad = actual - fechaNacimiento.getYear();
-			for(int i=0;i<carrera.getCategorias().length;i++){
-				if(edad >= carrera.getCategorias()[i].getLimiteInferior() && edad < carrera.getCategorias()[i].getLimiteSuperior()){
-					this.categoria = carrera.getCategorias()[i].getCategoria();
+		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){		
+			if(fechaNacimiento!=null && carrera!= null){
+				int actual = new Date().getYear();			
+				int edad = actual - fechaNacimiento.getYear();
+				for(int i=0;i<carrera.getCategorias().size();i++){			
+					if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
+						this.categoria = carrera.getCategorias().get(i).getCategoria();
+					}
 				}
+				if(this.categoria == null)
+					this.categoria = "Sin categoria";
 			}
 		}
 		
@@ -121,6 +160,9 @@ public class Inscripcion {
 		public Corredor getCorredor() {
 			return corredor;
 		}
-	
+		
+		public String getComentario(){
+			return comentario;
+		}
 }
 
