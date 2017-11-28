@@ -854,8 +854,8 @@ public class BaseInscripciones {
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()){
-				for(int i=0;i<rs.getFetchSize();i++){
-					if(rs.getDouble(i)!=-1){
+				for(int i=1;i<6;i++){
+					if(rs.getInt(i)!=-1){
 						n++;
 					}
 				}

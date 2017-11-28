@@ -179,7 +179,7 @@ public class VentanaClasificacion extends JDialog {
 			String[] nombreColumnas = new String[n+6];
 			nombreColumnas[0]="Posicion";nombreColumnas[1]="Dorsal";
 			for(int i=0;i<n;i++)
-				nombreColumnas[2+i]="Tiempo "+i;
+				nombreColumnas[2+i]="Tiempo "+(i+1);
 			nombreColumnas[n+2]="Tiempo Final";nombreColumnas[n+3]="Diferencia";nombreColumnas[n+4]="Sexo";nombreColumnas[n+5]="Categoria";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
@@ -198,7 +198,7 @@ public class VentanaClasificacion extends JDialog {
 			String[] nombreColumnas = new String[n+6];
 			nombreColumnas[0]="Posicion";nombreColumnas[1]="Dorsal";
 			for(int i=0;i<n;i++)
-				nombreColumnas[2+i]="Tiempo "+i;
+				nombreColumnas[2+i]="Tiempo "+(i+1);
 			nombreColumnas[n+2]="Tiempo Final";nombreColumnas[n+3]="Diferencia";nombreColumnas[n+4]="Sexo";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
