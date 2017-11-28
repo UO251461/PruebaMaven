@@ -142,12 +142,7 @@ public class Carrera {
 	
 	public ArrayList<Integer> getTiemposControl() {
 		return tiemposControl;
-	}
-	
-	
-	public ArrayList<Integer> getTiemposControl() {
-		return tiemposControl;
-	}
+	}	
 
 	public void setTiemposControl(ArrayList<Integer> tiemposControl) {
 		this.tiemposControl = tiemposControl;

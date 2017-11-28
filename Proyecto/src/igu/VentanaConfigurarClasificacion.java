@@ -72,7 +72,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 				JButton okButton = new JButton("Aceptar");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						aï¿½adirCategorias();
+						añadirCategorias();
 						mostrarVentanaClasificacion(carrera);
 						dispose();
 					}
@@ -186,7 +186,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 		}
 	}
 	
-	private void aï¿½adirCategorias(){
+	private void añadirCategorias(){
 		Component[] comp = pnCategoria.getComponents();
 		for(int i=0;i<comp.length;i++){
 			if(comp[i] instanceof JRadioButton && ((JRadioButton) comp[i]).isSelected()){

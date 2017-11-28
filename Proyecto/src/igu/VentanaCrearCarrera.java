@@ -115,6 +115,9 @@ public class VentanaCrearCarrera extends JDialog {
 	private JTextField textTiempo5;
 	
 	private ArrayList<Integer> tControl = new ArrayList<Integer>();
+	private JLabel lblPlazosInscripcion_1;
+	
+
 
 	/**
 	 * Launch the application.
@@ -138,7 +141,7 @@ public class VentanaCrearCarrera extends JDialog {
 		contentPane.add(getBtnCrear());
 		contentPane.add(getPanelPlazos());
 		contentPane.add(getBtnBorrarPlazoInscripcion());
-		contentPane.add(getLblPlazosInscripcion());
+
 		contentPane.add(getScrollPlazos());
 		contentPane.add(getLblCategoriasFemeninas());
 		contentPane.add(getScrollFemenino());
@@ -149,6 +152,7 @@ public class VentanaCrearCarrera extends JDialog {
 		contentPane.add(getPanelInfoGeneral());
 		contentPane.add(getTxtrSeRecuerdaAl());
 		contentPane.add(getPanelTiemposControl());
+		contentPane.add(getLblPlazosInscripcion_1());
 	}
 
 	private JButton getBtnCrear() {
@@ -711,15 +715,7 @@ public class VentanaCrearCarrera extends JDialog {
 		return btnBorrarPlazoInscripcion;
 	}
 
-	private JLabel getLblPlazos() {
-		if (lblPlazos == null) {
-			lblPlazos = new JLabel("PLAZOS INSCRIPCION");
-			lblPlazos.setFont(new Font("Tahoma", Font.BOLD, 16));
-			lblPlazos.setHorizontalAlignment(SwingConstants.CENTER);
-			lblPlazos.setBounds(10, 188, 454, 29);
-		}
-		return lblPlazosInscripcion;
-	}
+
 	private JScrollPane getScrollPlazos() {
 		if (scrollPlazos == null) {
 			scrollPlazos = new JScrollPane();
@@ -1192,5 +1188,14 @@ public class VentanaCrearCarrera extends JDialog {
 			textTiempo5.setBounds(383, 98, 130, 20);
 		}
 		return textTiempo5;
+	}
+	private JLabel getLblPlazosInscripcion_1() {
+		if (lblPlazosInscripcion_1 == null) {
+			lblPlazosInscripcion_1 = new JLabel("PLAZOS INSCRIPCION");
+			lblPlazosInscripcion_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lblPlazosInscripcion_1.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPlazosInscripcion_1.setBounds(10, 188, 454, 31);
+		}
+		return lblPlazosInscripcion_1;
 	}
 }
