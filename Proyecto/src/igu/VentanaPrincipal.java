@@ -14,10 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -50,9 +46,6 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_3;
 	private JButton btnCambiarA;
 	
-	private JButton btClasificacion;
-	private JButton btnAsignarDorsal;
-
 	/**
 	 * Launch the application.
 	 */
