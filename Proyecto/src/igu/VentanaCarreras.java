@@ -52,6 +52,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnGestionarExtractos;
 	private JButton btnAsginarDorsales;
 	private JButton btnClasificacin;
+	private JButton btnCederDorsal;
 
 	/**
 	 * Create the frame.
@@ -164,7 +165,7 @@ public class VentanaCarreras extends JDialog {
 			listCarreras = new JList<Carrera>(modeloCarrera);
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
-				public void mouseClicked(MouseEvent arg0) {
+				public void mousePressed(MouseEvent arg0) {
 					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() == null) {
 					btnSiguiente.setEnabled(true);
 					btnInfoCarrera.setEnabled(true);
@@ -173,7 +174,7 @@ public class VentanaCarreras extends JDialog {
 					btnGestionarExtractos.setEnabled(true);
 					btnAsginarDorsales.setEnabled(true);
 					btnClasificacin.setEnabled(true);
-					}
+					btnCederDorsal.setEnabled(true);}
 				}
 			});
 
@@ -202,6 +203,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.setLayout(new GridLayout(10, 1, 0, 0));
 			panelBotonesCarrera.add(getBtnInfoCarrera());
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
+			panelBotonesCarrera.add(getBtnCederDorsal());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
 			panelBotonesCarrera.add(getBtnClasificacin());
@@ -349,6 +351,27 @@ public class VentanaCarreras extends JDialog {
 		vc.setVisible(true);
 	}
 
+	private JButton getBtnCederDorsal() {
+		if (btnCederDorsal == null) {
+			btnCederDorsal = new JButton("Ceder dorsal");
+			btnCederDorsal.setEnabled(false);
+			btnCederDorsal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					crearVentanaCederDorsal();
+				}
+			});
+		}
+		return btnCederDorsal;
+	}
+	/**
+	 * Crea una ventana ceder dorsal (Samuel)
+	 */
+	private void crearVentanaCederDorsal(){
+		VentanaCederDorsal vce = new VentanaCederDorsal(this);
+		vce.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		vce.setVisible(true);
+	}
 }
 
 

@@ -16,6 +16,29 @@ public class Inscripcion {
 		private String comentario;
 		
 		
+		/**
+		 * Este va a ser el Dios �nico y omnipotente constructor, 
+		 * los dem�s son lacayos y deber�an ser borrados
+		 * @param carrera
+		 * @param corredor
+		 */
+		public Inscripcion(Carrera carrera, Corredor corredor) {
+			this.carrera = carrera;
+			this.corredor = corredor;
+			this.fecha = new Date();
+			this.comentario="";
+			if(corredor!=null)
+				asignarCategoria(corredor.getFechaNacimiento(), carrera);
+		}
+
+		
+		
+		//--------------------------------BORRAR Y CORREGIR ERRORES----------------------------------------------------//
+
+		
+		
+		
+		
 		public Inscripcion(Carrera carrera, Corredor corredor, Date fecha, String categoria) {
 			this.carrera = carrera;
 			this.corredor = corredor;
@@ -24,8 +47,6 @@ public class Inscripcion {
 			this.comentario="";
 		}
 		
-		
-
 		
 		public Inscripcion(String idCompeticion, String idOrganizador, String dni, String pagado, Date fecha, String categoria) {
 			corredor = new Corredor(dni, 0, "", "", "");
@@ -117,16 +138,18 @@ public class Inscripcion {
 		}
 
 		@SuppressWarnings("deprecation")
-		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){			
-			int actual = new Date().getYear();			
-			int edad = actual - fechaNacimiento.getYear();
-			for(int i=0;i<carrera.getCategorias().size();i++){			
-				if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
-					this.categoria = carrera.getCategorias().get(i).getCategoria();
+		public void asignarCategoria(Date fechaNacimiento,Carrera carrera){		
+			if(fechaNacimiento!=null && carrera!= null){
+				int actual = new Date().getYear();			
+				int edad = actual - fechaNacimiento.getYear();
+				for(int i=0;i<carrera.getCategorias().size();i++){			
+					if(edad >= carrera.getCategorias().get(i).getLimiteInferior() && edad < carrera.getCategorias().get(i).getLimiteSuperior()){					
+						this.categoria = carrera.getCategorias().get(i).getCategoria();
+					}
 				}
+				if(this.categoria == null)
+					this.categoria = "Sin categoria";
 			}
-			if(this.categoria == null)
-				this.categoria = "Sin categoria";
 		}
 		
 		@Override
@@ -141,7 +164,5 @@ public class Inscripcion {
 		public String getComentario(){
 			return comentario;
 		}
-		
-		
 }
 
