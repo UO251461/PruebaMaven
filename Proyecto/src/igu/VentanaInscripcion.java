@@ -384,9 +384,9 @@ public class VentanaInscripcion extends JDialog {
 			
 			
 			
-			Corredor corr=vc.getBase().getBaseInscripciones().estaRegistrado(txtDni.getText());
+			boolean estainscrito=vc.getBase().getBaseInscripciones().estaInscrito(inscripcion);
 			// SI EL CORREDOR ESTA REGISTRADO corr SERÁ UN OBJETO, en caso contrario null
-			if(corr == null){
+			if(!estainscrito){
 				getBase().getBaseInscripciones().registrarCorredor(date, inscripcion);
 				JOptionPane.showMessageDialog(this, "¡Felicidades! Está Pre-inscrito");
 			}

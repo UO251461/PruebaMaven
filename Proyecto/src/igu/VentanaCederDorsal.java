@@ -132,19 +132,20 @@ public class VentanaCederDorsal extends JDialog {
 				@Override
 				public void focusLost(FocusEvent arg0) {
 					Inscripcion inscrip= null;
+					boolean estaInscrito = false;
 					if(campoDniNoVacio(txtDni)){
 						if(comprobarDniValido(txtDni)){
 							ponerLetraMayuscula(txtDni);
 							
 							Corredor corredor = new Corredor(txtDni.getText(), null, null, null, null);
 							Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
-							Inscripcion inscripcion = new Inscripcion(carreraSel, corredor);
-							inscrip=vc.getBase().getBaseInscripciones().estaInscrito(inscripcion);
+							inscrip = new Inscripcion(carreraSel, corredor);
+							estaInscrito=vc.getBase().getBaseInscripciones().estaInscrito(inscrip);
 						}
 					}
 					
 					
-					if(inscrip!=null){
+					if(estaInscrito && inscrip!=null){
 						completarCampos(inscrip);
 					}
 					else{
@@ -166,8 +167,10 @@ public class VentanaCederDorsal extends JDialog {
 		
 	}
 	private void completarCampos(Inscripcion inscripcion){
+		//-1 si no hay dorsal asignado, se añade en baseInscripciones
+		if(inscripcion.getDorsal()==-1)	txtDorsal.setText("SIN DORSAL");
+		else txtDorsal.setText(inscripcion.getDorsal()+"");
 		
-		txtDorsal.setText(inscripcion.getDorsal()+"");
 		txtEstado.setText(inscripcion.getEstado());
 		
 	}
@@ -526,9 +529,10 @@ public class VentanaCederDorsal extends JDialog {
 		Corredor corredor = new Corredor(txtDni.getText(), null, null, null, null);
 		Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 		Inscripcion inscripcion = new Inscripcion(carreraSel, corredor);	
+		/*
 		if(vc.getBase().getBaseInscripciones().estaInscrito(inscripcion) != null)
-			return true;
-		return false;
+			return true;*/
+		return vc.getBase().getBaseInscripciones().estaInscrito(inscripcion) ;
 	}
 	private boolean correctoDni2() {
 		char[] dniArray = txtDni2.getText().toCharArray();
