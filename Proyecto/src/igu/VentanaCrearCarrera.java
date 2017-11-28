@@ -1039,7 +1039,7 @@ public class VentanaCrearCarrera extends JDialog {
 	private JPanel getPanelTiemposControl() {
 		if (panelTiemposControl == null) {
 			panelTiemposControl = new JPanel();
-			panelTiemposControl.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Tiempos de control", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelTiemposControl.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Tiempos de control en minutos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panelTiemposControl.setBounds(484, 15, 596, 132);
 			panelTiemposControl.setLayout(null);
 			panelTiemposControl.add(getLblTiempoFinal());
