@@ -730,6 +730,24 @@ public class BaseInscripciones {
 		con.close();
 	}
 	
+	public String obtenerDNIPorDorsalYCompeticion(Carrera competicion,int dorsal) throws SQLException
+	{
+		Connection con = getConnection();
+		PreparedStatement pst = con.prepareStatement("select dni from inscripcion where IDCOMPETICION = 23 and IDORGANIZADOR = 1 and dorsal = 20");
+		pst.setString(1, competicion.getIdcarrera());
+		pst.setString(2, competicion.getOrganizador().getIdorganizador());
+		pst.setInt(3, dorsal);
+		
+		ResultSet rst = pst.executeQuery();
+		
+		String dni = "";
+		
+		while(rst.next())
+			dni = rst.getString("dni");
+		
+		return dni;
+	}	
+	
 	/**
 	 * Devuelve un corredor si el dni pasado como paraametro se encuentra en la base de datos, en caso contrario
 	 * devuelve null.(Samuel)
@@ -774,7 +792,7 @@ public class BaseInscripciones {
 				
 				ins.setEstado(rs.getString("ESTADO"));
 				//lo obtengo como string porque si lo obtengo como int i el valor en la base de datos es null retorna 0
-				// y 0 es un numero de dorsal válido
+				// y 0 es un numero de dorsal vï¿½lido
 				if(rs.getString("DORSAL") == null)
 					ins.setDorsal(-1);
 				else

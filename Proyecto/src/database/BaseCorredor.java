@@ -5,11 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
+import logica.Carrera;
 import logica.Corredor;
 import logica.Inscripcion;
 
@@ -51,7 +49,7 @@ public class BaseCorredor {
 		
 		
 	}
-	
+
 	
 	public ArrayList<Corredor> getCorredores() {
 		return corredores;
