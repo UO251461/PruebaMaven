@@ -171,16 +171,18 @@ public class VentanaCarreras extends JDialog {
 			listCarreras.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() == null) {
-					btnSiguiente.setEnabled(true);
-					btnInfoCarrera.setEnabled(true);
-					btnInscripcionesClub.setEnabled(true);
-					btnMostrarEstadoInscripciones.setEnabled(true);
-					btnGestionarExtractos.setEnabled(true);
-					btnAsginarDorsales.setEnabled(true);
-					btnClasificacin.setEnabled(true);
-					btnCederDorsal.setEnabled(true);
-					btnAadirTiempos.setEnabled(true);}
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					if(vp.getBase().getBaseCarrera().getCarreraSeleccionada() != null) {
+						btnSiguiente.setEnabled(true);
+						btnInfoCarrera.setEnabled(true);
+						btnInscripcionesClub.setEnabled(true);
+						btnMostrarEstadoInscripciones.setEnabled(true);
+						btnGestionarExtractos.setEnabled(true);
+						btnAsginarDorsales.setEnabled(true);
+						btnClasificacin.setEnabled(true);
+						btnCederDorsal.setEnabled(true);
+						btnAadirTiempos.setEnabled(true);
+					}
 				}
 			});
 
@@ -188,7 +190,16 @@ public class VentanaCarreras extends JDialog {
 		return listCarreras;
 	}
 	
-
+	private boolean habilitarRegistro() {
+		java.util.Date fecha = new Date();
+		Date fechaComp = vp.getBase().getBaseCarrera().getCarreraSeleccionada().getFechaCompeticion();
+		Long tiempoF = fecha.getTime();
+		Long tiempoC = fechaComp.getTime();
+		if(tiempoF >= tiempoC) {
+			return true;
+		}
+		return false;
+	}
 
 
 
@@ -391,7 +402,11 @@ public class VentanaCarreras extends JDialog {
 			btnAadirTiempos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
-					gestionarRegistroTiempo();
+					if(habilitarRegistro())
+						gestionarRegistroTiempo();
+					else {
+						JOptionPane.showMessageDialog(null, "La competicion aun no ha acabado y no hay registro de tiempo");
+					}
 				}
 			});
 		}

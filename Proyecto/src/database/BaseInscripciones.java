@@ -911,9 +911,9 @@ public class BaseInscripciones {
  	}
 	
 	
-	public void registrarTiemposCorredor(Carrera carrera, String dni, int[] tiempos, String comentario) {
+	public void registrarTiemposCorredor(Carrera carrera, String dni, int[] tiempos, String comentario) throws SQLException {
 		Connection con;
-		try {
+		
 			con = getConnection();
 			PreparedStatement pst = con.prepareStatement("INSERT INTO REGISTRO_TIEMPO_CORREDOR (IDCOMPETICION,COMENTARIO,IDORGANIZADOR,DNI,T_INICIO,T_FIN,T_1,T_2,T_3,T_4,T_5) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			pst.setString(1, carrera.getIdcarrera());
@@ -933,9 +933,7 @@ public class BaseInscripciones {
 			rst.close();
 			pst.close();
 			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		
 	}
 

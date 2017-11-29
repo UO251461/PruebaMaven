@@ -2,9 +2,11 @@ package logica;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
 
 import javax.swing.JOptionPane;
 
@@ -42,11 +44,14 @@ public class TratarRegistroTiempo {
 				vc.getBase().getBaseInscripciones().registrarTiemposCorredor(carrera, dni, tiempos, comentario);
 				line = br.readLine();
 			}
-
+			JOptionPane.showMessageDialog(null, "Se han añadido los tiempos correctamente");
 			br.close();
-		} catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "Ha habido un error al cargar el fichero");
-			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "El fichero no se ha generado, debido a que no ha acabado la carrera.");
+		}catch(SQLException se) {
+			JOptionPane.showMessageDialog(null, "Los datos registrados son erroneos o ya han sido insertados");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error al insertar el fichero");
 		}
 
 	}
@@ -55,7 +60,7 @@ public class TratarRegistroTiempo {
 		String coment = "";
 		for(int i= 0; i< rt.length;i++) {
 		
-				if( i== 0 && rt[i] == -1 && tiemposMaximos[i] != -1 && rt[i+1] == -1 && tiemposMaximos[i+1] != -1 && rt[1] != -1) {
+				if( i== 0 && rt[i] == -1 && tiemposMaximos[i] != -1 && rt[i+1] == -1 && tiemposMaximos[i+1] != -1 && rt[1] == -1) {
 					coment = "DNS";
 					break;
 				}
