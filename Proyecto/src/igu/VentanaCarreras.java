@@ -7,12 +7,10 @@ import javax.swing.border.EmptyBorder;
 import database.Base;
 import logica.Carrera;
 import logica.GestorExtractos;
-<<<<<<< Updated upstream
-import logica.Incidencia;
-=======
-import logica.TratarRegistroTiempo;
->>>>>>> Stashed changes
 
+import logica.Incidencia;
+
+import logica.TratarRegistroTiempo;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 
