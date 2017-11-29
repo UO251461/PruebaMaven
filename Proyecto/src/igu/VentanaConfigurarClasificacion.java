@@ -41,6 +41,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	private Carrera carrera;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private ArrayList<String> categorias;
+	private JRadioButton rdbtnGenerales;
 
 	/**
 	 * Create the dialog.
@@ -149,6 +150,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 			pnCategoria.setBounds(43, 148, 152, 114);
 			pnCategoria.setLayout(new GridLayout(0, 1, 0, 0));
 			pnCategoria.add(getRdbtnTodos());
+			pnCategoria.add(getRdbtnGenerales());
 			generarCategorias();
 		}
 		return pnCategoria;
@@ -188,6 +190,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	
 	private void añadirCategorias(){
 		Component[] comp = pnCategoria.getComponents();
+		categorias.add("Generales");
 		for(int i=0;i<comp.length;i++){
 			if(comp[i] instanceof JRadioButton && ((JRadioButton) comp[i]).isSelected()){
 				categorias.add(((JRadioButton) comp[i]).getText());
@@ -206,5 +209,11 @@ public class VentanaConfigurarClasificacion extends JDialog {
 		vc.setLocationRelativeTo(this);
 		vc.setModal(true);
 		vc.setVisible(true);
+	}
+	private JRadioButton getRdbtnGenerales() {
+		if (rdbtnGenerales == null) {
+			rdbtnGenerales = new JRadioButton("Generales");
+		}
+		return rdbtnGenerales;
 	}
 }

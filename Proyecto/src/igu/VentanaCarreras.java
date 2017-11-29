@@ -318,6 +318,10 @@ public class VentanaCarreras extends JDialog {
 			btnAsginarDorsales.setVisible(organizador);
 			btnAsginarDorsales.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					if(listCarreras.getSelectedValue().getFechaCompeticion().compareTo( new Date())<0)
+						JOptionPane.showMessageDialog(null, "No se pueden generar los dorsales\nLa carrera ya ha finalizado");
+					else{
+						
 					String idCarrera=listCarreras.getSelectedValue().getIdcarrera();
 					String idOrganizador=listCarreras.getSelectedValue().getOrganizador().getIdorganizador();
 					//int plazas=listCarreras.getSelectedValue().getPlazasDisponibles();
@@ -343,6 +347,7 @@ public class VentanaCarreras extends JDialog {
 					else{					
 						vp.getBase().getBaseInscripciones().actualizarDorsales(idCarrera, idOrganizador,-1);
 					}
+				}
 				}
 				}
 			});

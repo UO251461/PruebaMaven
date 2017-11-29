@@ -71,93 +71,97 @@ public class VentanaClasificacion extends JDialog {
 		int pos = 1;
 		int primero = 0;
 		if (categoria.equals("Generales")) {
+			nuevaFila = new Object[tiempos + 7];
+			for (Inscripcion i : datos) {
+				if (primero == 0) {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					String[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());			
+					for (int j = 2; j < time.length-1; j++) {
+						if (Integer.parseInt(time[j]) == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+
+					}
+					if (Integer.parseInt(time[1]) == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					nuevaFila[tiempos + 3] = "";
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					nuevaFila[tiempos + 5] = i.getCategoria();
+					nuevaFila[tiempos+6]=time[time.length-1];
+					modeloTabla.addRow(nuevaFila);
+					primero = Integer.parseInt(time[1]);
+				} else {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					String[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - 1; j++) {
+						if (Integer.parseInt(time[j]) == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+						;
+
+					}
+					if (Integer.parseInt(time[1]) == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					nuevaFila[tiempos + 3] = "+" + (primero - Integer.parseInt(time[1]));
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					nuevaFila[tiempos + 5] = i.getCategoria();
+					nuevaFila[tiempos+6]=time[time.length-1];
+					modeloTabla.addRow(nuevaFila);
+					
+				}
+			}
+		} else {
 			nuevaFila = new Object[tiempos + 6];
 			for (Inscripcion i : datos) {
 				if (primero == 0) {
 					nuevaFila[0] = pos++;
 					nuevaFila[1] = i.getDorsal();
-					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
-					for (int j = 2; j < time.length - tiempos; j++) {
-						if (time[j] == 0)
+					String[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - 1; j++) {
+						if (Integer.parseInt(time[j]) == 0)
 							nuevaFila[j] = "---";
 						else
 							nuevaFila[j] = time[j];
 						;
 
 					}
-					if (time[tiempos+2] == 0)
+					if (Integer.parseInt(time[1]) == 0)
 						nuevaFila[tiempos+2] = "---";
 					else
 						nuevaFila[tiempos + 2] = time[1];
 					nuevaFila[tiempos + 3] = "";
 					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
-					nuevaFila[tiempos + 5] = i.getCategoria();
+					nuevaFila[tiempos+5]=time[time.length-1];
 					modeloTabla.addRow(nuevaFila);
-					primero = time[1];
+					primero = Integer.parseInt(time[1]);
 				} else {
 					nuevaFila[0] = pos++;
 					nuevaFila[1] = i.getDorsal();
-					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
-					for (int j = 2; j < time.length - tiempos; j++) {
-						if (time[j] == 0)
+					String[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - 1; j++) {
+						if (Integer.parseInt(time[j]) == 0)
 							nuevaFila[j] = "---";
 						else
 							nuevaFila[j] = time[j];
 						;
 
 					}
-					if (time[tiempos+2] == 0)
-						nuevaFila[tiempos+2] = "---";
-					else
-						nuevaFila[tiempos + 2] = time[1];
-					nuevaFila[tiempos + 3] = "+" + (primero - time[1]);
-					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
-					nuevaFila[tiempos + 5] = i.getCategoria();
-					modeloTabla.addRow(nuevaFila);
-				}
-			}
-		} else {
-			nuevaFila = new Object[tiempos + 5];
-			for (Inscripcion i : datos) {
-				if (primero == 0) {
-					nuevaFila[0] = pos++;
-					nuevaFila[1] = i.getDorsal();
-					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
-					for (int j = 2; j < time.length - tiempos; j++) {
-						if (time[j] == 0)
-							nuevaFila[j] = "---";
-						else
-							nuevaFila[j] = time[j];
-						;
-
-					}
-					if (time[tiempos+2] == 0)
-						nuevaFila[tiempos+2] = "---";
-					else
-						nuevaFila[tiempos + 2] = time[1];
-					nuevaFila[tiempos + 3] = "";
-					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
-					modeloTabla.addRow(nuevaFila);
-					primero = time[1];
-				} else {
-					nuevaFila[0] = pos++;
-					nuevaFila[1] = i.getDorsal();
-					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
-					for (int j = 2; j < time.length - tiempos; j++) {
-						if (time[j] == 0)
-							nuevaFila[j] = "---";
-						else
-							nuevaFila[j] = time[j];
-						;
-
-					}
-					if (time[tiempos+2] == 0)
+					if (Integer.parseInt(time[1]) == 0)
 						nuevaFila[tiempos+2] = "---";
 					else
 						nuevaFila[tiempos + 2] = time[1];
 					
-					nuevaFila[tiempos + 3] = "+" + (primero - time[1]);
+					nuevaFila[tiempos + 3] = "+" + (primero - Integer.parseInt(time[1]));
 					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					nuevaFila[tiempos+5]=time[time.length-1];
 					modeloTabla.addRow(nuevaFila);
 				}
 			}
@@ -241,7 +245,7 @@ public class VentanaClasificacion extends JDialog {
 		if (categoria.equals("Generales")) {
 			tablaClasificacion = new JTable();
 			int n = base.getBaseInscripciones().getNumeroTiempos(carrera);
-			String[] nombreColumnas = new String[n + 6];
+			String[] nombreColumnas = new String[n + 7];
 			nombreColumnas[0] = "Posicion";
 			nombreColumnas[1] = "Dorsal";
 			for (int i = 0; i < n; i++)
@@ -250,6 +254,7 @@ public class VentanaClasificacion extends JDialog {
 			nombreColumnas[n + 3] = "Diferencia";
 			nombreColumnas[n + 4] = "Sexo";
 			nombreColumnas[n + 5] = "Categoria";
+			nombreColumnas[n+6]="Comentario";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
@@ -264,7 +269,7 @@ public class VentanaClasificacion extends JDialog {
 		} else {
 			tablaClasificacion = new JTable();
 			int n = base.getBaseInscripciones().getNumeroTiempos(carrera);
-			String[] nombreColumnas = new String[n + 5];
+			String[] nombreColumnas = new String[n + 6];
 			nombreColumnas[0] = "Posicion";
 			nombreColumnas[1] = "Dorsal";
 			for (int i = 0; i < n; i++)
@@ -272,6 +277,7 @@ public class VentanaClasificacion extends JDialog {
 			nombreColumnas[n + 2] = "Tiempo Final";
 			nombreColumnas[n + 3] = "Diferencia";
 			nombreColumnas[n + 4] = "Sexo";
+			nombreColumnas[n+5]="Comentario";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
