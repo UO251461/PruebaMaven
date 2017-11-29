@@ -735,9 +735,7 @@ public class BaseInscripciones {
 		pst.close();
 		con.close();
 	}
-	
-<<<<<<< Updated upstream
-=======
+
 	public String obtenerDNIPorDorsalYCompeticion(Carrera competicion,int dorsal) throws SQLException
 	{
 		Connection con = getConnection();
@@ -755,8 +753,7 @@ public class BaseInscripciones {
 		
 		return dni;
 	}	
-	
->>>>>>> Stashed changes
+
 	/**
 	 * Devuelve un corredor si el dni pasado como paraametro se encuentra en la base de datos, en caso contrario
 	 * devuelve null.(Samuel)
@@ -879,8 +876,7 @@ public class BaseInscripciones {
 		}
 		return inscrito;
 	}
-<<<<<<< Updated upstream
-=======
+
 	
 	public int[] getTiemposMaximos(Carrera carrera) {
 		int[] tiempos = new int[7];
@@ -942,10 +938,9 @@ public class BaseInscripciones {
 		}
 		
 	}
-}
 
 
->>>>>>> Stashed changes
+
 
 	public int getNumeroTiempos(Carrera carrera) {
 		int n=0;
