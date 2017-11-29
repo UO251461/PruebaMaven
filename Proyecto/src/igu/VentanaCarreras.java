@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import database.Base;
 import logica.Carrera;
 import logica.GestorExtractos;
+import logica.Incidencia;
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -276,7 +278,6 @@ public class VentanaCarreras extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
 					generarExtractos();
-					vp.getBase().getBaseInscripciones().gestionarIncidenciasActuales();
 				}
 			});
 		}
@@ -289,7 +290,10 @@ public class VentanaCarreras extends JDialog {
 		GestorExtractos gestor = new GestorExtractos(this);
 		gestor.leerFichero(fichero);
 		vp.getBase().getBaseInscripciones().generarIncidencias(gestor);
-
+		
+		ArrayList<Incidencia> incidencias = gestor.getIncidencias();		
+		if(incidencias.size()>0)	
+			vp.getBase().getBaseInscripciones().gestionarIncidenciasActuales(incidencias.get(0).getIdCompeti(), incidencias.get(0).getOrganizador());
 	}
 	private JButton getBtnAsginarDorsales() {
 		if (btnAsginarDorsales == null) {

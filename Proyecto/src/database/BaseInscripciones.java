@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JDialog;
 
@@ -204,8 +205,8 @@ public class BaseInscripciones {
 			ps.setString(4, estado);
 			ps.setString(5, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
 			ps.setString(6, inscripcion.getCategoria());
-			float precio = getPrecioCarrera(inscripcion.getCarrera().getIdcarrera(), inscripcion.getCarrera().getOrganizador().getIdorganizador());
-			ps.setFloat(7, precio);
+			double precio = inscripcion.getCarrera().getPrecio();
+			ps.setDouble(7, precio);
 			if(numDorsal<0)
 				ps.setString(8, null);
 			else
@@ -422,15 +423,17 @@ public class BaseInscripciones {
 
 	/**
 	 * Mï¿½todo que gestiona los estados de las inscripciones segï¿½n el campo
-	 * "incidencias" . Si de una inscripcion el campo "incidencia" estï¿½ en
+	 * "incidencias" de la competicion señalada. Si de una inscripcion el campo "incidencia" estï¿½ en
 	 * "Falta dinero"estado de la inscripciï¿½n ->ANULADO, si "Devoluciï¿½n" estado
 	 * de la inscripciï¿½n->INSCRITO, si "Fuera de plazo" estado -> ANULADO, si
 	 * Pago correcto" estado -> "INSCRITO", si "(BLANCO)" estado -> "ANULADO",
 	 * luego se mostrarï¿½ una ventana con los datos de las incidencias :el nï¿½mero
 	 * de pagos menos, no pagados, pagos ok, pago demï¿½s, pago fuera de plazo,
 	 * cantidad procesados.(SAMUEL)
+	 * @param idCompeticion, id de la competicion
+	 * @param idOrganizador, id del organizador
 	 */
-	public void gestionarIncidenciasActuales() {
+	public void gestionarIncidenciasActuales(String idCompeticion, String idOrganizador) {
 		int cLeidos = 0;
 		int nPagoMenos = 0;
 		int nPagoMas = 0;
@@ -440,15 +443,18 @@ public class BaseInscripciones {
 		String campoIncidencia = "";
 		try {
 			con = getConnection();
-			ps = con.prepareStatement("select IDCOMPETICION, IDORGANIZADOR, DNI, INCIDENCIA from INSCRIPCION");
+			ps = con.prepareStatement("select DNI, INCIDENCIA from INSCRIPCION where IDCOMPETICION = ? and IDORGANIZADOR = ?");
+			ps.setString(1, idCompeticion);
+			ps.setString(2, idOrganizador);
 			rs = ps.executeQuery();
+			
 			PreparedStatement ps2 = con.prepareStatement(
 					"UPDATE INSCRIPCION SET ESTADO = ? WHERE IDCOMPETICION=? AND IDORGANIZADOR=? AND DNI = ?");
 			while (rs.next()) {
 				campoIncidencia = rs.getString("INCIDENCIA");
 
-				ps2.setString(2, rs.getString("IDCOMPETICION"));
-				ps2.setString(3, rs.getString("IDORGANIZADOR"));
+				ps2.setString(2, idCompeticion);
+				ps2.setString(3, idOrganizador);
 				ps2.setString(4, rs.getString("DNI"));
 
 				if (campoIncidencia == null) {
