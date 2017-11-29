@@ -39,7 +39,7 @@ public class InscripcionesClub {
 				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 				Date fecha = formato.parse(fields[4]);
 
-				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3].toUpperCase(),fields[0],fields[1]),null,"");
+				//inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3].toUpperCase(),fields[0],fields[1]),null,"");
 
 				Date fechaHoy = new Date();
 				inscripcion = new Inscripcion(vi.getVc().getBase().getBaseCarrera().getCarreraSeleccionada(), new Corredor(fields[2],fecha,fields[3],fields[0],fields[1]),fechaHoy,"");

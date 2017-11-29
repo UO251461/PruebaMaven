@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import igu.VentanaInformeIncidencias;
 import logica.Carrera;
@@ -21,6 +22,7 @@ import logica.Corredor;
 import logica.GestorExtractos;
 import logica.Incidencia;
 import logica.Inscripcion;
+import logica.TratarRegistroTiempo;
 
 public class BaseInscripciones {
 	private final static String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
@@ -734,6 +736,27 @@ public class BaseInscripciones {
 		con.close();
 	}
 	
+<<<<<<< Updated upstream
+=======
+	public String obtenerDNIPorDorsalYCompeticion(Carrera competicion,int dorsal) throws SQLException
+	{
+		Connection con = getConnection();
+		PreparedStatement pst = con.prepareStatement("select dni from inscripcion where IDCOMPETICION = ? and IDORGANIZADOR = ? and dorsal = ?");
+		pst.setString(1, competicion.getIdcarrera());
+		pst.setString(2, competicion.getOrganizador().getIdorganizador());
+		pst.setInt(3, dorsal);
+		
+		ResultSet rst = pst.executeQuery();
+		
+		String dni = "";
+	
+		while(rst.next())	
+			dni = rst.getString("dni");
+		
+		return dni;
+	}	
+	
+>>>>>>> Stashed changes
 	/**
 	 * Devuelve un corredor si el dni pasado como paraametro se encuentra en la base de datos, en caso contrario
 	 * devuelve null.(Samuel)
@@ -856,6 +879,73 @@ public class BaseInscripciones {
 		}
 		return inscrito;
 	}
+<<<<<<< Updated upstream
+=======
+	
+	public int[] getTiemposMaximos(Carrera carrera) {
+		int[] tiempos = new int[7];
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement("select tiempo_inicio, tiempo_final,tiempo1,tiempo2,tiempo3,tiempo4,tiempo5 from tiempos_control where idcompeticion = ? and idorganizador = ? ");
+			pst.setString(1, carrera.getIdcarrera());
+			pst.setString(2, carrera.getOrganizador().getIdorganizador());
+			ResultSet rst = pst.executeQuery();
+			while(rst.next()) {
+				tiempos[0] = rst.getInt("tiempo_inicio");
+				tiempos[1] = rst.getInt("tiempo_final");
+				tiempos[2] = rst.getInt("tiempo1");
+				tiempos[3] = rst.getInt("tiempo2");
+				tiempos[4] = rst.getInt("tiempo3");
+				tiempos[5] = rst.getInt("tiempo4");
+				tiempos[6] = rst.getInt("tiempo5");
+				
+				
+			}
+			rst.close();
+			pst.close();
+			con.close();
+			
+		} catch (SQLException sql) {
+			sql.printStackTrace();
+		} 
+		
+		
+		
+		return tiempos;
+ 	}
+	
+	
+	public void registrarTiemposCorredor(Carrera carrera, String dni, int[] tiempos, String comentario) {
+		Connection con;
+		try {
+			con = getConnection();
+			PreparedStatement pst = con.prepareStatement("INSERT INTO REGISTRO_TIEMPO_CORREDOR (IDCOMPETICION,COMENTARIO,IDORGANIZADOR,DNI,T_INICIO,T_FIN,T_1,T_2,T_3,T_4,T_5) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+			pst.setString(1, carrera.getIdcarrera());
+			pst.setString(2, comentario);
+			pst.setString(3, carrera.getOrganizador().getIdorganizador());
+			pst.setString(4, dni);
+			pst.setInt(5, tiempos[0]);
+			pst.setInt(6, tiempos[1]);
+			pst.setInt(7, tiempos[2]);
+			pst.setInt(8, tiempos[3]);
+			pst.setInt(9, tiempos[4]);
+			pst.setInt(10, tiempos[5]);
+			pst.setInt(11, tiempos[6]);
+			
+			ResultSet rst = pst.executeQuery();
+			rst.next();
+			rst.close();
+			pst.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+}
+
+
+>>>>>>> Stashed changes
 
 	public int getNumeroTiempos(Carrera carrera) {
 		int n=0;

@@ -179,6 +179,11 @@ public class Ventana_Inscripcion_Club extends JFrame {
 							String fecha =ins.getCorredor().getFechaNacimiento().getDate()+ "/" + (ins.getCorredor().getFechaNacimiento().getMonth()+1) +"/"+(ins.getCorredor().getFechaNacimiento().getYear()+1900);
 							try {
 								inscrito = vc.getBase().getBaseInscripciones().registrarCorredor(fecha, ins);
+
+								if(inscrito)
+									contadorOK++;
+								else
+									contadorKO++;
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -189,10 +194,6 @@ public class Ventana_Inscripcion_Club extends JFrame {
 							btnContinuar.setEnabled(true);
 
 
-						if(inscrito)
-							contadorOK++;
-						else
-							contadorKO++;
 					
 
 					txtProcesados.setText(String.valueOf(inscripciones.size())); 
@@ -257,6 +258,9 @@ public class Ventana_Inscripcion_Club extends JFrame {
 						File textoInscripcion = jfInscripcion.getSelectedFile();
 						inscripcionClub.leerFichero(textoInscripcion);
 						txtLocalizacion.setText(textoInscripcion.getAbsolutePath());
+						txtProcesados.setText("0");
+						txtProcesadosKo.setText("0");
+						txtProcesadosOk.setText("0");
 						inscripciones = inscripcionClub.getInscripcionesClub();
 
 						btnInscribir.setEnabled(true);

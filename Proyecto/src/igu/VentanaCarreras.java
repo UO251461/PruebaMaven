@@ -7,7 +7,11 @@ import javax.swing.border.EmptyBorder;
 import database.Base;
 import logica.Carrera;
 import logica.GestorExtractos;
+<<<<<<< Updated upstream
 import logica.Incidencia;
+=======
+import logica.TratarRegistroTiempo;
+>>>>>>> Stashed changes
 
 import javax.swing.JLabel;
 import java.awt.GridLayout;
@@ -55,6 +59,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnAsginarDorsales;
 	private JButton btnClasificacin;
 	private JButton btnCederDorsal;
+	private JButton btnAadirTiempos;
 
 	/**
 	 * Create the frame.
@@ -176,7 +181,8 @@ public class VentanaCarreras extends JDialog {
 					btnGestionarExtractos.setEnabled(true);
 					btnAsginarDorsales.setEnabled(true);
 					btnClasificacin.setEnabled(true);
-					btnCederDorsal.setEnabled(true);}
+					btnCederDorsal.setEnabled(true);
+					btnAadirTiempos.setEnabled(true);}
 				}
 			});
 
@@ -210,6 +216,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
 			panelBotonesCarrera.add(getBtnClasificacin());
 			panelBotonesCarrera.add(getBtnAsginarDorsales());
+			panelBotonesCarrera.add(getBtnAadirTiempos());
 		}
 		return panelBotonesCarrera;
 	}
@@ -378,7 +385,28 @@ public class VentanaCarreras extends JDialog {
 		vce.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		vce.setVisible(true);
 	}
+	private JButton getBtnAadirTiempos() {
+		if (btnAadirTiempos == null) {
+			btnAadirTiempos = new JButton("A\u00F1adir Tiempos");
+			btnAadirTiempos.setEnabled(false);
+			btnAadirTiempos.setVisible(organizador);
+			btnAadirTiempos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					gestionarRegistroTiempo();
+				}
+			});
+		}
+		return btnAadirTiempos;
+	}
+	
+	private void gestionarRegistroTiempo() {
+		File fichero = new File("documentos/registrotiempo" + vp.getBase().getBaseCarrera().getCarreraSeleccionada().getIdcarrera()+"-" + 
+				vp.getBase().getBaseCarrera().getCarreraSeleccionada().getOrganizador().getIdorganizador()+".txt");
+		TratarRegistroTiempo trt = new TratarRegistroTiempo(this);
+		trt.leerFichero(fichero);
+	}
 }
 
-
+ 
 
