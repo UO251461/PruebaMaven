@@ -98,21 +98,25 @@ public class BaseInscripciones {
 	public boolean registrarCorredor(String fecha, Inscripcion inscripcion) throws SQLException {
 		boolean inscrito;
 		try {
-			con = getConnection();
-
 			Corredor c = inscripcion.getCorredor();
-			String dni = c.getDni();
-			String nombre = c.getNombre();
-			String apellido = c.getApellido();
-			String sexo = c.getSexo();
-			// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
-			ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
-			ps.setString(1, dni);
-			ps.setString(2, nombre);
-			ps.setString(3, apellido);
-			ps.setString(4, fecha);
-			ps.setString(5, sexo);
-			rs = ps.executeQuery();
+			//Si el corredor se encuentra en la base no hace falta registrarlo de nuevo
+			if( estaRegistrado(c.getDni())==null ){
+				con = getConnection();
+	
+				
+				String dni = c.getDni();
+				String nombre = c.getNombre();
+				String apellido = c.getApellido();
+				String sexo = c.getSexo();
+				// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
+				ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
+				ps.setString(1, dni);
+				ps.setString(2, nombre);
+				ps.setString(3, apellido);
+				ps.setString(4, fecha);
+				ps.setString(5, sexo);
+				rs = ps.executeQuery();
+			}
 
 		} catch (SQLException sql) {
 			sql.printStackTrace();
@@ -850,22 +854,25 @@ public class BaseInscripciones {
 	public boolean registrarCorredorCedido(Inscripcion inscripcion) throws SQLException {
 		boolean inscrito;
 		try {
-			con = getConnection();
-
 			Corredor c = inscripcion.getCorredor();
-			String dni = c.getDni();
-			String nombre = c.getNombre();
-			String apellido = c.getApellido();
-			String sexo = c.getSexo();
-			Date fecha = inscripcion.getCorredor().getFechaNacimiento();
-			// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
-			ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
-			ps.setString(1, dni);
-			ps.setString(2, nombre);
-			ps.setString(3, apellido);
-			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
-			ps.setString(5, sexo);
-			rs = ps.executeQuery();
+			if( estaRegistrado(c.getDni())==null ){
+				con = getConnection();
+	
+				
+				String dni = c.getDni();
+				String nombre = c.getNombre();
+				String apellido = c.getApellido();
+				String sexo = c.getSexo();
+				Date fecha = inscripcion.getCorredor().getFechaNacimiento();
+				// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
+				ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
+				ps.setString(1, dni);
+				ps.setString(2, nombre);
+				ps.setString(3, apellido);
+				ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
+				ps.setString(5, sexo);
+				rs = ps.executeQuery();
+			}
 
 		} catch (SQLException sql) {
 			sql.printStackTrace();

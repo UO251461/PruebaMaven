@@ -486,9 +486,12 @@ public class VentanaCederDorsal extends JDialog {
 						if(correctoDni1()){
 							if(correctoDni2()){
 								if(txtEstado.getText().equals("INSCRITO")){
-									int resp = mensajeOpcion();
-									if(resp == 0)
-										ceder();									
+									if(!txtDni.getText().equals(txtDni2.getText())){
+										int resp = mensajeOpcion();
+										if(resp == 0)
+											ceder();
+									}	
+									else errorIguales();
 								}else errorNoInscrito();
 								
 							}else errorDni2();						
@@ -562,6 +565,9 @@ public class VentanaCederDorsal extends JDialog {
 		JOptionPane.showMessageDialog(this, "Únicamente pueden ceder sus dorsales los corredores cuyo estado sea INSCRITO.");
 	}
 
+	private void errorIguales() {
+		JOptionPane.showMessageDialog(this, "No se puede ceder el dorsal a uno mismo.");		
+	}
 	private void errorDni1() {
 		JOptionPane.showMessageDialog(this, "El primer corredor no está inscrito en esta carrera.");		
 	}
