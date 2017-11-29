@@ -1,3 +1,4 @@
+
 package database;
 
 import java.sql.Connection;
@@ -94,25 +95,22 @@ public class BaseInscripciones {
 	public boolean registrarCorredor(String fecha, Inscripcion inscripcion) throws SQLException {
 		boolean inscrito;
 		try {
+			con = getConnection();
+
 			Corredor c = inscripcion.getCorredor();
-			//Si el corredor se encuentra en la base no hace falta registrarlo de nuevo
-			if( estaRegistrado(c.getDni())==null ){
-				con = getConnection();
-	
-				
-				String dni = c.getDni();
-				String nombre = c.getNombre();
-				String apellido = c.getApellido();
-				String sexo = c.getSexo();
-				// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
-				ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
-				ps.setString(1, dni);
-				ps.setString(2, nombre);
-				ps.setString(3, apellido);
-				ps.setString(4, fecha);
-				ps.setString(5, sexo);
-				rs = ps.executeQuery();
-			}
+			String dni = c.getDni();
+			String nombre = c.getNombre();
+			String apellido = c.getApellido();
+			String sexo = c.getSexo();
+			// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
+			ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
+			ps.setString(1, dni);
+			ps.setString(2, nombre);
+			ps.setString(3, apellido);
+			ps.setString(4, fecha);
+			ps.setString(5, sexo);
+			rs = ps.executeQuery();
+
 		} catch (SQLException sql) {
 			sql.printStackTrace();
 		} finally {
@@ -730,24 +728,6 @@ public class BaseInscripciones {
 		con.close();
 	}
 	
-	public String obtenerDNIPorDorsalYCompeticion(Carrera competicion,int dorsal) throws SQLException
-	{
-		Connection con = getConnection();
-		PreparedStatement pst = con.prepareStatement("select dni from inscripcion where IDCOMPETICION = 23 and IDORGANIZADOR = 1 and dorsal = 20");
-		pst.setString(1, competicion.getIdcarrera());
-		pst.setString(2, competicion.getOrganizador().getIdorganizador());
-		pst.setInt(3, dorsal);
-		
-		ResultSet rst = pst.executeQuery();
-		
-		String dni = "";
-		
-		while(rst.next())
-			dni = rst.getString("dni");
-		
-		return dni;
-	}	
-	
 	/**
 	 * Devuelve un corredor si el dni pasado como paraametro se encuentra en la base de datos, en caso contrario
 	 * devuelve null.(Samuel)
@@ -792,7 +772,7 @@ public class BaseInscripciones {
 				
 				ins.setEstado(rs.getString("ESTADO"));
 				//lo obtengo como string porque si lo obtengo como int i el valor en la base de datos es null retorna 0
-				// y 0 es un numero de dorsal v�lido
+				// y 0 es un numero de dorsal valido
 				if(rs.getString("DORSAL") == null)
 					ins.setDorsal(-1);
 				else
@@ -844,25 +824,22 @@ public class BaseInscripciones {
 	public boolean registrarCorredorCedido(Inscripcion inscripcion) throws SQLException {
 		boolean inscrito;
 		try {
+			con = getConnection();
+
 			Corredor c = inscripcion.getCorredor();
-			if( estaRegistrado(c.getDni())==null ){
-				con = getConnection();
-	
-				
-				String dni = c.getDni();
-				String nombre = c.getNombre();
-				String apellido = c.getApellido();
-				String sexo = c.getSexo();
-				Date fecha = inscripcion.getCorredor().getFechaNacimiento();
-				// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
-				ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
-				ps.setString(1, dni);
-				ps.setString(2, nombre);
-				ps.setString(3, apellido);
-				ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
-				ps.setString(5, sexo);
-				rs = ps.executeQuery();
-			}
+			String dni = c.getDni();
+			String nombre = c.getNombre();
+			String apellido = c.getApellido();
+			String sexo = c.getSexo();
+			Date fecha = inscripcion.getCorredor().getFechaNacimiento();
+			// REGISTRAR E INSERTAR EN LA TABLA "CORREDOR"
+			ps = con.prepareStatement("INSERT INTO CORREDOR VALUES(?,?,?,?,?)");
+			ps.setString(1, dni);
+			ps.setString(2, nombre);
+			ps.setString(3, apellido);
+			ps.setString(4, new SimpleDateFormat("dd-MM-yyyy").format(fecha));
+			ps.setString(5, sexo);
+			rs = ps.executeQuery();
 
 		} catch (SQLException sql) {
 			sql.printStackTrace();
@@ -873,8 +850,59 @@ public class BaseInscripciones {
 		}
 		return inscrito;
 	}
+
+	public int getNumeroTiempos(Carrera carrera) {
+		int n=0;
+		try {
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement("select t_1, t_2, t_3, t_4, t_5"
+					+ " from REGISTRO_TIEMPO_CORREDOR "
+					+ "where IDCOMPETICION=? and IDORGANIZADOR=? order by T_FIN");
+			ps.setString(1, carrera.getIdcarrera());
+			ps.setString(2, carrera.getOrganizador().getIdorganizador());
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()){
+				for(int i=1;i<6;i++){
+					if(rs.getInt(i)!=-1){
+						n++;
+					}
+				}
+			}
+			rs.close();
+			ps.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
+
+	public int[] getTiempo(Carrera carrera, Corredor corredor) {
+		int[] n=new int[7];
+		try {
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement("select *"
+					+ " from REGISTRO_TIEMPO_CORREDOR "
+					+ "where IDCOMPETICION=? and IDORGANIZADOR=? and DNI=? order by T_FIN");
+			ps.setString(1, carrera.getIdcarrera());
+			ps.setString(2, carrera.getOrganizador().getIdorganizador());
+			ps.setString(3, corredor.getDni());
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()){
+				for(int i=0;i<7;i++){
+					n[i]=rs.getInt(i+1);
+				}
+			}
+			rs.close();
+			ps.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return n;
+	}
 }
-
-
-
-

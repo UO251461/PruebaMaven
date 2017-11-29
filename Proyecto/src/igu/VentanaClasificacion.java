@@ -42,21 +42,6 @@ public class VentanaClasificacion extends JDialog {
 	private ArrayList<String> categorias;
 	private int sexo;
 
-	// /**
-	// * Launch the application.
-	// */
-	// public static void main(String[] args) {
-	// EventQueue.invokeLater(new Runnable() {
-	// public void run() {
-	// try {
-	// VentanaClasificacion frame = new VentanaClasificacion("6");
-	// frame.setVisible(true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// }
 
 	/**
 	 * Create the frame.
@@ -79,23 +64,102 @@ public class VentanaClasificacion extends JDialog {
 		generarTablas();
 	}
 
-	public void añadirFilas(String categoria, ModeloNoEditable modeloTabla) {
+	public void añadirFilas(String categoria, ModeloNoEditable modeloTabla, int tiempos) {
 		ArrayList<Inscripcion> datos;
-		Object[] nuevaFila = new Object[6];
+		Object[] nuevaFila = new Object[tiempos + 6];
 		datos = base.getBaseInscripciones().generarClasificaciones(sexo, carrera.getIdcarrera(), categoria);
 		int pos = 1;
-		for (Inscripcion i : datos) {
-			if (true) {
-				nuevaFila[0] = pos++;
-				nuevaFila[1] = i.getCorredor().getDni();
-				nuevaFila[2] = i.getDorsal();
-				if (i.getTiempo() == 0)
-					nuevaFila[3] = "---";
-				else
-					nuevaFila[3] = i.getTiempo();
-				nuevaFila[4] = i.getCorredor().getSexo();
-				nuevaFila[5] = i.getCategoria();
-				modeloTabla.addRow(nuevaFila);
+		int primero = 0;
+		if (categoria.equals("Generales")) {
+			nuevaFila = new Object[tiempos + 6];
+			for (Inscripcion i : datos) {
+				if (primero == 0) {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - tiempos; j++) {
+						if (time[j] == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+						;
+
+					}
+					if (time[tiempos+2] == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					nuevaFila[tiempos + 3] = "";
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					nuevaFila[tiempos + 5] = i.getCategoria();
+					modeloTabla.addRow(nuevaFila);
+					primero = time[1];
+				} else {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - tiempos; j++) {
+						if (time[j] == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+						;
+
+					}
+					if (time[tiempos+2] == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					nuevaFila[tiempos + 3] = "+" + (primero - time[1]);
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					nuevaFila[tiempos + 5] = i.getCategoria();
+					modeloTabla.addRow(nuevaFila);
+				}
+			}
+		} else {
+			nuevaFila = new Object[tiempos + 5];
+			for (Inscripcion i : datos) {
+				if (primero == 0) {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - tiempos; j++) {
+						if (time[j] == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+						;
+
+					}
+					if (time[tiempos+2] == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					nuevaFila[tiempos + 3] = "";
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					modeloTabla.addRow(nuevaFila);
+					primero = time[1];
+				} else {
+					nuevaFila[0] = pos++;
+					nuevaFila[1] = i.getDorsal();
+					int[] time = base.getBaseInscripciones().getTiempo(carrera, i.getCorredor());
+					for (int j = 2; j < time.length - tiempos; j++) {
+						if (time[j] == 0)
+							nuevaFila[j] = "---";
+						else
+							nuevaFila[j] = time[j];
+						;
+
+					}
+					if (time[tiempos+2] == 0)
+						nuevaFila[tiempos+2] = "---";
+					else
+						nuevaFila[tiempos + 2] = time[1];
+					
+					nuevaFila[tiempos + 3] = "+" + (primero - time[1]);
+					nuevaFila[tiempos + 4] = i.getCorredor().getSexo();
+					modeloTabla.addRow(nuevaFila);
+				}
 			}
 		}
 	}
@@ -176,40 +240,49 @@ public class VentanaClasificacion extends JDialog {
 		ModeloNoEditable modeloTabla;
 		if (categoria.equals("Generales")) {
 			tablaClasificacion = new JTable();
-			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo", "Categoria" };
+			int n = base.getBaseInscripciones().getNumeroTiempos(carrera);
+			String[] nombreColumnas = new String[n + 6];
+			nombreColumnas[0] = "Posicion";
+			nombreColumnas[1] = "Dorsal";
+			for (int i = 0; i < n; i++)
+				nombreColumnas[2 + i] = "Tiempo " + (i + 1);
+			nombreColumnas[n + 2] = "Tiempo Final";
+			nombreColumnas[n + 3] = "Diferencia";
+			nombreColumnas[n + 4] = "Sexo";
+			nombreColumnas[n + 5] = "Categoria";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
 			// las crearemos en tiempo de ejecucion
 			tablaClasificacion.setModel(modeloTabla);
-			// Aplica el renderer que marca la fila seleccionada en rojo y
-			// negrita
-			// tablaInscripciones.setDefaultRenderer(Object.class, new
-			// RendererSubstance());
 			/// subo el alto de la fila
 			tablaClasificacion.setRowHeight(30);
 			// modifico el ancho de la columna 0
 			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			añadirFilas(categoria, modeloTabla);
+			añadirFilas(categoria, modeloTabla, n);
 		} else {
 			tablaClasificacion = new JTable();
-			String[] nombreColumnas = { "Posicion", "dni", "Dorsal", "Tiempo", "Sexo" };
+			int n = base.getBaseInscripciones().getNumeroTiempos(carrera);
+			String[] nombreColumnas = new String[n + 5];
+			nombreColumnas[0] = "Posicion";
+			nombreColumnas[1] = "Dorsal";
+			for (int i = 0; i < n; i++)
+				nombreColumnas[2 + i] = "Tiempo " + (i + 1);
+			nombreColumnas[n + 2] = "Tiempo Final";
+			nombreColumnas[n + 3] = "Diferencia";
+			nombreColumnas[n + 4] = "Sexo";
 			modeloTabla = new ModeloNoEditable(nombreColumnas, 0);
 			// al pasarle bnombre de columnas creara el numero necesario...
 			// filas 0 ya que
 			// las crearemos en tiempo de ejecucion
 			tablaClasificacion.setModel(modeloTabla);
-			// Aplica el renderer que marca la fila seleccionada en rojo y
-			// negrita
-			// tablaInscripciones.setDefaultRenderer(Object.class, new
-			// RendererSubstance());
 			/// subo el alto de la fila
 			tablaClasificacion.setRowHeight(30);
 			// modifico el ancho de la columna 0
 			tablaClasificacion.getTableHeader().getColumnModel().getColumn(0).setPreferredWidth(50);
 			tablaClasificacion.getTableHeader().setReorderingAllowed(false);
-			añadirFilas(categoria, modeloTabla);
+			añadirFilas(categoria, modeloTabla, n);
 		}
 		return tablaClasificacion;
 	}
@@ -233,7 +306,8 @@ public class VentanaClasificacion extends JDialog {
 			Component[] paneles = panelCentral.getComponents();
 			for (Component panel : paneles) {
 				csvOutput.write(((JLabel) ((JPanel) ((JPanel) panel).getComponent(0)).getComponent(0)).getText());
-				csvOutput.endRecord();				JTable tabla = (JTable) ((JScrollPane) ((JPanel) panel).getComponent(1)).getViewport().getView();
+				csvOutput.endRecord();
+				JTable tabla = (JTable) ((JScrollPane) ((JPanel) panel).getComponent(1)).getViewport().getView();
 				for (int i = 0; i < tabla.getModel().getColumnCount(); i++)
 					csvOutput.write(tabla.getModel().getColumnName(i));
 				csvOutput.endRecord();

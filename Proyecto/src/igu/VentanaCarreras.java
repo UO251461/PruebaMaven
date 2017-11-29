@@ -1,7 +1,6 @@
 package igu;
 
 import java.awt.BorderLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -21,6 +20,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Date;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -334,8 +334,10 @@ public class VentanaCarreras extends JDialog {
 			btnClasificacin = new JButton("Clasificaci\u00F3n");
 			btnClasificacin.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//mostrar la clasificacion
-					mostrarVentanaConfiguracionClasificacion(listCarreras.getSelectedValue());
+					if(listCarreras.getSelectedValue().getFechaCompeticion().compareTo( new Date())<0)
+						mostrarVentanaConfiguracionClasificacion(listCarreras.getSelectedValue());
+					else
+						JOptionPane.showMessageDialog(null, "No se pueden generar las Clasificaciones\nLa carrera aún no ha finalizado");
 				}
 			});
 			btnClasificacin.setVisible(organizador);
