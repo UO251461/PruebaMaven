@@ -634,9 +634,6 @@ public class BaseInscripciones {
 			pst.setString(4, inscripcion.getCarrera().getIdcarrera());
 			pst.setString(5, inscripcion.getCarrera().getOrganizador().getIdorganizador());
 			pst.setString(6, inscripcion.getCorredor().getDni());
-			System.out.println(inscripcion.getCarrera().getIdcarrera());
-			System.out.println(inscripcion.getCarrera().getOrganizador().getIdorganizador());
-			System.out.println(inscripcion.getCorredor().getDni());
 			pst.executeQuery();
 			
 			}catch(SQLException e){

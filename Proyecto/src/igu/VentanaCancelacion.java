@@ -113,7 +113,6 @@ public class VentanaCancelacion extends JDialog {
 					if(campoDniNoVacio(txtDni)){
 						if(comprobarDniValido(txtDni)){
 							ponerLetraMayuscula(txtDni);
-							System.out.println("PASA");
 							Corredor corredor = new Corredor(txtDni.getText(), null, null, null, null);
 							Carrera carreraSel = vc.getBase().getBaseCarrera().getCarreraSeleccionada();
 							inscrip = new Inscripcion(carreraSel, corredor);
@@ -286,6 +285,7 @@ private void cancelarInsc() {
 		
 		
 			JOptionPane.showMessageDialog(this, "Inscripción cancelada.");
+			dispose();
 	}
 	private boolean esCamposVacios() {
 		return txtDni.getText().equals("") ;
