@@ -13,6 +13,7 @@ import logica.Carrera;
 import logica.Categoria;
 import logica.Organizador;
 import logica.Plazo;
+import logica.PlazoCancelacion;
 
 public class BaseCarreras {
 
@@ -106,7 +107,7 @@ public class BaseCarreras {
 	}
 
 	public void crearCarrera(String nombre, Date fechaCompeticion, double distancia, String tipo, int plazasDisponibles,
-			String lugar, ArrayList<Plazo> plazos, ArrayList<Categoria> categorias,ArrayList<Integer> tControl) {
+			String lugar, ArrayList<Plazo> plazos, ArrayList<Categoria> categorias,ArrayList<Integer> tControl, boolean puedeCancelar, ArrayList<PlazoCancelacion> plazosCancelacion) {
 		try {
 			con = getConnection();
 			String consultaCarrera = "INSERT INTO COMPETICION (IDORGANIZADOR,FECHACOMPETICION, NOMBRE_COMPETICION,DISTANCIA,TIPO,PLAZAS_DISPONIBLES,LUGAR,CEDER_DORSAL)"
@@ -120,6 +121,8 @@ public class BaseCarreras {
 			String consultaTiemposControl = "INSERT INTO TIEMPOS_CONTROL (IDORGANIZADOR,IDCOMPETICION,TIEMPO_INICIO,TIEMPO1,TIEMPO2,TIEMPO3,TIEMPO4,TIEMPO5,TIEMPO_FINAL) "
 					+ "VALUES(1,?,?,?,?,?,?,?,?)";
 
+			
+			
 			ps = con.prepareStatement(consultaCarrera);
 
 			ps.setDate(1, new java.sql.Date(fechaCompeticion.getTime()));
