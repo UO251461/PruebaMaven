@@ -888,6 +888,7 @@ public class BaseInscripciones {
 		return inscrito;
 	}
 
+
 	
 	public int[] getTiemposMaximos(Carrera carrera) {
 		int[] tiempos = new int[7];
@@ -950,6 +951,7 @@ public class BaseInscripciones {
 
 
 
+	
 
 	public int getNumeroTiempos(Carrera carrera) {
 		int n=0;
@@ -957,7 +959,7 @@ public class BaseInscripciones {
 			Connection con = getConnection();
 			PreparedStatement ps = con.prepareStatement("select t_1, t_2, t_3, t_4, t_5"
 					+ " from REGISTRO_TIEMPO_CORREDOR "
-					+ "where IDCOMPETICION=? and IDORGANIZADOR=? order by T_FIN");
+					+ "where IDCOMPETICION=? and IDORGANIZADOR=? and T_FIN>-1 and COMENTARIO='ACABADO' order by T_FIN");
 			ps.setString(1, carrera.getIdcarrera());
 			ps.setString(2, carrera.getOrganizador().getIdorganizador());
 			ResultSet rs = ps.executeQuery();
@@ -979,8 +981,8 @@ public class BaseInscripciones {
 		return n;
 	}
 
-	public int[] getTiempo(Carrera carrera, Corredor corredor) {
-		int[] n=new int[7];
+	public String[] getTiempo(Carrera carrera, Corredor corredor) {
+		String[] n=new String[8];
 		try {
 			Connection con = getConnection();
 			PreparedStatement ps = con.prepareStatement("select *"
@@ -992,9 +994,10 @@ public class BaseInscripciones {
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()){
-				for(int i=0;i<7;i++){
-					n[i]=rs.getInt(i+1);
+				for(int i=5;i<12;i++){
+					n[i-5]=String.valueOf(rs.getInt(i));
 				}
+				n[7]=rs.getString("COMENTARIO");
 			}
 			rs.close();
 			ps.close();
@@ -1005,7 +1008,8 @@ public class BaseInscripciones {
 		}
 		return n;
 	}
-
+	
+	
 	public float getPorcent(Carrera carrera) {
 		try {
 			Connection con = getConnection();
