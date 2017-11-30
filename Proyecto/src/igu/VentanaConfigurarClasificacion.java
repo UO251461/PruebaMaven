@@ -190,7 +190,7 @@ public class VentanaConfigurarClasificacion extends JDialog {
 	
 	private void añadirCategorias(){
 		Component[] comp = pnCategoria.getComponents();
-		categorias.add("Generales");
+		//categorias.add("Generales");
 		for(int i=0;i<comp.length;i++){
 			if(comp[i] instanceof JRadioButton && ((JRadioButton) comp[i]).isSelected()){
 				categorias.add(((JRadioButton) comp[i]).getText());
