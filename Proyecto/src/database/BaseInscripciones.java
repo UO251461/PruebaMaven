@@ -623,10 +623,10 @@ public class BaseInscripciones {
 		}
 	}
 	
-	public void cancelarInscripcion(Inscripcion inscripcion, float precio) throws SQLException {
-	
+	public void cancelarInscripcion(Inscripcion inscripcion, float precio) {
+		try{
 			Connection con = getConnection();
-			PreparedStatement pst = con.prepareStatement("UPDATE inscripcion SET estado = ? and incidencia = ? and cantidad = ? where idcompeticion = ? and idorganizador = ? and dni = ?");
+			PreparedStatement pst = con.prepareStatement("UPDATE inscripcion SET estado = ? ,incidencia = ? ,cantidad = ? where idcompeticion = ? and idorganizador = ? and dni = ?");
 			
 			pst.setString(1, "CANCELADA");
 			pst.setString(2, "CANCELADO_DEVOLVER_DINERO");
@@ -634,13 +634,17 @@ public class BaseInscripciones {
 			pst.setString(4, inscripcion.getCarrera().getIdcarrera());
 			pst.setString(5, inscripcion.getCarrera().getOrganizador().getIdorganizador());
 			pst.setString(6, inscripcion.getCorredor().getDni());
+			System.out.println(inscripcion.getCarrera().getIdcarrera());
+			System.out.println(inscripcion.getCarrera().getOrganizador().getIdorganizador());
+			System.out.println(inscripcion.getCorredor().getDni());
+			pst.executeQuery();
 			
-			ResultSet rst = pst.executeQuery();
-			
+			}catch(SQLException e){
+				e.printStackTrace();
+			} finally {
 
-			rst.close();
-			pst.close();
-			con.close();
+				cerrarConexion();
+			}
 	
 		
 		
@@ -1001,4 +1005,31 @@ public class BaseInscripciones {
 		}
 		return n;
 	}
+
+	public float getPorcent(Carrera carrera) {
+		try {
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement("select PORCENTAJE, FECHA_LIMITE"
+					+ " from PLAZO_CANCELACION "
+					+ "where IDCOMPETICION=? and IDORGANIZADOR=? order by FECHA_LIMITE asc" );
+			ps.setString(1, carrera.getIdcarrera());
+			ps.setString(2, carrera.getOrganizador().getIdorganizador());
+			ResultSet rs = ps.executeQuery();
+			Date hoy = new Date();
+			while(rs.next()){
+				Date fecha = rs.getDate("FECHA_LIMITE");
+				if(hoy.before(fecha))
+					return Float.parseFloat(rs.getString("PORCENTAJE"));
+			}
+			rs.close();
+			ps.close();
+			con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+
 }

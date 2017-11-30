@@ -1,36 +1,32 @@
 package igu;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import com.toedter.calendar.JDateChooser;
-
-import logica.Carrera;
-import logica.Corredor;
-import logica.Inscripcion;
-
-import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import javax.swing.ImageIcon;
 import javax.swing.ButtonGroup;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+
+import com.toedter.calendar.JDateChooser;
+
+import logica.Carrera;
+import logica.Corredor;
+import logica.Inscripcion;
 
 public class VentanaCederDorsal extends JDialog {
 

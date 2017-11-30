@@ -35,6 +35,7 @@ import javax.swing.JTextPane;
 import java.awt.ComponentOrientation;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.SwingConstants;
 
 
 public class VentanaInscripcion extends JDialog {
@@ -67,6 +68,8 @@ public class VentanaInscripcion extends JDialog {
 	
 	protected String sexoSelected = "HOMBRE";
 	private JTextPane txtTitulo;
+	private JLabel lblprmiteCancelacion;
+	private JTextField txtCancelacion;
 	
 	/**
 	 * Create the frame.
@@ -92,7 +95,7 @@ public class VentanaInscripcion extends JDialog {
 			lblDni = new JLabel("DNI :");
 			lblDni.setDisplayedMnemonic('d');
 			lblDni.setLabelFor(getTxtDni());
-			lblDni.setBounds(40, 35, 72, 23);
+			lblDni.setBounds(40, 75, 72, 23);
 		}
 		return lblDni;
 	}
@@ -119,7 +122,7 @@ public class VentanaInscripcion extends JDialog {
 
 				
 			});
-			txtDni.setBounds(172, 35, 209, 23);
+			txtDni.setBounds(172, 74, 209, 23);
 			txtDni.setColumns(10);
 		}
 		return txtDni;
@@ -159,14 +162,14 @@ public class VentanaInscripcion extends JDialog {
 			lblNombre = new JLabel("Nombre :");
 			lblNombre.setLabelFor(getTxtNombre());
 			lblNombre.setDisplayedMnemonic('n');
-			lblNombre.setBounds(40, 93, 79, 23);
+			lblNombre.setBounds(40, 125, 79, 23);
 		}
 		return lblNombre;
 	}
 	private JTextField getTxtNombre() {
 		if (txtNombre == null) {
 			txtNombre = new JTextField();
-			txtNombre.setBounds(172, 93, 209, 23);
+			txtNombre.setBounds(172, 124, 209, 23);
 			txtNombre.setText("");
 			txtNombre.setColumns(10);
 		}
@@ -175,7 +178,7 @@ public class VentanaInscripcion extends JDialog {
 	private JLabel getLblSexo() {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo :");
-			lblSexo.setBounds(40, 209, 86, 23);
+			lblSexo.setBounds(40, 225, 86, 23);
 		}
 		return lblSexo;
 	}
@@ -184,7 +187,7 @@ public class VentanaInscripcion extends JDialog {
 			lblFechaDeNacimiento = new JLabel("Fecha de nacimiento :");
 			lblFechaDeNacimiento.setLabelFor(getDateChooser());
 			lblFechaDeNacimiento.setDisplayedMnemonic('f');
-			lblFechaDeNacimiento.setBounds(40, 267, 126, 23);
+			lblFechaDeNacimiento.setBounds(40, 275, 126, 23);
 		}
 		return lblFechaDeNacimiento;
 	}
@@ -266,6 +269,8 @@ public class VentanaInscripcion extends JDialog {
 			panel.add(getRdbtnHombre());
 			panel.add(getRdbtnMujer());
 			panel.add(getDateChooser());
+			panel.add(getLblprmiteCancelacion());
+			panel.add(getTxtCancelacion());
 			
 		}
 		return panel;
@@ -281,7 +286,7 @@ public class VentanaInscripcion extends JDialog {
 			});
 			rdbtnHombre.setSelected(true);
 			buttonGroup.add(rdbtnHombre);
-			rdbtnHombre.setBounds(172, 209, 103, 23);
+			rdbtnHombre.setBounds(172, 224, 103, 23);
 		}
 		return rdbtnHombre;
 	}
@@ -295,7 +300,7 @@ public class VentanaInscripcion extends JDialog {
 				}
 			});
 			buttonGroup.add(rdbtnMujer);
-			rdbtnMujer.setBounds(277, 209, 104, 23);
+			rdbtnMujer.setBounds(277, 225, 104, 23);
 		}
 		return rdbtnMujer;
 	}
@@ -314,7 +319,7 @@ public class VentanaInscripcion extends JDialog {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			fecha.setBounds(172, 267, 209, 23);
+			fecha.setBounds(172, 274, 209, 23);
 		}
 		return fecha;
 	}
@@ -323,7 +328,7 @@ public class VentanaInscripcion extends JDialog {
 			lbApellidos = new JLabel("Apellidos");
 			lbApellidos.setDisplayedMnemonic('a');
 			lbApellidos.setLabelFor(getTxtApellidos());
-			lbApellidos.setBounds(40, 151, 79, 23);
+			lbApellidos.setBounds(40, 175, 79, 23);
 		}
 		return lbApellidos;
 	}
@@ -332,7 +337,7 @@ public class VentanaInscripcion extends JDialog {
 			txtApellidos = new JTextField();
 			txtApellidos.setText("");
 			txtApellidos.setColumns(10);
-			txtApellidos.setBounds(172, 151, 209, 23);
+			txtApellidos.setBounds(172, 174, 209, 23);
 		}
 		return txtApellidos;
 	}
@@ -474,8 +479,30 @@ public class VentanaInscripcion extends JDialog {
 			txtTitulo.setFont(new Font("Arial Black", Font.BOLD, 16));
 			txtTitulo.setText(vc.getBase().getBaseCarrera().getCarreraSeleccionada().getNombre());			
 			//txtTitulo.setText("CARERRA PRUEBA CON UN TITULO LARGOOOOOOOOOOOOOOOO LAAAAAARGGGGGGGGGGO");
-			txtTitulo.setBounds(75, 24, 426, 81);
+			txtTitulo.setBounds(52, 24, 449, 53);
 		}
 		return txtTitulo;
+	}
+	private JLabel getLblprmiteCancelacion() {
+		if (lblprmiteCancelacion == null) {
+			lblprmiteCancelacion = new JLabel("\u00BFPrmite cancelacion?");
+			lblprmiteCancelacion.setBounds(40, 27, 126, 21);
+		}
+		return lblprmiteCancelacion;
+	}
+	private JTextField getTxtCancelacion() {
+		if (txtCancelacion == null) {
+			txtCancelacion = new JTextField();
+			txtCancelacion.setHorizontalAlignment(SwingConstants.CENTER);
+			txtCancelacion.setText("--");
+			if(vc.getBase().getBaseCarrera().getCarreraSeleccionada().isPermiteCancelar())
+				txtCancelacion.setText("SI");
+			else
+				txtCancelacion.setText("NO");
+			txtCancelacion.setEditable(false);
+			txtCancelacion.setBounds(172, 27, 209, 20);
+			txtCancelacion.setColumns(10);
+		}
+		return txtCancelacion;
 	}
 }

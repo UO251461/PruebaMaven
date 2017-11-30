@@ -17,8 +17,10 @@ public class Carrera {
 	private ArrayList<Categoria> categorias = new ArrayList<Categoria>();
 	private String lugar;	
 	private ArrayList<Integer> tiemposControl = new ArrayList<Integer>();
+	private boolean permiteCancelar;
 	
 
+	
 	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
 			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,ArrayList<Categoria> cat,ArrayList<Integer> tControl) {
 
@@ -35,8 +37,18 @@ public class Carrera {
 		this.lugar= lugar;
 		this.categorias = cat;
 		this.tiemposControl = tControl;
+		
 	}	
 	
+	public Carrera(String nombre, double precio, Date fechaFI, Date fechaEI, Date fechaCompe, double distancia,
+			String tipo, Organizador organizador,int plazasDisponibles,String idcarrera, String lugar,ArrayList<Categoria> cat,ArrayList<Integer> tControl, String permiteCancelar){
+		this(nombre,precio,fechaFI,fechaEI,fechaCompe,distancia,tipo,organizador,plazasDisponibles,idcarrera,lugar,cat,tControl);
+	
+		if(permiteCancelar!=null && permiteCancelar.equals("SI"))
+			this.permiteCancelar = true;
+		else
+			this.permiteCancelar = false;
+	}
 	public ArrayList<Categoria> getCategorias(){
 		return categorias;
 	}
@@ -158,5 +170,13 @@ public class Carrera {
 				"Plazas disponibles: " + plazasDisponibles + ".\n" +
 				"Lugar: " + lugar+".";
 		return info;
+	}
+
+	public boolean isPermiteCancelar() {
+		return permiteCancelar;
+	}
+
+	public void setPermiteCancelar(boolean permiteCancelar) {
+		this.permiteCancelar = permiteCancelar;
 	}
 }

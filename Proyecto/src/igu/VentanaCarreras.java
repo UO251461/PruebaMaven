@@ -58,6 +58,7 @@ public class VentanaCarreras extends JDialog {
 	private JButton btnClasificacin;
 	private JButton btnCederDorsal;
 	private JButton btnAadirTiempos;
+	private JButton btnCancelarInscripcipn;
 
 	/**
 	 * Create the frame.
@@ -182,6 +183,7 @@ public class VentanaCarreras extends JDialog {
 						btnClasificacin.setEnabled(true);
 						btnCederDorsal.setEnabled(true);
 						btnAadirTiempos.setEnabled(true);
+						btnCancelarInscripcipn.setEnabled(true);
 					}
 				}
 			});
@@ -221,6 +223,7 @@ public class VentanaCarreras extends JDialog {
 			panelBotonesCarrera.add(getBtnInfoCarrera());
 			panelBotonesCarrera.add(getBtnInscripcionesClub());
 			panelBotonesCarrera.add(getBtnCederDorsal());
+			panelBotonesCarrera.add(getBtnCancelarInscripcipn());
 			panelBotonesCarrera.add(getBtnMostrarEstadoInscripciones());
 			panelBotonesCarrera.add(getBtnGestionarExtractos());
 			panelBotonesCarrera.add(getBtnClasificacin());
@@ -418,6 +421,27 @@ public class VentanaCarreras extends JDialog {
 				vp.getBase().getBaseCarrera().getCarreraSeleccionada().getOrganizador().getIdorganizador()+".txt");
 		TratarRegistroTiempo trt = new TratarRegistroTiempo(this);
 		trt.leerFichero(fichero);
+	}
+	private JButton getBtnCancelarInscripcipn() {
+		if (btnCancelarInscripcipn == null) {
+			btnCancelarInscripcipn = new JButton("Cancelar inscripci\u00F3n");
+			btnCancelarInscripcipn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					vp.getBase().getBaseCarrera().setCarreraSeleccionada(listCarreras.getSelectedValue());
+					mostrarCancelar();
+				}
+
+				
+			});
+			btnCancelarInscripcipn.setEnabled(false);
+		}
+		return btnCancelarInscripcipn;
+	}
+	private void mostrarCancelar() {
+		VentanaCancelacion vc = new VentanaCancelacion(this);
+		vc.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		vc.setVisible(true);
+		
 	}
 }
 

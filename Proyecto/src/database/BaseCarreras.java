@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -53,7 +54,7 @@ public class BaseCarreras {
 		try {
 			con = getConnection();			
 			
-			String consultaCarrera  ="select competicion.*,p.fecha_inicio,p.fecha_fin,p.precio,organizador.* from competicion,plazo_inscripcion p,organizador "
+			String consultaCarrera  ="select competicion.*,p.fecha_inicio,p.fecha_fin,p.precio,organizador.*, competicion.permite_cancelar from competicion,plazo_inscripcion p,organizador "
 					+ " where competicion.idcompeticion = p.idcompeticion and competicion.idorganizador = p.idorganizador and"
 					+ " competicion.idorganizador = p.idorganizador and current_date between p.fecha_inicio and p.fecha_fin order by fechacompeticion";
 			String consultaCategoria = "select c.nombre,c.limite_inferior,c.limite_superior,c.sexo from categoria c where c.IDCOMPETICION = ? and c.IDORGANIZADOR = ?";
@@ -90,7 +91,7 @@ public class BaseCarreras {
 				}
 				carreras.add(new Carrera(rs1.getString("nombre_competicion"), rs1.getDouble("precio"), rs1.getDate("fecha_fin"), rs1.getDate("fecha_inicio"), rs1.getDate("fechacompeticion"),
 						rs1.getDouble("distancia"), rs1.getString("tipo"), new Organizador(rs1.getString("nombreorganizador"),rs1.getString("idorganizador")),
-						rs1.getInt("plazas_disponibles"), rs1.getString("idcompeticion"), rs1.getString("lugar"), categorias,tControl));				
+						rs1.getInt("plazas_disponibles"), rs1.getString("idcompeticion"), rs1.getString("lugar"), categorias,tControl, rs1.getString("permite_cancelar")));				
 				rs2.close();
 			}
 			
@@ -110,8 +111,12 @@ public class BaseCarreras {
 			String lugar, ArrayList<Plazo> plazos, ArrayList<Categoria> categorias,ArrayList<Integer> tControl, boolean puedeCancelar, ArrayList<PlazoCancelacion> plazosCancelacion) {
 		try {
 			con = getConnection();
-			String consultaCarrera = "INSERT INTO COMPETICION (IDORGANIZADOR,FECHACOMPETICION, NOMBRE_COMPETICION,DISTANCIA,TIPO,PLAZAS_DISPONIBLES,LUGAR,CEDER_DORSAL)"
-					+ " VALUES(1,?,?,?,?,?,?,'SI')";
+			
+			String consultaCarrera = "INSERT INTO COMPETICION (IDORGANIZADOR,FECHACOMPETICION, NOMBRE_COMPETICION,DISTANCIA,TIPO,PLAZAS_DISPONIBLES,LUGAR,CEDER_DORSAL,PERMITE_CANCELAR)"
+					+ " VALUES(1,?,?,?,?,?,?,'SI', ?)";
+			
+			
+			
 			String consultaPlazo = "INSERT INTO PLAZO_INSCRIPCION (FECHA_INICIO,FECHA_FIN,PRECIO,IDORGANIZADOR,IDCOMPETICION) "
 					+ "VALUES(?,?,?,1,?)";
 			String consultaCategorias = "INSERT INTO CATEGORIA (NOMBRE,LIMITE_INFERIOR,LIMITE_SUPERIOR,IDORGANIZADOR,IDCOMPETICION,SEXO) "
@@ -121,7 +126,8 @@ public class BaseCarreras {
 			String consultaTiemposControl = "INSERT INTO TIEMPOS_CONTROL (IDORGANIZADOR,IDCOMPETICION,TIEMPO_INICIO,TIEMPO1,TIEMPO2,TIEMPO3,TIEMPO4,TIEMPO5,TIEMPO_FINAL) "
 					+ "VALUES(1,?,?,?,?,?,?,?,?)";
 
-			
+			String consultaPlazoCancelacion = "INSERT INTO PLAZO_CANCELACION (IDORGANIZADOR,IDCOMPETICION,PORCENTAJE,FECHA_LIMITE)"
+											+ "	 VALUES(1,?,?,?)";
 			
 			ps = con.prepareStatement(consultaCarrera);
 
@@ -131,8 +137,16 @@ public class BaseCarreras {
 			ps.setString(4, tipo);
 			ps.setInt(5, plazasDisponibles);
 			ps.setString(6, lugar);
+			if(puedeCancelar)
+				ps.setString(7, "SI");
+			else
+				ps.setString(7, "NO");
 			ps.executeQuery();
 
+			
+			
+			
+			
 			ps = con.prepareStatement(consultaIdCarerra);
 			ResultSet rs = ps.executeQuery();
 			String idCarrera = "";
@@ -143,6 +157,16 @@ public class BaseCarreras {
 				System.err.println("------------------IDCARRERA VACIO---------------");
 				return;
 			}
+			
+			//PLAZO CANCELACION
+			for(int i =0; i<plazosCancelacion.size(); i++){
+				ps = con.prepareStatement(consultaPlazoCancelacion);
+				ps.setString(1, idCarrera);
+				ps.setFloat(2, plazosCancelacion.get(i).getPorcentaje());	
+				ps.setDate(3, new java.sql.Date(plazosCancelacion.get(i).getFecha().getTime()));	
+				ps.executeQuery();			
+			}
+			
 			
 			for(int i=0;i<plazos.size();i++){
 				ps = con.prepareStatement(consultaPlazo);			
