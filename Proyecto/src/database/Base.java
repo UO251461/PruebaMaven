@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.*;
 
 public class Base {
+	private static final String USERNAME2 = "PRUPEUPRUPRUPRUPRUP";
 	private static final String CONNECTION_STRING = "jdbc:oracle:thin:@156.35.94.99:1521:desa";
 	
 	private static final String USERNAME="IPS_2018_5";
